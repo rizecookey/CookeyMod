@@ -1,0 +1,5 @@
+config-version = 1
+
+[animations]
+swingAndUseItem = true
+attackCooldownHandOffset = 0.4
