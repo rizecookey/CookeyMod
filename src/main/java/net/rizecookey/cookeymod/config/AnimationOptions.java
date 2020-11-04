@@ -13,7 +13,8 @@ public class AnimationOptions implements Category {
     public static final String TRANSLATION_KEY = ModConfig.TRANSLATION_KEY + ".animations";
 
     boolean swingAndUseItem = true;
-    double attackCooldownHandOffset = 0.4D;
+    double attackCooldownHandOffset = 0.5D;
+    boolean enableOldSwing = false;
 
     public boolean isSwingAndUseItem() {
         return swingAndUseItem;
@@ -31,10 +32,19 @@ public class AnimationOptions implements Category {
         this.attackCooldownHandOffset = attackCooldownHandOffset;
     }
 
+    public boolean isEnableOldSwing() {
+        return enableOldSwing;
+    }
+
+    public void setEnableOldSwing(boolean enableOldSwing) {
+        this.enableOldSwing = enableOldSwing;
+    }
+
     public void loadOptions(Map<String, Object> options) {
         if (options != null) {
             this.swingAndUseItem = (Boolean) options.get("swingAndUseItem");
             this.attackCooldownHandOffset = (double) options.get("attackCooldownHandOffset");
+            this.enableOldSwing = (Boolean) options.get("enableOldSwing");
         }
     }
 
@@ -42,6 +52,7 @@ public class AnimationOptions implements Category {
         HashMap<String, Object> map = new HashMap<>();
         map.put("swingAndUseItem", this.swingAndUseItem);
         map.put("attackCooldownHandOffset", this.attackCooldownHandOffset);
+        map.put("enableOldSwing", this.enableOldSwing);
         return map;
     }
 
@@ -63,6 +74,17 @@ public class AnimationOptions implements Category {
                 .build()
         );
 
+        entries.add(
+                ConfigEntryBuilder.create()
+                        .startBooleanToggle(new TranslatableComponent(TRANSLATION_KEY + ".enableOldSwing"), this.enableOldSwing)
+                        .setSaveConsumer(this::setEnableOldSwing)
+                .build()
+        );
+
         return entries;
+    }
+
+    public String getTranslationId() {
+        return TRANSLATION_KEY;
     }
 }

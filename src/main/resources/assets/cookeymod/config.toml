@@ -2,4 +2,8 @@ config-version = 1
 
 [animations]
 swingAndUseItem = true
-attackCooldownHandOffset = 0.4
+attackCooldownHandOffset = 0.5
+enableOldSwing = false
+
+[misc]
+showOwnNameInThirdPerson = false

@@ -33,7 +33,7 @@ public class ModMenuApiImpl implements ModMenuApi {
 
             for (String id : config.getCategories().keySet()) {
                 Category category = config.getCategory(id);
-                ConfigCategory configCategory = builder.getOrCreateCategory(new TranslatableComponent(ModConfig.TRANSLATION_KEY + "." + id));
+                ConfigCategory configCategory = builder.getOrCreateCategory(new TranslatableComponent(category.getTranslationId()));
 
                 for (AbstractConfigListEntry<?> entry : category.getConfigEntries()) {
                     configCategory.addEntry(entry);

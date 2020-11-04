@@ -36,7 +36,9 @@ dependencies {
 	include toml4j
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	def fabric_api = "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation fabric_api
+	include fabric_api
 
 	// Mod Menu
 	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"

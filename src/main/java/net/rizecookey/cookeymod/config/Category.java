@@ -9,4 +9,5 @@ public interface Category {
     void loadOptions(Map<String, Object> options);
     Map<String, Object> toMap();
     List<AbstractConfigListEntry<?>> getConfigEntries();
+    String getTranslationId();
 }

@@ -2,5 +2,8 @@
   "options.cookeymod": "CookeyMod",
   "options.cookeymod.animations": "Animations",
   "options.cookeymod.animations.swingAndUseItem": "Swing & Use Item",
-  "options.cookeymod.attackCooldownHandOffset": "Cooldown Hand Offset"
+  "options.cookeymod.animations.attackCooldownHandOffset": "Cooldown Hand Offset",
+  "options.cookeymod.animations.enableOldSwing": "Enable Old Swing Animation",
+  "options.cookeymod.misc": "Miscellaneous",
+  "options.cookeymod.misc.showOwnNameInThirdPerson": "Show own Name in Third Person"
 }

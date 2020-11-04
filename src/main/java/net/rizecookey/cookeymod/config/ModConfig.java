@@ -39,6 +39,7 @@ public class ModConfig {
 
     public void registerCategories() {
         this.registerCategory("animations", new AnimationOptions());
+        this.registerCategory("misc", new MiscOptions());
     }
 
     public void registerCategory(String id, Category category) {
@@ -59,13 +60,15 @@ public class ModConfig {
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
-        InputStream resourceStream = ClassLoader.getSystemClassLoader().getResourceAsStream("assets/cookeymod/config.toml");
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("assets/cookeymod/config.toml");
         if (resourceStream == null) {
             logger.error("Failed to find config resource!");
             return;
         }
         if (!file.exists()) {
+            logger.info("Config not found, creating default one...");
             Files.copy(resourceStream, Paths.get(file.getPath()));
+            logger.info("Copied default config.");
         }
         else {
             Map<String, Object> configMap = new Toml().read(file).toMap();
