@@ -38,7 +38,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	def fabric_api = "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation fabric_api
-	include fabric_api
 
 	// Mod Menu
 	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
@@ -51,10 +50,10 @@ dependencies {
 
 // Custom Manifest and Intermediary mappings declaration
 minecraft {
-	customManifest = "https://gist.githubusercontent.com/rizecookey/4c6142baaccc3875f9b227fe22f2ace5/raw/c8ed74b19f7a5315813c9d4b199798b692a8f359/1.16_combat-6.json"
+	/*customManifest = "https://gist.githubusercontent.com/rizecookey/4c6142baaccc3875f9b227fe22f2ace5/raw/c8ed74b19f7a5315813c9d4b199798b692a8f359/1.16_combat-6.json"
 	intermediaryUrl = { mcVersion ->
 		return "https://maven.combatreforged.com/net/fabricmc/intermediary/${mcVersion}/intermediary-${mcVersion}-v2.jar";
-	}
+	}*/
 }
 
 processResources {

@@ -19,10 +19,10 @@ public abstract class LivingEntityMixin extends Entity {
         super(entityType, level);
     }
 
-    @Inject(method = "getAttackAnim", at = @At("RETURN"), cancellable = true, locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    /*@Inject(method = "getAttackAnim", at = @At("RETURN"), cancellable = true, locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void changeAttackAnim(float f, CallbackInfoReturnable<Float> cir, float g, float h) {
         if (CookeyMod.getInstance().getConfig().getCategory(AnimationOptions.class).isEnableOldSwing()) {
             cir.setReturnValue(h);
         }
-    }
+    }*/
 }
