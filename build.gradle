@@ -41,7 +41,8 @@ dependencies {
 	include fabric_api
 
 	// Mod Menu
-	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+	def modmenu = "io.github.prospector:modmenu:${project.modmenu_version}"
+	modImplementation modmenu
 
 
 
