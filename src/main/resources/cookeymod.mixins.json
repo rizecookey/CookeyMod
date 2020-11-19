@@ -4,11 +4,14 @@
   "package": "net.rizecookey.cookeymod.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "client.HorseArmorLayerMixin",
+    "client.HumanoidArmorLayerMixin"
   ],
   "client": [
     "client.ItemInHandRendererMixin",
     "client.LivingEntityMixin",
-    "client.LivingEntityRendererMixin"
+    "client.LivingEntityRendererMixin",
+    "client.OverlayTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1
