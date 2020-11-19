@@ -1,9 +1,11 @@
 {
   "options.cookeymod": "CookeyMod",
   "options.cookeymod.animations": "Animations",
-  "options.cookeymod.animations.swingAndUseItem": "Swing & Use Item",
-  "options.cookeymod.animations.attackCooldownHandOffset": "Cooldown Hand Offset",
-  "options.cookeymod.animations.enableOldSwing": "Enable Old Swing Animation",
+  "options.cookeymod.animations.swingAndUseItem": "Swing & use item",
+  "options.cookeymod.animations.attackCooldownHandOffset": "Cooldown hand offset",
+  "options.cookeymod.animations.enableOldSwing": "Enable old swing animation",
+  "options.cookeymod.animations.damageColor" : "Damage color on entities",
+  "options.cookeymod.animations.showDamageTintOnArmor": "Show damage tint on armor",
   "options.cookeymod.misc": "Miscellaneous",
-  "options.cookeymod.misc.showOwnNameInThirdPerson": "Show own Name in Third Person"
+  "options.cookeymod.misc.showOwnNameInThirdPerson": "Show own name in 3rd person"
 }

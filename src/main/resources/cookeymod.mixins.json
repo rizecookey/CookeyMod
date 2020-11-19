@@ -6,9 +6,12 @@
   "mixins": [
   ],
   "client": [
+    "client.HorseArmorLayerMixin",
+    "client.HumanoidArmorLayerMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityMixin",
-    "client.LivingEntityRendererMixin"
+    "client.LivingEntityRendererMixin",
+    "client.OverlayTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

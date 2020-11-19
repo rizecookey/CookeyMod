@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class MiscOptions implements Category {
     public static final String TRANSLATION_KEY = ModConfig.TRANSLATION_KEY + ".misc";
+    public static final MiscOptions DEFAULTS = new MiscOptions();
 
     boolean showOwnNameInThirdPerson = false;
 
@@ -42,6 +43,7 @@ public class MiscOptions implements Category {
                 ConfigEntryBuilder.create().
                         startBooleanToggle(new TranslatableComponent(TRANSLATION_KEY + ".showOwnNameInThirdPerson"), this.showOwnNameInThirdPerson)
                         .setSaveConsumer(this::setShowOwnNameInThirdPerson)
+                        .setDefaultValue(DEFAULTS.isShowOwnNameInThirdPerson())
                 .build()
         );
 
