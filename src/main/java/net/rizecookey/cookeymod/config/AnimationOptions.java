@@ -67,7 +67,7 @@ public class AnimationOptions implements Category {
             this.swingAndUseItem = (Boolean) options.getOrDefault("swingAndUseItem", this.swingAndUseItem);
             this.attackCooldownHandOffset = (double) options.getOrDefault("attackCooldownHandOffset", this.attackCooldownHandOffset);
             this.enableOldSwing = (Boolean) options.getOrDefault("enableOldSwing", this.enableOldSwing);
-            this.damageColor = Color.ofTransparent(Math.toIntExact((Long) options.getOrDefault("damageColor", this.damageColor.getColor())));
+            this.damageColor = Color.ofTransparent((int) (long) options.getOrDefault("damageColor", this.damageColor.getColor()));
             this.showDamageTintOnArmor = (Boolean) options.getOrDefault("showDamageTintOnArmor", this.showDamageTintOnArmor);
         }
     }

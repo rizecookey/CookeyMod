@@ -38,7 +38,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	def fabric_api = "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation fabric_api
-	include fabric_api
 
 	// Mod Menu
 	def modmenu = "io.github.prospector:modmenu:${project.modmenu_version}"
