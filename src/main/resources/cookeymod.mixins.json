@@ -4,10 +4,10 @@
   "package": "net.rizecookey.cookeymod.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "client.HorseArmorLayerMixin",
-    "client.HumanoidArmorLayerMixin"
   ],
   "client": [
+    "client.HorseArmorLayerMixin",
+    "client.HumanoidArmorLayerMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
