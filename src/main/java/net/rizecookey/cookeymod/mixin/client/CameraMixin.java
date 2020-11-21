@@ -24,7 +24,7 @@ public abstract class CameraMixin {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void disableSneakAnimation(CallbackInfo ci) {
-        if (this.getSneakAnimationSpeed() == 0.0) {
+        if (this.getSneakAnimationSpeed() == 0.0 && this.entity != null) {
             this.eyeHeight = this.getEntity().getEyeHeight();
             this.eyeHeightOld = this.eyeHeight;
             ci.cancel();
