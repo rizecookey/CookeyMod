@@ -6,6 +6,7 @@
   "mixins": [
   ],
   "client": [
+    "client.CameraMixin",
     "client.HorseArmorLayerMixin",
     "client.HumanoidArmorLayerMixin",
     "client.ItemInHandRendererMixin",
