@@ -48,7 +48,8 @@ public class ModConfig {
 
     public void loadCategories() {
         for (String id : categories.keySet()) {
-            categories.get(id).loadOptions(toml.getTable(id).toMap());
+            Toml category = toml.getTable(id);
+            categories.get(id).loadOptions(category != null ? category.toMap() : new HashMap<>());
         }
     }
 
