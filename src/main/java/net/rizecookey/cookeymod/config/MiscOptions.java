@@ -25,7 +25,7 @@ public class MiscOptions implements Category {
 
     @Override
     public void loadOptions(Map<String, Object> options) {
-        this.showOwnNameInThirdPerson = (boolean) options.get("showOwnNameInThirdPerson");
+        this.showOwnNameInThirdPerson = (boolean) options.getOrDefault("showOwnNameInThirdPerson", this.showOwnNameInThirdPerson);
     }
 
     @Override
