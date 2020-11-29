@@ -15,7 +15,7 @@
   "license": "CC0-1.0",
   "icon": "assets/cookeymod/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "net.rizecookey.cookeymod.CookeyMod"
@@ -30,7 +30,7 @@
 
   "depends": {
     "fabricloader": ">=0.7.4",
-    "minecraft": "1.16.x"
+    "minecraft": "1.16.2-1.16.combat-6"
   },
   "suggests": {
     "modmenu": "*"
