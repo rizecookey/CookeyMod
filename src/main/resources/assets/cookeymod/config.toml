@@ -1,8 +1,1 @@
 config-version = 1
-
-[animations]
-swingAndUseItem = true
-attackCooldownHandOffset = 0.5
-
-[misc]
-showOwnNameInThirdPerson = false

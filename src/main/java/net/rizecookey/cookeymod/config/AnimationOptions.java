@@ -26,7 +26,7 @@ public class AnimationOptions implements Category {
     };
     public static final AnimationOptions DEFAULTS = new AnimationOptions();
 
-    boolean swingAndUseItem = true;
+    boolean swingAndUseItem = false;
     double attackCooldownHandOffset = 0.0D;
     //boolean enableOldSwing = false;
     Color damageColor = Color.ofRGBA(255, 0, 0, 77);
