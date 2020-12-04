@@ -16,11 +16,4 @@ public abstract class PlayerMixin extends LivingEntity {
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
     }
-
-    @Inject(method = "isAttackAvailable", at = @At(value = "RETURN"), cancellable = true)
-    public void disable4TickSwinging(float f, CallbackInfoReturnable<Boolean> cir) {
-        if (this.getAttackStrengthScale(f) < 1.0F && CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).force100PercentRecharge.get()) {
-            cir.setReturnValue(false);
-        }
-    }
 }
