@@ -24,8 +24,8 @@ public abstract class ScreenBuilder {
                         CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file!");
                         e.printStackTrace();
                     }
-                })
-                .setParentScreen(prevScreen);
+                });
+                if (prevScreen != null) builder.setParentScreen(prevScreen);
 
         for (String id : config.getCategories().keySet()) {
             Category category = config.getCategory(id);

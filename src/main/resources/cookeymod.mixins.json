@@ -7,12 +7,14 @@
   ],
   "client": [
     "client.CameraMixin",
+    "client.GameRendererMixin",
     "client.HorseArmorLayerMixin",
     "client.HumanoidArmorLayerMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
-    "client.OverlayTextureMixin"
+    "client.OverlayTextureMixin",
+    "client.PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

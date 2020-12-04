@@ -32,6 +32,7 @@ public class AnimationOptions implements Category {
     Color damageColor = Color.ofRGBA(255, 0, 0, 77);
     boolean showDamageTintOnArmor = false;
     double sneakAnimationSpeed = 1.0F;
+    boolean disableCameraBobbing = false;
 
     public boolean isSwingAndUseItem() {
         return swingAndUseItem;
@@ -82,6 +83,13 @@ public class AnimationOptions implements Category {
         this.sneakAnimationSpeed = sneakAnimationSpeed;
     }
 
+    public boolean isDisableCameraBobbing() {
+        return disableCameraBobbing;
+    }
+
+    public void setDisableCameraBobbing(boolean disableCameraBobbing) {
+        this.disableCameraBobbing = disableCameraBobbing;
+    }
 
 
     public void loadOptions(Map<String, Object> options) {
@@ -92,6 +100,7 @@ public class AnimationOptions implements Category {
             this.damageColor = Color.ofTransparent((int) (long) options.getOrDefault("damageColor", (long) this.damageColor.getColor()));
             this.showDamageTintOnArmor = (Boolean) options.getOrDefault("showDamageTintOnArmor", this.showDamageTintOnArmor);
             this.sneakAnimationSpeed = (double) options.getOrDefault("sneakAnimationSpeed", this.sneakAnimationSpeed);
+            this.disableCameraBobbing = (boolean) options.getOrDefault("disableCameraBobbing", this.disableCameraBobbing);
         }
     }
 
@@ -103,6 +112,7 @@ public class AnimationOptions implements Category {
         map.put("damageColor", this.damageColor.getColor());
         map.put("showDamageTintOnArmor", this.showDamageTintOnArmor);
         map.put("sneakAnimationSpeed", this.sneakAnimationSpeed);
+        map.put("disableCameraBobbing", this.disableCameraBobbing);
         return map;
     }
 
@@ -159,6 +169,14 @@ public class AnimationOptions implements Category {
                         .setTextGetter(DOUBLE_SLIDER_TEXT)
                         .setSaveConsumer((value) -> this.setSneakAnimationSpeed(value / 100.0F))
                         .setDefaultValue((long) (DEFAULTS.getSneakAnimationSpeed() * 100.0F))
+                .build()
+        );
+
+        entries.add(
+                ConfigEntryBuilder.create()
+                        .startBooleanToggle(new TranslatableComponent(TRANSLATION_KEY + ".disableCameraBobbing"), this.disableCameraBobbing)
+                        .setSaveConsumer(this::setDisableCameraBobbing)
+                        .setDefaultValue(DEFAULTS.isDisableCameraBobbing())
                 .build()
         );
 

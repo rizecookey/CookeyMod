@@ -22,9 +22,7 @@ public class CookeyMod implements ModInitializer {
 		this.config = new ModConfig(FabricLoader.getInstance().getConfigDir().resolve("cookeymod/config.toml").toFile());
 
 		CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> {
-			if (!dedicated) {
-				CookeyModCommand.registerCommand(dispatcher);
-			}
+			CookeyModCommand.registerCommand(dispatcher);
 		}));
 
 		logger.info("CookeyMod has been loaded.");

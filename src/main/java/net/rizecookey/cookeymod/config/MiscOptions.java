@@ -14,6 +14,7 @@ public class MiscOptions implements Category {
     public static final MiscOptions DEFAULTS = new MiscOptions();
 
     boolean showOwnNameInThirdPerson = false;
+    boolean force100PercentRecharge = false;
 
     public boolean isShowOwnNameInThirdPerson() {
         return showOwnNameInThirdPerson;
@@ -23,15 +24,25 @@ public class MiscOptions implements Category {
         this.showOwnNameInThirdPerson = showOwnNameInThirdPerson;
     }
 
+    public boolean isForce100PercentRecharge() {
+        return force100PercentRecharge;
+    }
+
+    public void setForce100PercentRecharge(boolean force100PercentRecharge) {
+        this.force100PercentRecharge = force100PercentRecharge;
+    }
+
     @Override
     public void loadOptions(Map<String, Object> options) {
         this.showOwnNameInThirdPerson = (boolean) options.getOrDefault("showOwnNameInThirdPerson", this.showOwnNameInThirdPerson);
+        this.force100PercentRecharge = (boolean) options.getOrDefault("force100PercentRecharge", this.force100PercentRecharge);
     }
 
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("showOwnNameInThirdPerson", this.showOwnNameInThirdPerson);
+        map.put("force100PercentRecharge", this.force100PercentRecharge);
         return map;
     }
 
@@ -40,10 +51,18 @@ public class MiscOptions implements Category {
         List<AbstractConfigListEntry<?>> entries = new ArrayList<>();
 
         entries.add(
-                ConfigEntryBuilder.create().
-                        startBooleanToggle(new TranslatableComponent(TRANSLATION_KEY + ".showOwnNameInThirdPerson"), this.showOwnNameInThirdPerson)
+                ConfigEntryBuilder.create()
+                        .startBooleanToggle(new TranslatableComponent(TRANSLATION_KEY + ".showOwnNameInThirdPerson"), this.showOwnNameInThirdPerson)
                         .setSaveConsumer(this::setShowOwnNameInThirdPerson)
                         .setDefaultValue(DEFAULTS.isShowOwnNameInThirdPerson())
+                .build()
+        );
+
+        entries.add(
+                ConfigEntryBuilder.create()
+                        .startBooleanToggle(new TranslatableComponent(TRANSLATION_KEY + ".force100PercentRecharge"), this.force100PercentRecharge)
+                        .setSaveConsumer(this::setForce100PercentRecharge)
+                        .setDefaultValue(DEFAULTS.isForce100PercentRecharge())
                 .build()
         );
 
