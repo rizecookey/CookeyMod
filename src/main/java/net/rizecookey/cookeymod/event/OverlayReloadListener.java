@@ -1,4 +1,4 @@
-package net.rizecookey.cookeymod.events;
+package net.rizecookey.cookeymod.event;
 
 import java.util.ArrayList;
 import java.util.List;

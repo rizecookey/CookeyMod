@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.HorseArmorLayer;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.AnimationOptions;
+import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.extension.OverlayRendered;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +20,7 @@ public abstract class HorseArmorLayerMixin implements OverlayRendered<Horse> {
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HorseModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"), index = 3)
     public int modifyOverlayCoords(int previousCoords) {
-        boolean show = CookeyMod.getInstance().getConfig().getCategory(AnimationOptions.class).isShowDamageTintOnArmor();
+        boolean show = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showDamageTintOnArmor.get();
         return show ? this.overlayCoords : previousCoords;
     }
 

@@ -5,7 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.AnimationOptions;
+import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +21,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "getAttackAnim", at = @At(value = "RETURN", shift = At.Shift.BEFORE), cancellable = true, locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void changeAttackAnim(float f, CallbackInfoReturnable<Float> cir, float g, float h) {
-        if (CookeyMod.getInstance().getConfig().getCategory(AnimationOptions.class).isEnableOldSwing()) {
+        if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableOldSwing.get()) {
             cir.setReturnValue(h);
         }
     }

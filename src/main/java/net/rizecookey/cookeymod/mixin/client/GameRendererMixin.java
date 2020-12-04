@@ -3,7 +3,7 @@ package net.rizecookey.cookeymod.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.GameRenderer;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.AnimationOptions;
+import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,7 +15,7 @@ public abstract class GameRendererMixin {
 
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobView(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"))
     public void cancelCameraShake(GameRenderer gameRenderer, PoseStack poseStack, float f) {
-        if (!CookeyMod.getInstance().getConfig().getCategory(AnimationOptions.class).isDisableCameraBobbing()) {
+        if (!CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).disableCameraBobbing.get()) {
             this.bobView(poseStack, f);
         }
     }
