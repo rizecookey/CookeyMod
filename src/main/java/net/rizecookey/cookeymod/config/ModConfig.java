@@ -3,6 +3,9 @@ package net.rizecookey.cookeymod.config;
 import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;
 import net.rizecookey.cookeymod.CookeyMod;
+import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.category.Category;
+import net.rizecookey.cookeymod.config.category.MiscCategory;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -15,6 +18,7 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class ModConfig {
     public static final String TRANSLATION_KEY = "options.cookeymod";
+    public static final String GENERIC_KEYS = TRANSLATION_KEY + "." + "generic.options";
 
     CookeyMod mod;
     Logger logger;
@@ -38,12 +42,12 @@ public class ModConfig {
     }
 
     public void registerCategories() {
-        this.registerCategory("animations", new AnimationOptions());
-        this.registerCategory("misc", new MiscOptions());
+        this.registerCategory(new AnimationsCategory());
+        this.registerCategory(new MiscCategory());
     }
 
-    public void registerCategory(String id, Category category) {
-        categories.put(id, category);
+    public void registerCategory(Category category) {
+        categories.put(category.getId(), category);
     }
 
     public void loadCategories() {

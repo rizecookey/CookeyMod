@@ -3,10 +3,11 @@ package net.rizecookey.cookeymod.screen;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.Category;
+import net.rizecookey.cookeymod.config.category.Category;
 import net.rizecookey.cookeymod.config.ModConfig;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public abstract class ScreenBuilder {
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setTitle(new TranslatableComponent(ModConfig.TRANSLATION_KEY))
+                .setTransparentBackground(Minecraft.getInstance().level != null)
                 .setSavingRunnable(() -> {
                     try {
                         config.saveConfig();
@@ -24,12 +26,12 @@ public abstract class ScreenBuilder {
                         CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file!");
                         e.printStackTrace();
                     }
-                })
-                .setParentScreen(prevScreen);
+                });
+                if (prevScreen != null) builder.setParentScreen(prevScreen);
 
         for (String id : config.getCategories().keySet()) {
             Category category = config.getCategory(id);
-            ConfigCategory configCategory = builder.getOrCreateCategory(new TranslatableComponent(category.getTranslationId()));
+            ConfigCategory configCategory = builder.getOrCreateCategory(new TranslatableComponent(category.getTranslationKey()));
 
             for (AbstractConfigListEntry<?> entry : category.getConfigEntries()) {
                 configCategory.addEntry(entry);

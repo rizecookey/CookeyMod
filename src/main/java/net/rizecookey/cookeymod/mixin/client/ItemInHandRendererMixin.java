@@ -8,7 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.AnimationOptions;
+import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -20,7 +20,7 @@ public abstract class ItemInHandRendererMixin {
 
     @Redirect(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;applyItemArmAttackTransform(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/entity/HumanoidArm;F)V", ordinal = 1))
     public void cancelAttackTransform(ItemInHandRenderer itemInHandRenderer, PoseStack poseStack, HumanoidArm humanoidArm, float f) {
-        if (!this.getAnimationOptions().isSwingAndUseItem()) this.applyItemArmAttackTransform(poseStack, humanoidArm, f);
+        if (!this.getAnimationOptions().swingAndUseItem.get()) this.applyItemArmAttackTransform(poseStack, humanoidArm, f);
     }
 
     @Inject(method = "renderArmWithItem",
@@ -29,7 +29,7 @@ public abstract class ItemInHandRendererMixin {
                     target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemTransforms$TransformType;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
                     ordinal = 1, shift = At.Shift.BEFORE))
     public void injectAttackTransform(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
-        if (this.getAnimationOptions().isSwingAndUseItem() && !abstractClientPlayer.isAutoSpinAttack()) {
+        if (this.getAnimationOptions().swingAndUseItem.get() && !abstractClientPlayer.isAutoSpinAttack()) {
             HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND
                     ? abstractClientPlayer.getMainArm()
                     : abstractClientPlayer.getMainArm().getOpposite();
@@ -41,11 +41,11 @@ public abstract class ItemInHandRendererMixin {
             from = @At(value = "JUMP", ordinal = 3)
     ), at = @At(value = "FIELD", ordinal = 0))
     public float modifyArmHeight(float f) {
-        double offset = this.getAnimationOptions().getAttackCooldownHandOffset();
+        double offset = this.getAnimationOptions().attackCooldownHandOffset.get();
         return (float) (f * (1 - offset) + offset);
     }
 
-    public AnimationOptions getAnimationOptions() {
-        return CookeyMod.getInstance().getConfig().getCategory(AnimationOptions.class);
+    public AnimationsCategory getAnimationOptions() {
+        return CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
     }
 }

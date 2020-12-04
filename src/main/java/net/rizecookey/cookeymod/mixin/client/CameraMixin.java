@@ -3,7 +3,7 @@ package net.rizecookey.cookeymod.mixin.client;
 import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.AnimationOptions;
+import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,6 +37,6 @@ public abstract class CameraMixin {
     }
 
     public double getSneakAnimationSpeed() {
-        return CookeyMod.getInstance().getConfig().getCategory(AnimationOptions.class).getSneakAnimationSpeed();
+        return CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).sneakAnimationSpeed.get();
     }
 }

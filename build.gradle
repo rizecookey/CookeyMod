@@ -16,7 +16,6 @@ repositories {
 		name "CombatReforged"
 		url "https://maven.combatreforged.com"
 	}
-	mavenLocal()
 }
 
 configurations {
@@ -28,25 +27,22 @@ dependencies {
 	mappings minecraft.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	def cloth_config_api = "me.shedaniel.cloth:config-2:${project.cloth_config_api_version}"
-	modImplementation cloth_config_api
-	include cloth_config_api
-
-	def toml4j = "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
-	implementation toml4j
-	includeClasspath toml4j
-
-	Set<String> apiModules = [
-			"fabric-api-base",
-			"fabric-command-api-v1"
-	]
-
-    // Add each module as a dependency
-	apiModules.forEach {
-		modImplementation(fabricApi.module(it, project.fabric_version))
+	modApi("me.shedaniel.cloth:config-2:${project.cloth_config_api_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
 	}
+	include "me.shedaniel.cloth:config-2:${project.cloth_config_api_version}"
 
-	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+	implementation "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
+	includeClasspath "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
+
+	// Local jars
+	modApi "net.fabricmc.fabric-api:fabric-api-base:0.2.0+9f0fb4b898"
+	modApi "net.fabricmc.fabric-api:fabric-command-api-v1:1.0.9+a4467d2a98"
+	modApi "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.3.2+facf3bbf98"
+
+	modImplementation("io.github.prospector:modmenu:${project.modmenu_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 }
 
 // Custom Manifest and Intermediary mappings declaration

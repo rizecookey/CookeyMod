@@ -6,9 +6,9 @@ import me.shedaniel.math.Color;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.events.OverlayReloadListener;
+import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.event.OverlayReloadListener;
 import net.rizecookey.cookeymod.extension.OverlayTextureExtension;
-import net.rizecookey.cookeymod.config.AnimationOptions;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,8 +42,8 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
         for(int i = 0; i < 16; ++i) {
             for(int j = 0; j < 16; ++j) {
                 if (i < 8) {
-                    AnimationOptions animOpt = CookeyMod.getInstance().getConfig().getCategory(AnimationOptions.class);
-                    Color color = animOpt.getDamageColor();
+                    AnimationsCategory animOpt = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+                    Color color = animOpt.damageColor.get();
                     nativeImage.setPixelRGBA(j, i, getColorInt(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                 }
             }

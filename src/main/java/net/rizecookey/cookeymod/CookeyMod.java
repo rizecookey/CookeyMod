@@ -1,9 +1,7 @@
 package net.rizecookey.cookeymod;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.rizecookey.cookeymod.command.CookeyModCommand;
 import net.rizecookey.cookeymod.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,12 +18,6 @@ public class CookeyMod implements ModInitializer {
 
 		CookeyMod.instance = this;
 		this.config = new ModConfig(FabricLoader.getInstance().getConfigDir().resolve("cookeymod/config.toml").toFile());
-
-		CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> {
-			if (!dedicated) {
-				CookeyModCommand.registerCommand(dispatcher);
-			}
-		}));
 
 		logger.info("CookeyMod has been loaded.");
 	}
