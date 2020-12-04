@@ -13,6 +13,7 @@
     "client.ItemInHandRendererMixin",
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
+    "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
     "client.PlayerMixin"
   ],

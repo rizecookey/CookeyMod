@@ -1,5 +1,6 @@
 {
   "options.cookeymod": "CookeyMod",
+  "options.cookeymod.button": "CookeyMod...",
   "options.cookeymod.generic.options.off": "Off",
   "options.cookeymod.animations": "Animations & Rendering",
   "options.cookeymod.animations.swingAndUseItem": "Swing & use item",
@@ -10,6 +11,7 @@
   "options.cookeymod.animations.sneakAnimationSpeed": "Sneaking transition speed",
   "options.cookeymod.animations.disableCameraBobbing": "Disable camera bob shaking",
   "options.cookeymod.misc": "Miscellaneous",
+  "options.cookeymod.misc.showModButton": "Show mod button in Minecraft options",
   "options.cookeymod.misc.showOwnNameInThirdPerson": "Show own name in 3rd person",
   "options.cookeymod.misc.force100PercentRecharge": "Force 100% weapon recharge"
 }
