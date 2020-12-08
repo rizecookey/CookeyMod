@@ -10,14 +10,6 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-repositories {
-	// Repo for CT intermediary mappings
-	maven {
-		name "CombatReforged"
-		url "https://maven.combatreforged.com"
-	}
-}
-
 configurations {
 	includeClasspath
 }
@@ -27,18 +19,19 @@ dependencies {
 	mappings minecraft.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modApi("me.shedaniel.cloth:config-2:${project.cloth_config_api_version}") {
+	String clothConfig = "me.shedaniel.cloth:config-2:${project.cloth_config_api_version}"
+	modApi(clothConfig) {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include "me.shedaniel.cloth:config-2:${project.cloth_config_api_version}"
+	include clothConfig
 
-	implementation "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
-	includeClasspath "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
+	String toml4j = "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
+	implementation toml4j
+	includeClasspath toml4j
 
-	// Local jars
-	modApi "net.fabricmc.fabric-api:fabric-api-base:0.2.0+9f0fb4b898"
-	modApi "net.fabricmc.fabric-api:fabric-command-api-v1:1.0.9+a4467d2a98"
-	modApi "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.3.2+facf3bbf98"
+	Dependency fabricResourceLoader = fabricApi.module("fabric-resource-loader-v0", project.fabric_version) as Dependency
+	modImplementation fabricResourceLoader
+	include fabricResourceLoader
 
 	modImplementation("io.github.prospector:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
