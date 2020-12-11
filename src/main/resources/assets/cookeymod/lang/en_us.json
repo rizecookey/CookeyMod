@@ -10,6 +10,8 @@
   "options.cookeymod.animations.showDamageTintOnArmor": "Show damage tint on armor",
   "options.cookeymod.animations.sneakAnimationSpeed": "Sneaking transition speed",
   "options.cookeymod.animations.disableCameraBobbing": "Disable camera bob shaking",
+  "options.cookeymod.animations.onlyShowShieldWhenBlocking": "Only show shield when blocking",
+  "options.cookeymod.animations.enableItemBlocking": "Enable item blocking",
   "options.cookeymod.misc": "Miscellaneous",
   "options.cookeymod.misc.showModButton": "Show mod button in Minecraft options",
   "options.cookeymod.misc.showOwnNameInThirdPerson": "Show own name in 3rd person",
