@@ -7,8 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.category.Category;
 import net.rizecookey.cookeymod.config.ModConfig;
+import net.rizecookey.cookeymod.config.category.Category;
 
 import java.io.IOException;
 

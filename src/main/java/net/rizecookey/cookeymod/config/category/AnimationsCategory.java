@@ -16,7 +16,8 @@ public class AnimationsCategory extends Category {
     public Option<Double> sneakAnimationSpeed;
     public Option<Boolean> disableCameraBobbing;
     public Option<Boolean> onlyShowShieldWhenBlocking;
-    public Option<Boolean> enableItemBlocking;
+    public Option<Boolean> enableToolBlocking;
+    public Option<Boolean> showEatingInThirdPerson;
 
     public AnimationsCategory() {
         swingAndUseItem = this.register(new BooleanOption("swingAndUseItem", this, false));
@@ -33,7 +34,8 @@ public class AnimationsCategory extends Category {
         sneakAnimationSpeed = this.register(new DoubleSliderOption("sneakAnimationSpeed", this, 1.0, 0.0, 2.0));
         disableCameraBobbing = this.register(new BooleanOption("disableCameraBobbing", this, false));
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
-        enableItemBlocking = this.register(new BooleanOption("enableItemBlocking", this, false));
+        enableToolBlocking = this.register(new BooleanOption("enableToolBlocking", this, false));
+        showEatingInThirdPerson = this.register(new BooleanOption("showEatingInThirdPerson", this, false));
     }
 
     @Override

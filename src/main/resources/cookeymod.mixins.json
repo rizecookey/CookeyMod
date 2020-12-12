@@ -10,12 +10,16 @@
     "client.GameRendererMixin",
     "client.HorseArmorLayerMixin",
     "client.HumanoidArmorLayerMixin",
+    "client.HumanoidModelMixin",
+    "client.ItemInHandLayerMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
+    "client.MinecraftAccessor",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
-    "client.PlayerMixin"
+    "client.PlayerMixin",
+    "client.PlayerRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

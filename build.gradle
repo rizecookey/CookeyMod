@@ -44,6 +44,7 @@ minecraft {
 	intermediaryUrl = { mcVersion ->
 		return "https://maven.combatreforged.com/net/fabricmc/intermediary/${mcVersion}/intermediary-${mcVersion}-v2.jar";
 	}
+	accessWidener "src/main/resources/cookeymod.accesswidener"
 }
 
 processResources {

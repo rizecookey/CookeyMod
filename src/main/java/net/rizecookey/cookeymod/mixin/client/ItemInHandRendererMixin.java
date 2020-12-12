@@ -2,7 +2,6 @@ package net.rizecookey.cookeymod.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,14 +14,10 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ItemInHandRenderer.class)
 public abstract class ItemInHandRendererMixin {
@@ -41,23 +36,17 @@ public abstract class ItemInHandRendererMixin {
     @Shadow
     private ItemStack mainHandItem;
 
-    @Unique boolean isBlocking;
-    @Unique float shieldI;
-
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
         if (this.getAnimationOptions().onlyShowShieldWhenBlocking.get()) {
-            this.shieldI = i;
             if (itemStack.getItem() instanceof ShieldItem && !abstractClientPlayer.isBlocking()) {
                 ci.cancel();
             }
         }
-        if (this.getAnimationOptions().enableItemBlocking.get()) {
+        if (this.getAnimationOptions().enableToolBlocking.get()) {
             ItemStack otherHandItem = interactionHand == InteractionHand.MAIN_HAND ? this.offHandItem : this.mainHandItem;
             if (itemStack.getItem() instanceof ShieldItem) {
-                this.isBlocking = abstractClientPlayer.isBlocking();
-                this.shieldI = i;
-                if (otherHandItem.getItem() instanceof TieredItem) {
+                if (otherHandItem.getItem() instanceof TieredItem && abstractClientPlayer.isBlocking()) {
                     ci.cancel();
                 }
             }
@@ -66,8 +55,7 @@ public abstract class ItemInHandRendererMixin {
                 HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND
                         ? abstractClientPlayer.getMainArm()
                         : abstractClientPlayer.getMainArm().getOpposite();
-                if (this.isBlocking != abstractClientPlayer.isBlocking()) shieldI = 1;
-                this.applyItemArmTransform(poseStack, humanoidArm, shieldI);
+                this.applyItemArmTransform(poseStack, humanoidArm, i);
                 this.applyItemBlockTransform(poseStack, humanoidArm);
                 if (getAnimationOptions().swingAndUseItem.get()) {
                     this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
