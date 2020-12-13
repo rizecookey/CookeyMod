@@ -64,11 +64,11 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
         float j;
         float k = 1.0F - (float) Math.pow(h, 27.0D);
         if (h < 0.8F) {
-            j = Mth.abs(Mth.cos(g / 4.0F * 3.1415927F) * 0.5F);
+            j = Mth.abs(Mth.cos(g / 4.0F * 3.1415927F) * 0.25F);
             xRot = xRot * 0.5F - 1.57079633F + j;
         }
         else {
-            xRot = k * (xRot * 0.5F - 1.57079633F + 0.5F);
+            xRot = k * (xRot * 0.5F - 1.57079633F + 0.25F);
         }
 
         yRot = side * k * -0.5235988F;
