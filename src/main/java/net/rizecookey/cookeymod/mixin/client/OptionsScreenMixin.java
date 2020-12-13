@@ -1,6 +1,5 @@
 package net.rizecookey.cookeymod.mixin.client;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
