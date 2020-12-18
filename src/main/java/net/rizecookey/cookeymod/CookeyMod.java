@@ -8,18 +8,18 @@ import org.apache.logging.log4j.Logger;
 
 public class CookeyMod implements ModInitializer {
 	ModConfig config;
-	Logger logger = LogManager.getLogger();
+	Logger logger = LogManager.getLogger("CookeyMod");
 
 	static CookeyMod instance;
 
 	@Override
 	public void onInitialize() {
-		logger.info("Loading CookeyMod...");
+		logger.info("[" + getClass().getSimpleName() + "] Loading CookeyMod...");
 
 		CookeyMod.instance = this;
 		this.config = new ModConfig(FabricLoader.getInstance().getConfigDir().resolve("cookeymod/config.toml").toFile());
 
-		logger.info("CookeyMod has been loaded.");
+		logger.info("[" + getClass().getSimpleName() + "] CookeyMod has been loaded.");
 	}
 
 	public Logger getLogger() {

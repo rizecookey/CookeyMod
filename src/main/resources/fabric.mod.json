@@ -21,7 +21,7 @@
       "net.rizecookey.cookeymod.CookeyMod"
     ],
     "modmenu": [
-      "net.rizecookey.cookeymod.screen.ModMenuApiImpl"
+      "net.rizecookey.cookeymod.implementation.ModMenuApiImpl"
     ]
   },
   "mixins": [

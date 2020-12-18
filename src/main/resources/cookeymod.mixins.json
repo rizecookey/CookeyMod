@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "net.rizecookey.cookeymod.mixin",
   "compatibilityLevel": "JAVA_8",
+  "plugin": "net.rizecookey.cookeymod.implementation.CookeyModMixinPlugin",
   "mixins": [
   ],
   "client": [
@@ -19,7 +20,9 @@
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
     "client.PlayerMixin",
-    "client.PlayerRendererMixin"
+    "client.PlayerRendererMixin",
+
+    "client.compatibility.optifabric.OFHumanoidArmorLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
