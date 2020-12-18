@@ -34,8 +34,8 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
                 : livingEntity.getMainArm().getOpposite();
         if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson.get()) {
             if (livingEntity.isUsingItem() && usedHand == HumanoidArm.RIGHT && (livingEntity.getUseItem().isEdible() || livingEntity.getUseItem().getItem() instanceof PotionItem)) {
-                this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
-                ci.cancel();
+                boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
+                if (run) ci.cancel();
             }
         }
     }
@@ -47,20 +47,21 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
                 : livingEntity.getMainArm().getOpposite();
         if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson.get()) {
             if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().isEdible() || livingEntity.getUseItem().getItem() instanceof PotionItem)) {
-                this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
-                ci.cancel();
+                boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
+                if (run) ci.cancel();
             }
         }
     }
 
     // Animation values and "formula" from ItemInHandRenderer's applyEatAnimation
-    public void applyEatingAnimation(LivingEntity livingEntity, HumanoidArm humanoidArm, float f) {
+    public boolean applyEatingAnimation(LivingEntity livingEntity, HumanoidArm humanoidArm, float f) {
         int side = humanoidArm == HumanoidArm.RIGHT ? 1 : -1;
         float xRot = humanoidArm == HumanoidArm.RIGHT ? this.rightArm.xRot : this.leftArm.xRot;
         float yRot;
 
         float g = livingEntity.getUseItemRemainingTicks() - f + 1.0F;
         float h = g / livingEntity.getUseItem().getUseDuration();
+        if (h < -1.0F) return false; // Stop animation from going wild if eating won't process
         float j;
         float k = 1.0F - (float) Math.pow(h, 27.0D);
         if (h < 0.8F) {
@@ -80,5 +81,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
             this.leftArm.xRot = xRot;
             this.leftArm.yRot = yRot;
         }
+
+        return true;
     }
 }
