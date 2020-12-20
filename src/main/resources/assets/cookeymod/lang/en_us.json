@@ -13,6 +13,7 @@
   "options.cookeymod.animations.onlyShowShieldWhenBlocking": "Only show shield when blocking",
   "options.cookeymod.animations.enableToolBlocking": "Enable tool blocking",
   "options.cookeymod.animations.showEatingInThirdPerson": "Show eating & drinking animation in 3rd person",
+  "options.cookeymod.animations.disableEffectBasedFovChange": "Disable non-sprinting based FOV changing",
   "options.cookeymod.misc": "Miscellaneous",
   "options.cookeymod.misc.showModButton": "Show mod button in Minecraft options",
   "options.cookeymod.misc.showOwnNameInThirdPerson": "Show own name in 3rd person",

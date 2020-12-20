@@ -7,6 +7,7 @@
   "mixins": [
   ],
   "client": [
+    "client.AbstractClientPlayerMixin",
     "client.CameraMixin",
     "client.GameRendererMixin",
     "client.HorseArmorLayerMixin",
@@ -14,6 +15,7 @@
     "client.HumanoidModelMixin",
     "client.ItemInHandLayerMixin",
     "client.ItemInHandRendererMixin",
+    "client.LivingEntityAccessor",
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
     "client.MinecraftAccessor",
@@ -21,7 +23,6 @@
     "client.OverlayTextureMixin",
     "client.PlayerMixin",
     "client.PlayerRendererMixin",
-
     "client.compatibility.optifabric.OFHumanoidArmorLayerMixin"
   ],
   "injectors": {
