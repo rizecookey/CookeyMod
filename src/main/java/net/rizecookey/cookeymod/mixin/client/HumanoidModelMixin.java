@@ -47,7 +47,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
                 ? livingEntity.getMainArm()
                 : livingEntity.getMainArm().getOpposite();
         if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson.get()) {
-            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().isEdible() || livingEntity.getUseItem().getItem() instanceof PotionItem)) {
+            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
                 boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
                 if (run) ci.cancel();
             }
