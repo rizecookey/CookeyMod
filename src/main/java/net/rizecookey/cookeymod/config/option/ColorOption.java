@@ -14,6 +14,7 @@ public class ColorOption extends Option<Color> {
                 .setAlphaMode(alphaMode)
                 .setDefaultValue(this.getDefault().getColor())
                 .build();
+        this.mcOption = null;
     }
 
     @Override

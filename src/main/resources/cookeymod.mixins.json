@@ -19,6 +19,7 @@
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
     "client.MinecraftAccessor",
+    "client.OptionsMixin",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
     "client.PlayerMixin",

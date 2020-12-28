@@ -132,4 +132,8 @@ public class ModConfig {
             }
         }
     }
+
+    public String getTranslationKey() {
+        return TRANSLATION_KEY;
+    }
 }
