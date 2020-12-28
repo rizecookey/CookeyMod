@@ -22,7 +22,7 @@ public class ModConfigScreen extends Screen {
     public void addButton(Component label, Button.OnPress onPress) {
         int i = this.buttons.size();
         int x = i % 2 == 0 ? this.width / 2 - 155 : this.width / 2 + 5;
-        int y = this.height / 6 + 12 - 6 + (int) (24 * Math.floor(this.buttons.size() / 2.0));
+        int y = this.height / 6 + 12 - 6 + (int) (24 * Math.floor(i / 2.0));
 
         this.addButton(new Button(x, y, 150, 20, label, onPress));
     }
