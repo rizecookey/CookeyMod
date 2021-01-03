@@ -14,6 +14,7 @@
   "options.cookeymod.animations.enableToolBlocking": "Tool blocking",
   "options.cookeymod.animations.showEatingInThirdPerson": "3rd person consuming",
   "options.cookeymod.animations.disableEffectBasedFovChange": "Ignore effect FOV",
+  "options.cookeymod.animations.enableDamageCameraTilt" : "Camera damage tilt",
   "options.cookeymod.misc": "Miscellaneous",
   "options.cookeymod.misc.showModButton": "Mod button in MC options",
   "options.cookeymod.misc.showOwnNameInThirdPerson": "Name in 3rd person",

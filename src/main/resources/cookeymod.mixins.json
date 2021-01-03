@@ -9,6 +9,7 @@
   "client": [
     "client.AbstractClientPlayerMixin",
     "client.CameraMixin",
+    "client.ClientPacketListenerMixin",
     "client.GameRendererMixin",
     "client.HorseArmorLayerMixin",
     "client.HumanoidArmorLayerMixin",
