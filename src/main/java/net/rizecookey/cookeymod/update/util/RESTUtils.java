@@ -49,6 +49,7 @@ public class RESTUtils {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 JsonElement json = gson.fromJson(reader, JsonElement.class);
                 reader.close();
+                con.disconnect();
 
                 LOGGER.info("Done.");
                 return json;
