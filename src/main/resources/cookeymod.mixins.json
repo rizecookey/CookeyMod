@@ -25,6 +25,7 @@
     "client.OverlayTextureMixin",
     "client.PlayerMixin",
     "client.PlayerRendererMixin",
+    "client.RemotePlayerMixin",
     "client.compatibility.optifabric.OFHumanoidArmorLayerMixin"
   ],
   "injectors": {
