@@ -16,6 +16,7 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.option.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,9 +28,11 @@ public abstract class ItemInHandLayerMixin<T extends LivingEntity, M extends Ent
         super(renderLayerParent);
     }
 
+    Option<Boolean> enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking;
+
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void hideShieldWithToolBlocking(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-        if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking.get()) {
+        if (this.enableToolBlocking.get()) {
             InteractionHand otherHand = humanoidArm == livingEntity.getMainArm() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
             ItemStack otherHandStack = livingEntity.getItemInHand(otherHand);
             if (itemStack.getItem() instanceof ShieldItem && otherHandStack.getItem() instanceof TieredItem && livingEntity.isBlocking()) {

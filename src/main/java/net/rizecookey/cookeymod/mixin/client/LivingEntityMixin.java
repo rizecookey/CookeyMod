@@ -20,6 +20,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
     boolean receivedKb = false;
     int hurtTimeKb;
 
+    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+
     // Default constructor to satisfy compiler :P
     public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -63,6 +65,6 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
     }
 
     public boolean isDamageTilt() {
-        return CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableDamageCameraTilt.get();
+        return animationsCategory.enableDamageCameraTilt.get();
     }
 }

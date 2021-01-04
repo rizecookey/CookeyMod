@@ -36,6 +36,8 @@ public abstract class ItemInHandRendererMixin {
     @Shadow
     private ItemStack mainHandItem;
 
+    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
         if (this.getAnimationOptions().onlyShowShieldWhenBlocking.get()) {
@@ -102,7 +104,7 @@ public abstract class ItemInHandRendererMixin {
     }
 
     public AnimationsCategory getAnimationOptions() {
-        return CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+        return this.animationsCategory;
     }
 
     /* Values from 15w33b, thanks to Fuzss for providing them

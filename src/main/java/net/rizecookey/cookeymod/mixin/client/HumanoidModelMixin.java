@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.UseAnim;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.option.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,12 +28,14 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     @Shadow
     public ModelPart leftArm;
 
+    Option<Boolean> showEatingInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson;
+
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
     public void addRightEatAnimation(T livingEntity, CallbackInfo ci) {
         HumanoidArm usedHand = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND
                 ? livingEntity.getMainArm()
                 : livingEntity.getMainArm().getOpposite();
-        if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson.get()) {
+        if (this.showEatingInThirdPerson.get()) {
             if (livingEntity.isUsingItem() && usedHand == HumanoidArm.RIGHT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
                 boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
                 if (run) ci.cancel();
@@ -45,7 +48,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
         HumanoidArm usedHand = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND
                 ? livingEntity.getMainArm()
                 : livingEntity.getMainArm().getOpposite();
-        if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson.get()) {
+        if (this.showEatingInThirdPerson.get()) {
             if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
                 boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
                 if (run) ci.cancel();
