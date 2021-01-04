@@ -60,16 +60,15 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
         float yRot;
 
         float g = livingEntity.getUseItemRemainingTicks() - f + 1.0F;
-        float h = g / livingEntity.getUseItem().getUseDuration() % 1.0F;
-        if (h < -1.0F) return false; // Stop animation from going wild if eating won't process
+        float h = g / livingEntity.getUseItem().getUseDuration();
         float j;
-        float k = 1.0F - (float) Math.pow(h, 27.0D);
+        float k = Math.min(1.0F - (float) Math.pow(h, 27.0D), 1.0F);
         if (h < 0.8F) {
             j = Mth.abs(Mth.cos(g / 4.0F * 3.1415927F) * 0.25F);
             xRot = xRot * 0.5F - 1.57079633F + j;
         }
         else {
-            xRot = k * (xRot * 0.5F - 1.57079633F + 0.25F);
+            xRot = k * (xRot * 0.5F - 1.32079633F);
         }
 
         yRot = side * k * -0.5235988F;
