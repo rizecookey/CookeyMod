@@ -3,9 +3,8 @@ package net.rizecookey.cookeymod.update.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -16,7 +15,7 @@ import java.net.URL;
 import java.util.Arrays;
 
 public class RESTUtils {
-    private static final Logger LOGGER = LogManager.getLogger(RESTUtils.class.getSimpleName());
+    private static final PrefixLogger LOGGER = new PrefixLogger(LogManager.getLogger(RESTUtils.class.getSimpleName()));
 
     public static JsonElement makeJsonGetRequest(String urlString, String... requestHeaders) {
         URL url;
@@ -24,7 +23,7 @@ public class RESTUtils {
             url = new URL(urlString);
         } catch (MalformedURLException e) {
             LOGGER.error("Invalid URL \"" + urlString + "\"!");
-            LOGGER.error(e);
+            LOGGER.unwrap().error(e);
             return null;
         }
         try {
@@ -60,7 +59,7 @@ public class RESTUtils {
             }
         } catch (IOException e) {
             LOGGER.error("Failed to open connection to \"" + url.toString() + "\"!");
-            LOGGER.error(e);
+            LOGGER.unwrap().error(e);
             return null;
         }
     }
