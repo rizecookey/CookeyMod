@@ -8,11 +8,10 @@ import net.rizecookey.cookeymod.config.category.Category;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -25,11 +24,11 @@ public class ModConfig {
     CookeyMod mod;
     Logger logger;
 
-    File file;
+    Path file;
     Toml toml;
     Map<String, Category> categories = new HashMap<>();
 
-    public ModConfig(File file) {
+    public ModConfig(Path file) {
         this.mod = CookeyMod.getInstance();
         this.logger = mod.getLogger();
 
@@ -64,27 +63,28 @@ public class ModConfig {
     }
 
     public void loadConfig() throws IOException {
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
+        if (!Files.exists(file.getParent())) {
+            Files.createDirectories(file.getParent());
         }
-        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("assets/cookeymod/config.toml");
+
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("assets/" + mod.getModId() + "/config.toml");
         if (resourceStream == null) {
             logger.error("Failed to find config resource!");
             return;
         }
-        if (!file.exists()) {
+        if (!Files.exists(file)) {
             logger.info("Config not found, creating default one...");
-            Files.copy(resourceStream, Paths.get(file.getPath()));
+            Files.copy(resourceStream, file);
             logger.info("Copied default config.");
         }
         else {
-            Map<String, Object> configMap = new Toml().read(file).toMap();
+            Map<String, Object> configMap = new Toml().read(file.toFile()).toMap();
             Map<String, Object> fallbackMap = new Toml().read(resourceStream).toMap();
             this.copyMissingNested(fallbackMap, configMap);
-            new TomlWriter().write(configMap, file);
+            new TomlWriter().write(configMap, file.toFile());
         }
         resourceStream.close();
-        this.toml = new Toml().read(file);
+        this.toml = new Toml().read(file.toFile());
         this.loadCategories();
     }
 
@@ -116,7 +116,7 @@ public class ModConfig {
             optionsMap.put(id, categories.get(id).toMap());
         }
 
-        new TomlWriter().write(optionsMap, file);
+        new TomlWriter().write(optionsMap, file.toFile());
     }
 
     @SuppressWarnings("rawtypes")

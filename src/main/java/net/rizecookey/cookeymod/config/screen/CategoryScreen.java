@@ -25,16 +25,23 @@ public class CategoryScreen extends OptionsSubScreen {
 
     @Override
     protected void init() {
+        assert this.minecraft != null;
         this.list = new OptionsList(this.minecraft, this.width, this.height, 32, this.height - 32, 25);
         List<net.minecraft.client.Option> mcOptions = new ArrayList<>();
         for (Option<?> option : this.category.getOptions().values()) {
-            if (option.getMcOption() != null) mcOptions.add(option.getMcOption());
+            if (option.getMcOption() != null) {
+                if (this.minecraft.font.width(new TranslatableComponent(option.getTranslationKey())) > 150) {
+                    this.list.addBig(option.getMcOption());
+                }
+                else {
+                    mcOptions.add(option.getMcOption());
+                }
+            }
         }
         this.list.addSmall(mcOptions.toArray(new net.minecraft.client.Option[0]));
         this.children.add(this.list);
 
         this.addButton(new Button(this.width / 2 - 100, this.height - 27, 200, 20, CommonComponents.GUI_DONE, (button) -> {
-            assert this.minecraft != null;
             this.minecraft.options.save();
             this.minecraft.getWindow().changeFullscreenVideoMode();
             this.minecraft.setScreen(this.lastScreen);

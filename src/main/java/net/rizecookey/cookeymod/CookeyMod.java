@@ -2,38 +2,53 @@ package net.rizecookey.cookeymod;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.rizecookey.cookeymod.config.ModConfig;
-import net.rizecookey.cookeymod.update.ModUpdater;
+import net.rizecookey.cookeymod.update.GitHubUpdater;
 import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-public class CookeyMod implements ModInitializer {
+public class CookeyMod implements ModInitializer { ;
     public static final String MINECRAFT_VERSION = "1.16_combat-6";
 
-    public Path updateDir;
-
+    ModContainer modContainer;
+    ModMetadata modMetadata;
     ModConfig config;
     PrefixLogger logger = new PrefixLogger(LogManager.getLogger("CookeyMod"));
+
+    GitHubUpdater updater;
 
     static CookeyMod instance;
 
     @Override
     public void onInitialize() {
-        FabricLoader fabricLoader = FabricLoader.getInstance();
-        updateDir = fabricLoader.getConfigDir().resolve("cookeymod/config.toml");
-
         logger.info("Loading CookeyMod...");
 
         CookeyMod.instance = this;
-        this.config = new ModConfig(fabricLoader.getConfigDir().resolve("cookeymod/config.toml").toFile());
+        FabricLoader loader = FabricLoader.getInstance();
 
-        // Unfinished
-        // ModUpdater.update(fabricLoader.getModContainer("cookeymod").get().getMetadata().getVersion().toString(), MINECRAFT_VERSION, fabricLoader.getConfigDir().resolve("cookeymod/update/"));
+        Optional<ModContainer> opt = loader.getModContainer("cookeymod");
+        if (opt.isPresent()) {
+            modContainer = opt.get();
+            modMetadata = modContainer.getMetadata();
 
-        logger.info("CookeyMod has been loaded.");
+            Path configDir = loader.getConfigDir().resolve(getModId() + "/");
+
+            config = new ModConfig(configDir.resolve("config.toml"));
+            updater = new GitHubUpdater(modMetadata, loader.getConfigDir().resolve("mods"));
+
+            logger.info("CookeyMod " + getModVersion() + " has been loaded.");
+        }
+        else {
+            logger.error("Couldn't find own mod container!");
+            System.exit(-1);
+        }
+
     }
 
     public Logger getLogger() {
@@ -42,6 +57,22 @@ public class CookeyMod implements ModInitializer {
 
     public ModConfig getConfig() {
         return this.config;
+    }
+
+    public String getModId() {
+        return modMetadata.getId();
+    }
+
+    public String getModVersion() {
+        return modMetadata.getVersion().getFriendlyString();
+    }
+
+    public ModContainer getModContainer() {
+        return modContainer;
+    }
+
+    public GitHubUpdater getUpdater() {
+        return updater;
     }
 
     public static CookeyMod getInstance() {
