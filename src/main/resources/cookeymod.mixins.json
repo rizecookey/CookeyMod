@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_8",
   "plugin": "net.rizecookey.cookeymod.implementation.CookeyModMixinPlugin",
   "mixins": [
-    "client.MinecraftMixin"
   ],
   "client": [
     "client.AbstractClientPlayerMixin",
@@ -21,6 +20,7 @@
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
     "client.MinecraftAccessor",
+    "client.MinecraftMixin",
     "client.OptionsMixin",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",

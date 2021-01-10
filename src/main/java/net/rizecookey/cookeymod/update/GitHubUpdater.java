@@ -11,8 +11,7 @@ import net.rizecookey.cookeymod.update.util.RESTUtils;
 import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -20,6 +19,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,9 +41,9 @@ public class GitHubUpdater {
         logger = new PrefixLogger(LogManager.getLogger(modMetadata.getName() + " Updater"));
     }
 
-    public void checkForUpdates(String user, String repo, String branch) {
-        new Thread(() -> {
-            updateDownloaded = false;
+    public boolean checkForUpdates(String user, String repo, String branch) {
+        try {
+            setUpdateDownloaded(false);
             logger.info("Checking for updates...");
             JsonElement result = RESTUtils.makeJsonGetRequest(
                     "https://api.github.com/repos/" + user + "/" + repo + "/releases?per_page=10&page=1",
@@ -53,72 +53,86 @@ public class GitHubUpdater {
                 JsonArray releases = result.getAsJsonArray();
                 for (JsonElement release : releases) {
                     JsonObject releaseObj = release.getAsJsonObject();
-                    try {
-                        SemanticVersion releaseVersion = SemanticVersion.parse(releaseObj.get("tag_name").getAsString());
-                        SemanticVersion currentModVersion = SemanticVersion.parse(modMetadata.getVersion().getFriendlyString());
-                        String targetCommitish = releaseObj.get("target_commitish").getAsString();
-                        if (releaseVersion.compareTo(currentModVersion) > 0 && targetCommitish.equals(branch)) {
-                            logger.info("Found newer version: " + releaseVersion.getFriendlyString() + ", downloading...");
-                            downloadUpdate(new URL(releaseObj
-                                    .get("assets").getAsJsonArray()
-                                    .get(0).getAsJsonObject()
-                                    .get("browser_download_url").getAsString()), releaseVersion.getFriendlyString());
-                        }
-                    } catch (VersionParsingException | IOException e) {
-                        logger.unwrap().error(e);
+                    SemanticVersion releaseVersion = SemanticVersion.parse(releaseObj.get("tag_name").getAsString());
+                    SemanticVersion currentModVersion = SemanticVersion.parse(modMetadata.getVersion().getFriendlyString());
+                    String targetCommitish = releaseObj.get("target_commitish").getAsString();
+                    if (releaseVersion.compareTo(currentModVersion) > 0 && targetCommitish.equals(branch)) {
+                        logger.info("Found newer version: " + releaseVersion.getFriendlyString() + ", downloading...");
+                        return downloadUpdate(new URL(releaseObj
+                                .get("assets").getAsJsonArray()
+                                .get(0).getAsJsonObject()
+                                .get("browser_download_url").getAsString()), releaseVersion.getFriendlyString());
                     }
                 }
                 logger.info("Up to date.");
             } else {
                 logger.info("Aborting.");
             }
-        }, logger.unwrap().getName()).start();
+        } catch (VersionParsingException | IOException e) {
+            logger.unwrap().error(e);
+        }
+        return false;
     }
 
-    public void downloadUpdate(URL url, String version) {
+    public synchronized boolean downloadUpdate(URL url, String version) {
         try {
             logger.info("Downloading newest version from " + url.toString() + "...");
             Files.createDirectories(updateDir);
-            ReadableByteChannel byteChannel = Channels.newChannel(url.openStream());
-            FileOutputStream out = new FileOutputStream(updateDir.resolve(modMetadata.getId() + "-" + version + ".jar").toFile());
-            out.getChannel().transferFrom(byteChannel, 0, Long.MAX_VALUE);
-            out.close();
-            byteChannel.close();
+            Files.list(updateDir).sorted(Comparator.reverseOrder()).forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (IOException e) {
+                    logger.unwrap().error(e);
+                }
+            });
+            BufferedInputStream in = new BufferedInputStream(url.openStream());
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(updateDir.resolve(modMetadata.getId() + "-" + version + ".jar").toFile()));
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            out.flush();
             logger.info("Successfully downloaded newest version, restart to apply.");
-            this.updateDownloaded = true;
+            setUpdateDownloaded(true);
+            return true;
         } catch (IOException e) {
             logger.unwrap().error(e);
+            return false;
         }
     }
 
     public void applyUpdate() {
         try {
-            if (updateDownloaded && Files.exists(updateDir) && Files.list(updateDir).findFirst().isPresent()) {
-                Optional<Path> modOpt;
-                modOpt = Files.list(updateDir)
-                        .filter((path -> path.getFileName().toString().endsWith(".jar")))
-                        .findFirst();
-                if (modOpt.isPresent()) {
-                    logger.info("Copying mod update to mod folder...");
-                    Path mod = modOpt.get();
-                    Path currentModFile = Paths.get(GitHubUpdater.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-                    if (Files.exists(currentModFile)) {
-                        Files.delete(currentModFile);
-                    }
-                    Files.copy(mod, modsDir.resolve(mod.getFileName()));
-                    Files.walk(updateDir).sorted(Comparator.reverseOrder()).filter((Objects::nonNull)).forEach((path -> {
-                        try {
-                            Files.delete(path);
-                        } catch (IOException e) {
-                            logger.unwrap().error(e);
-                        }
-                    }));
-                    logger.info("Successfully copied.");
-                }
+            logger.info("Copying updater to temp directory...");
+            Path currentFile = Paths.get(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+            Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"));
+            Path newFile = tempDir.resolve(currentFile.getFileName());
+            Files.copy(currentFile, newFile, StandardCopyOption.REPLACE_EXISTING);
 
-            }
-        } catch (IOException | URISyntaxException e) {
+            String exec = "java" +
+                    " -jar" +
+                    " \"" + newFile.toAbsolutePath().toString() + "\"" +
+                    " applyUpdate" +
+                    " \"" + updateDir.toAbsolutePath().toString() + "\"" +
+                    " \"" + currentFile.toAbsolutePath().toString() + "\"";
+            logger.info("Executing updater with arguments as follows:");
+            logger.info(exec);
+            Runtime.getRuntime().exec(exec);
+        } catch (URISyntaxException e) {
+            logger.error("Unable to find current mod file!");
+            logger.unwrap().error(e);
+        } catch (IOException e) {
+            logger.error("Unable to copy mod jar to temp folder for updating!");
             logger.unwrap().error(e);
         }
+    }
+
+    public synchronized void setUpdateDownloaded(boolean updated) {
+        updateDownloaded = updated;
+    }
+
+    public synchronized boolean isUpdateDownloaded() {
+        return updateDownloaded;
     }
 }

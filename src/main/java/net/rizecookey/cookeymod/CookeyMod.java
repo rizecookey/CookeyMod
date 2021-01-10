@@ -13,9 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public class CookeyMod implements ModInitializer { ;
-    public static final String MINECRAFT_VERSION = "1.16_combat-6";
-
+public class CookeyMod implements ModInitializer {
     ModContainer modContainer;
     ModMetadata modMetadata;
     ModConfig config;
@@ -37,7 +35,7 @@ public class CookeyMod implements ModInitializer { ;
             modContainer = opt.get();
             modMetadata = modContainer.getMetadata();
 
-            Path configDir = loader.getConfigDir().resolve(getModId() + "/");
+            Path configDir = loader.getConfigDir().resolve(getModId());
 
             config = new ModConfig(configDir.resolve("config.toml"));
             updater = new GitHubUpdater(modMetadata, loader.getConfigDir().resolve("mods"));
