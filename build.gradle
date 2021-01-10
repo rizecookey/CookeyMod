@@ -65,7 +65,7 @@ tasks.withType(JavaCompile) {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+	archiveClassifier = "sources"
 	from sourceSets.main.allSource
 }
 
@@ -73,7 +73,9 @@ jar {
 	from "LICENSE"
 	from {
 		configurations.includeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-
+	}
+	manifest {
+		attributes 'Main-Class': 'net.rizecookey.updater.Updater'
 	}
 }
 

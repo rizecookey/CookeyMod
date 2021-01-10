@@ -12,6 +12,7 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.option.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,9 +24,11 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         super(entityRenderDispatcher, entityModel, f);
     }
 
+    private static final Option<Boolean> enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking;
+
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void addItemBlockPose(AbstractClientPlayer abstractClientPlayer, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
-        if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking.get()) {
+        if (enableToolBlocking.get()) {
             ItemStack currentHandStack = abstractClientPlayer.getItemInHand(interactionHand);
             ItemStack otherHandStack = interactionHand == InteractionHand.MAIN_HAND ? abstractClientPlayer.getItemInHand(InteractionHand.OFF_HAND) : abstractClientPlayer.getItemInHand(InteractionHand.MAIN_HAND);
             if (!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem) {

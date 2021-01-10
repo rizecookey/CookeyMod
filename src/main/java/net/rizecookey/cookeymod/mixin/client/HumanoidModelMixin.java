@@ -10,9 +10,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.UseAnim;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.option.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,13 +28,15 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     @Shadow
     public ModelPart leftArm;
 
+    Option<Boolean> showEatingInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson;
+
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
     public void addRightEatAnimation(T livingEntity, CallbackInfo ci) {
         HumanoidArm usedHand = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND
                 ? livingEntity.getMainArm()
                 : livingEntity.getMainArm().getOpposite();
-        if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson.get()) {
-            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.RIGHT && (livingEntity.getUseItem().isEdible() || livingEntity.getUseItem().getItem() instanceof PotionItem)) {
+        if (this.showEatingInThirdPerson.get()) {
+            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.RIGHT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
                 boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
                 if (run) ci.cancel();
             }
@@ -45,8 +48,8 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
         HumanoidArm usedHand = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND
                 ? livingEntity.getMainArm()
                 : livingEntity.getMainArm().getOpposite();
-        if (CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson.get()) {
-            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().isEdible() || livingEntity.getUseItem().getItem() instanceof PotionItem)) {
+        if (this.showEatingInThirdPerson.get()) {
+            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
                 boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
                 if (run) ci.cancel();
             }
@@ -63,13 +66,13 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
         float h = g / livingEntity.getUseItem().getUseDuration();
         if (h < -1.0F) return false; // Stop animation from going wild if eating won't process
         float j;
-        float k = 1.0F - (float) Math.pow(h, 27.0D);
+        float k = Math.min(1.0F - (float) Math.pow(h, 27.0D), 1.0F);
         if (h < 0.8F) {
             j = Mth.abs(Mth.cos(g / 4.0F * 3.1415927F) * 0.25F);
             xRot = xRot * 0.5F - 1.57079633F + j;
         }
         else {
-            xRot = k * (xRot * 0.5F - 1.57079633F + 0.25F);
+            xRot = k * (xRot * 0.5F - 1.32079633F);
         }
 
         yRot = side * k * -0.5235988F;

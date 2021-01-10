@@ -11,6 +11,7 @@ public abstract class Option<T> {
     T defaultValue;
     T value;
     Supplier<AbstractConfigListEntry<?>> entry;
+    net.minecraft.client.Option mcOption;
 
     public Option(String id, Category category, T defaultValue) {
         this.id = id;
@@ -58,5 +59,9 @@ public abstract class Option<T> {
 
     public void setConfigEntry(Supplier<AbstractConfigListEntry<?>> entry) {
         this.entry = entry;
+    }
+
+    public net.minecraft.client.Option getMcOption() {
+        return mcOption;
     }
 }

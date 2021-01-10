@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
+import net.rizecookey.cookeymod.config.option.Option;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,9 +20,11 @@ public abstract class OptionsScreenMixin extends Screen {
         super(component);
     }
 
+    Option<Boolean> showModButton = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showModButton;
+
     @Inject(method = "init", at = @At("TAIL"))
     public void injectCookeyModButton(CallbackInfo ci) {
-        if (CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showModButton.get()) {
+        if (this.showModButton.get()) {
             this.addButton(new Button(this.width / 2 - 155, this.height / 6 + 24 - 6, 150, 20, new TranslatableComponent("options.cookeymod.button"), (button) -> {
                 assert this.minecraft != null;
                 this.minecraft.setScreen(ScreenBuilder.buildConfig(this.minecraft.screen));

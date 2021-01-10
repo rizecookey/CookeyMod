@@ -12,5 +12,6 @@ public class BooleanOption extends Option<Boolean> {
                 .setDefaultValue(this.defaultValue)
                 .setSaveConsumer(this::set)
                 .build();
+        this.mcOption = new net.minecraft.client.BooleanOption(this.getTranslationKey(), (options -> this.get()), (options, value) -> this.set(value));
     }
 }

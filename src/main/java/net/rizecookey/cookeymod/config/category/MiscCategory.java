@@ -7,11 +7,13 @@ import net.rizecookey.cookeymod.config.option.Option;
 public class MiscCategory extends Category {
     public Option<Boolean> showOwnNameInThirdPerson;
     public Option<Boolean> showModButton;
+    public Option<Boolean> fixLocalPlayerHandling;
 
     public MiscCategory() {
         showOwnNameInThirdPerson = this.register(new BooleanOption("showOwnNameInThirdPerson", this, false));
         BooleanOption modButtonOpt = new BooleanOption("showModButton", this, true);
         this.showModButton = FabricLoader.getInstance().isModLoaded("modmenu") ? this.register(modButtonOpt) : modButtonOpt;
+        fixLocalPlayerHandling = this.register(new BooleanOption("fixLocalPlayerHandling", this, true));
     }
 
     @Override

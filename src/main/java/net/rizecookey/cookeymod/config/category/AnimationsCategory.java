@@ -17,6 +17,8 @@ public class AnimationsCategory extends Category {
     public Option<Boolean> onlyShowShieldWhenBlocking;
     public Option<Boolean> enableToolBlocking;
     public Option<Boolean> showEatingInThirdPerson;
+    public Option<Boolean> disableEffectBasedFovChange;
+    public Option<Boolean> enableDamageCameraTilt;
 
     public AnimationsCategory() {
         swingAndUseItem = this.register(new BooleanOption("swingAndUseItem", this, false));
@@ -34,6 +36,8 @@ public class AnimationsCategory extends Category {
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
         enableToolBlocking = this.register(new BooleanOption("enableToolBlocking", this, false));
         showEatingInThirdPerson = this.register(new BooleanOption("showEatingInThirdPerson", this, false));
+        disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));
+        enableDamageCameraTilt = this.register(new BooleanOption("enableDamageCameraTilt", this, false));
     }
 
     @Override

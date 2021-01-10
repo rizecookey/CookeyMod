@@ -7,21 +7,26 @@
   "mixins": [
   ],
   "client": [
+    "client.AbstractClientPlayerMixin",
     "client.CameraMixin",
+    "client.ClientPacketListenerMixin",
     "client.GameRendererMixin",
     "client.HorseArmorLayerMixin",
     "client.HumanoidArmorLayerMixin",
     "client.HumanoidModelMixin",
     "client.ItemInHandLayerMixin",
     "client.ItemInHandRendererMixin",
+    "client.LivingEntityAccessor",
     "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
     "client.MinecraftAccessor",
+    "client.MinecraftMixin",
+    "client.OptionsMixin",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
     "client.PlayerMixin",
     "client.PlayerRendererMixin",
-
+    "client.RemotePlayerMixin",
     "client.compatibility.optifabric.OFHumanoidArmorLayerMixin"
   ],
   "injectors": {

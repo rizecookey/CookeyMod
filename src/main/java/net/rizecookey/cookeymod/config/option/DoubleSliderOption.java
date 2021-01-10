@@ -1,6 +1,7 @@
 package net.rizecookey.cookeymod.config.option;
 
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.minecraft.client.ProgressOption;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.config.ModConfig;
@@ -27,5 +28,6 @@ public class DoubleSliderOption extends Option<Double> {
                 }).setSaveConsumer(value -> this.set(value / 100.0))
                 .setDefaultValue((long) (defaultValue * 100.0))
                 .build();
+        this.mcOption = new ProgressOption(this.getTranslationKey(), from, to, 0.01F, options -> this.get(), (options, aDouble) -> this.set(aDouble), (options, progressOption) -> new TranslatableComponent(this.getTranslationKey()).append(": " + new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US)).format(progressOption.get(options))));
     }
 }

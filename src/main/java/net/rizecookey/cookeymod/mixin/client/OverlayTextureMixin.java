@@ -20,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class OverlayTextureMixin implements OverlayTextureExtension, OverlayReloadListener {
     @Shadow @Final private DynamicTexture texture;
 
+    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+
     @Inject(method = "<init>", at = @At("TAIL"))
     public void modifyHitColor(CallbackInfo ci) {
         this.reloadOverlay();
@@ -30,7 +32,6 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
         this.reloadOverlay();
     }
 
-    @SuppressWarnings("SameParameterValue")
     private static int getColorInt(int red, int green, int blue, int alpha) {
         alpha = 255 - alpha;
         return (alpha << 24) + (blue << 16) + (green << 8) + red;
@@ -42,8 +43,8 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
         for(int i = 0; i < 16; ++i) {
             for(int j = 0; j < 16; ++j) {
                 if (i < 8) {
-                    AnimationsCategory animOpt = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
-                    Color color = animOpt.damageColor.get();
+                    Color color = this.animationsCategory.damageColor.get();
+                    assert nativeImage != null;
                     nativeImage.setPixelRGBA(j, i, getColorInt(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                 }
             }
