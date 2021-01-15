@@ -11,18 +11,17 @@ import net.rizecookey.cookeymod.update.util.RESTUtils;
 import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
-import java.util.Objects;
-import java.util.Optional;
 
 public class GitHubUpdater {
     PrefixLogger logger;

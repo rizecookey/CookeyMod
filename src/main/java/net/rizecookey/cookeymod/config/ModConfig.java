@@ -5,6 +5,7 @@ import com.moandjiezana.toml.TomlWriter;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.Category;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +28,7 @@ public class ModConfig {
     Path file;
     Toml toml;
     Map<String, Category> categories = new HashMap<>();
+    long version;
 
     public ModConfig(Path file) {
         this.mod = CookeyMod.getInstance();
@@ -44,6 +46,7 @@ public class ModConfig {
 
     public void registerCategories() {
         this.registerCategory(new AnimationsCategory());
+        this.registerCategory(new HudRenderingCategory());
         this.registerCategory(new MiscCategory());
     }
 
@@ -67,11 +70,7 @@ public class ModConfig {
             Files.createDirectories(file.getParent());
         }
 
-        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("assets/" + mod.getModId() + "/config.toml");
-        if (resourceStream == null) {
-            logger.error("Failed to find config resource!");
-            return;
-        }
+        InputStream resourceStream = getConfigResource();
         if (!Files.exists(file)) {
             logger.info("Config not found, creating default one...");
             Files.copy(resourceStream, file);
@@ -84,7 +83,9 @@ public class ModConfig {
             new TomlWriter().write(configMap, file.toFile());
         }
         resourceStream.close();
+
         this.toml = new Toml().read(file.toFile());
+        this.version = this.toml.contains("config-version") ? this.toml.getLong("config-version") : 1;
         this.loadCategories();
     }
 
@@ -116,6 +117,8 @@ public class ModConfig {
             optionsMap.put(id, categories.get(id).toMap());
         }
 
+        optionsMap.put("config-version", this.version);
+
         new TomlWriter().write(optionsMap, file.toFile());
     }
 
@@ -131,6 +134,15 @@ public class ModConfig {
                 this.copyMissingNested((Map) fromValue, (Map) toValue.get());
             }
         }
+    }
+
+    public InputStream getConfigResource() {
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("assets/" + mod.getModId() + "/config.toml");
+        if (resourceStream == null) {
+            logger.error("Failed to find config resource!");
+            return null;
+        }
+        return resourceStream;
     }
 
     public String getTranslationKey() {

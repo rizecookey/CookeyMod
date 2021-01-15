@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.option.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerMixin extends Player {
-    Option<Boolean> disableEffectBasedFovChange = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).disableEffectBasedFovChange;
+    Option<Boolean> disableEffectBasedFovChange = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).disableEffectBasedFovChange;
 
     public AbstractClientPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
         super(level, blockPos, f, gameProfile);

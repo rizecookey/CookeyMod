@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.annotation.mixin.Incompatible;
-import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.option.Option;
 import net.rizecookey.cookeymod.extension.OverlayRendered;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, M extends 
     @Shadow public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l);
 
     int overlayCoords;
-    Option<Boolean> showDamageTintOnArmor = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showDamageTintOnArmor;
+    Option<Boolean> showDamageTintOnArmor = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).showDamageTintOnArmor;
 
     @ModifyArg(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"), index = 3)
     public int modifyOverlayCoords(int previousCoords) {

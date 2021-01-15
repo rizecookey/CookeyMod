@@ -14,6 +14,7 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -37,15 +38,16 @@ public abstract class ItemInHandRendererMixin {
     private ItemStack mainHandItem;
 
     AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class);
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
-        if (this.getAnimationOptions().onlyShowShieldWhenBlocking.get()) {
+        if (hudRenderingCategory.onlyShowShieldWhenBlocking.get()) {
             if (itemStack.getItem() instanceof ShieldItem && !abstractClientPlayer.isBlocking()) {
                 ci.cancel();
             }
         }
-        if (this.getAnimationOptions().enableToolBlocking.get()) {
+        if (animationsCategory.enableToolBlocking.get()) {
             ItemStack otherHandItem = interactionHand == InteractionHand.MAIN_HAND ? this.offHandItem : this.mainHandItem;
             if (itemStack.getItem() instanceof ShieldItem) {
                 if (otherHandItem.getItem() instanceof TieredItem && abstractClientPlayer.isBlocking()) {
@@ -59,7 +61,7 @@ public abstract class ItemInHandRendererMixin {
                         : abstractClientPlayer.getMainArm().getOpposite();
                 this.applyItemArmTransform(poseStack, humanoidArm, i);
                 this.applyItemBlockTransform(poseStack, humanoidArm);
-                if (getAnimationOptions().swingAndUseItem.get()) {
+                if (animationsCategory.swingAndUseItem.get()) {
                     this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
                 }
                 boolean isRightHand = humanoidArm == HumanoidArm.RIGHT;
@@ -77,7 +79,7 @@ public abstract class ItemInHandRendererMixin {
                     target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;applyItemArmAttackTransform(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/entity/HumanoidArm;F)V",
                     ordinal = 1))
     public void cancelAttackTransform(ItemInHandRenderer itemInHandRenderer, PoseStack poseStack, HumanoidArm humanoidArm, float f) {
-        if (!this.getAnimationOptions().swingAndUseItem.get())
+        if (!animationsCategory.swingAndUseItem.get())
             this.applyItemArmAttackTransform(poseStack, humanoidArm, f);
     }
 
@@ -90,7 +92,7 @@ public abstract class ItemInHandRendererMixin {
         HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND
                 ? abstractClientPlayer.getMainArm()
                 : abstractClientPlayer.getMainArm().getOpposite();
-        if (this.getAnimationOptions().swingAndUseItem.get() && !abstractClientPlayer.isAutoSpinAttack()) {
+        if (animationsCategory.swingAndUseItem.get() && !abstractClientPlayer.isAutoSpinAttack()) {
             this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
         }
     }
@@ -99,12 +101,8 @@ public abstract class ItemInHandRendererMixin {
             from = @At(value = "JUMP", ordinal = 3)
     ), at = @At(value = "FIELD", ordinal = 0))
     public float modifyArmHeight(float f) {
-        double offset = this.getAnimationOptions().attackCooldownHandOffset.get();
+        double offset = hudRenderingCategory.attackCooldownHandOffset.get();
         return (float) (f * (1 - offset) + offset);
-    }
-
-    public AnimationsCategory getAnimationOptions() {
-        return this.animationsCategory;
     }
 
     /* Values from 15w33b, thanks to Fuzss for providing them

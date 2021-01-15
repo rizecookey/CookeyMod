@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.annotation.mixin.ModSpecific;
-import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.option.Option;
 import net.rizecookey.cookeymod.extension.OverlayRendered;
 import org.objectweb.asm.Opcodes;
@@ -24,7 +24,7 @@ public abstract class OFHumanoidArmorLayerMixin<T extends LivingEntity, M extend
     public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l);
 
     int overlayCoords;
-    Option<Boolean> showDamageTintOnArmor = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showDamageTintOnArmor;
+    Option<Boolean> showDamageTintOnArmor = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).showDamageTintOnArmor;
 
     @Redirect(method = "*", at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC, target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I"))
     public int modifyOverlayCoords() {
