@@ -16,6 +16,7 @@
   "options.cookeymod.hudRendering.showDamageTintOnArmor": "Damage tint on armor",
   "options.cookeymod.hudRendering.onlyShowShieldWhenBlocking": "Hide unused shield",
   "options.cookeymod.hudRendering.disableEffectBasedFovChange": "Ignore effect FOV",
+  "options.cookeymod.hudRendering.alternativeBobbing": "Alternative bobbing",
   "options.cookeymod.misc": "Miscellaneous",
   "options.cookeymod.misc.showModButton": "Mod button in MC options",
   "options.cookeymod.misc.showOwnNameInThirdPerson": "Name in 3rd person",
