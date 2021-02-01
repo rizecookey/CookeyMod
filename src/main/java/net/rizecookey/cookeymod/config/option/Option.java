@@ -13,11 +13,15 @@ public abstract class Option<T> {
     Supplier<AbstractConfigListEntry<?>> entry;
     net.minecraft.client.Option mcOption;
 
-    public Option(String id, Category category, T defaultValue) {
+    public Option(String id, Category category, T defaultValue, boolean forceRestart) {
         this.id = id;
         this.category = category;
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
+    }
+
+    public Option(String id, Category category, T defaultValue) {
+        this(id, category, defaultValue, false);
     }
 
     public String getId() {

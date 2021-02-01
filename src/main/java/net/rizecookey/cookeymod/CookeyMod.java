@@ -37,7 +37,7 @@ public class CookeyMod implements ModInitializer {
 
             Path configDir = loader.getConfigDir().resolve(getModId());
 
-            config = new ModConfig(configDir.resolve("config.toml"));
+            config = new ModConfig(this, configDir.resolve("config.toml"));
             updater = new GitHubUpdater(modMetadata, loader.getConfigDir().resolve("mods"));
 
             logger.info("CookeyMod " + getModVersion() + " has been loaded.");

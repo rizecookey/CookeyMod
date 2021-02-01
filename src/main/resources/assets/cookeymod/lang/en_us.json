@@ -22,6 +22,7 @@
   "options.cookeymod.misc.showOwnNameInThirdPerson": "Name in 3rd person",
   "options.cookeymod.misc.force100PercentRecharge": "Force 100% recharge",
   "options.cookeymod.misc.fixLocalPlayerHandling": "Fix local player handling",
+  "options.cookeymod.misc.groupWithLauncherOnTaskbar": "Group with MC Launcher",
   "options.cookeymod.update.notification.title": "CookeyMod update ready!",
   "options.cookeymod.update.notification.subtitle": "Restart to apply."
 }

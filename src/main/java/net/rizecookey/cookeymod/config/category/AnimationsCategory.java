@@ -1,5 +1,6 @@
 package net.rizecookey.cookeymod.config.category;
 
+import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
 import net.rizecookey.cookeymod.config.option.Option;
@@ -13,7 +14,8 @@ public class AnimationsCategory extends Category {
     public Option<Boolean> showEatingInThirdPerson;
     public Option<Boolean> enableDamageCameraTilt;
 
-    public AnimationsCategory() {
+    public AnimationsCategory(ModConfig modConfig) {
+        super(modConfig);
         swingAndUseItem = this.register(new BooleanOption("swingAndUseItem", this, false));
         enableOldSwing = this.register(new BooleanOption("enableOldSwing", this, false));
         sneakAnimationSpeed = this.register(new DoubleSliderOption("sneakAnimationSpeed", this, 1.0, 0.0, 2.0));

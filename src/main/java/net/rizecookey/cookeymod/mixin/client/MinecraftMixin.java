@@ -1,5 +1,8 @@
 package net.rizecookey.cookeymod.mixin.client;
 
+import com.sun.jna.Native;
+import com.sun.jna.NativeLong;
+import com.sun.jna.WString;
 import net.minecraft.client.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;

@@ -1,6 +1,7 @@
 package net.rizecookey.cookeymod.config.category;
 
 import me.shedaniel.math.Color;
+import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.ColorOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
@@ -15,7 +16,8 @@ public class HudRenderingCategory extends Category {
     public Option<Boolean> disableEffectBasedFovChange;
     public Option<Boolean> alternativeBobbing;
 
-    public HudRenderingCategory() {
+    public HudRenderingCategory(ModConfig modConfig) {
+        super(modConfig);
         attackCooldownHandOffset = this.register(new DoubleSliderOption("attackCooldownHandOffset", this, 0.0, -1.0, 1.0));
         damageColor = this.register(new ColorOption("damageColor", this, Color.ofRGBA(255, 0, 0, 77), true) {
             @Override
