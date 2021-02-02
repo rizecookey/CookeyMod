@@ -1,8 +1,14 @@
 package net.rizecookey.cookeymod.config.option;
 
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.config.category.Category;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public abstract class Option<T> {
@@ -67,5 +73,24 @@ public abstract class Option<T> {
 
     public net.minecraft.client.Option getMcOption() {
         return mcOption;
+    }
+
+    public Optional<Component[]> getTooltip(String translationId) {
+        List<Component> components = new ArrayList<>();
+        String tooltipKey = translationId + ".tooltip.";
+
+        int i = 0;
+        while (i != -1) {
+            if (Language.getInstance().has(tooltipKey + i)) {
+                components.add(new TranslatableComponent(tooltipKey + i));
+                i++;
+            }
+            else {
+                i = -1;
+            }
+        }
+        Component[] array = components.toArray(new Component[0]);
+
+        return Optional.ofNullable(array.length != 0 ? array : null);
     }
 }
