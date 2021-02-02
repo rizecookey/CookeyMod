@@ -5,6 +5,7 @@ import com.moandjiezana.toml.TomlWriter;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.Category;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
 import org.apache.logging.log4j.Logger;
 
@@ -21,15 +22,17 @@ public class ModConfig {
     public static final String TRANSLATION_KEY = "options.cookeymod";
     public static final String GENERIC_KEYS = TRANSLATION_KEY + "." + "generic.options";
 
-    CookeyMod mod;
-    Logger logger;
+    final CookeyMod mod;
+    final Logger logger;
 
     Path file;
+    Toml defaults;
     Toml toml;
     Map<String, Category> categories = new HashMap<>();
+    long version;
 
-    public ModConfig(Path file) {
-        this.mod = CookeyMod.getInstance();
+    public ModConfig(CookeyMod mod, Path file) {
+        this.mod = mod;
         this.logger = mod.getLogger();
 
         this.file = file;
@@ -42,9 +45,14 @@ public class ModConfig {
         }
     }
 
+    public CookeyMod getMod() {
+        return mod;
+    }
+
     public void registerCategories() {
-        this.registerCategory(new AnimationsCategory());
-        this.registerCategory(new MiscCategory());
+        this.registerCategory(new AnimationsCategory(this));
+        this.registerCategory(new HudRenderingCategory(this));
+        this.registerCategory(new MiscCategory(this));
     }
 
     public void registerCategory(Category category) {
@@ -52,9 +60,25 @@ public class ModConfig {
     }
 
     public void loadCategories() {
+        Map<String, Object> map = toml.toMap();
+        boolean updated = ConfigUpdater.update(map, this.version);
+
+        if (updated) logger.info("Updated config.");
+
         for (String id : categories.keySet()) {
-            Toml category = toml.getTable(id);
-            categories.get(id).loadOptions(category != null ? category.toMap() : new HashMap<>());
+            Map<String, Object> category = map.containsKey(id) && map.get(id) instanceof Map ? (Map<String, Object>) map.get(id) : new HashMap<>();
+            categories.get(id).loadOptions(category != null ? category : new HashMap<>());
+        }
+
+        this.version = this.defaults.contains("config-version") ? this.defaults.getLong("config-version") : 1;
+
+        if (updated) {
+            try {
+                this.saveConfig();
+            } catch (IOException e) {
+                CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file!");
+                e.printStackTrace();
+            }
         }
     }
 
@@ -67,24 +91,24 @@ public class ModConfig {
             Files.createDirectories(file.getParent());
         }
 
-        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("assets/" + mod.getModId() + "/config.toml");
-        if (resourceStream == null) {
-            logger.error("Failed to find config resource!");
-            return;
-        }
+        InputStream resourceStream = getConfigResource();
         if (!Files.exists(file)) {
             logger.info("Config not found, creating default one...");
             Files.copy(resourceStream, file);
             logger.info("Copied default config.");
         }
         else {
+            this.defaults = new Toml().read(resourceStream);
             Map<String, Object> configMap = new Toml().read(file.toFile()).toMap();
-            Map<String, Object> fallbackMap = new Toml().read(resourceStream).toMap();
+            Map<String, Object> fallbackMap = this.defaults.toMap();
+            if (!configMap.containsKey("config-version")) configMap.put("config-version", 1);
             this.copyMissingNested(fallbackMap, configMap);
             new TomlWriter().write(configMap, file.toFile());
         }
         resourceStream.close();
+
         this.toml = new Toml().read(file.toFile());
+        this.version = this.toml.contains("config-version") ? this.toml.getLong("config-version") : 1;
         this.loadCategories();
     }
 
@@ -116,6 +140,8 @@ public class ModConfig {
             optionsMap.put(id, categories.get(id).toMap());
         }
 
+        optionsMap.put("config-version", this.version);
+
         new TomlWriter().write(optionsMap, file.toFile());
     }
 
@@ -131,6 +157,19 @@ public class ModConfig {
                 this.copyMissingNested((Map) fromValue, (Map) toValue.get());
             }
         }
+    }
+
+    public InputStream getConfigResource() {
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("assets/" + mod.getModId() + "/config.toml");
+        if (resourceStream == null) {
+            logger.error("Failed to find config resource!");
+            return null;
+        }
+        return resourceStream;
+    }
+
+    public long getVersion() {
+        return version;
     }
 
     public String getTranslationKey() {

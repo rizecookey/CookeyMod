@@ -6,7 +6,7 @@ import me.shedaniel.math.Color;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.category.AnimationsCategory;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.event.OverlayReloadListener;
 import net.rizecookey.cookeymod.extension.OverlayTextureExtension;
 import org.spongepowered.asm.mixin.Final;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class OverlayTextureMixin implements OverlayTextureExtension, OverlayReloadListener {
     @Shadow @Final private DynamicTexture texture;
 
-    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class);
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void modifyHitColor(CallbackInfo ci) {
@@ -43,7 +43,7 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
         for(int i = 0; i < 16; ++i) {
             for(int j = 0; j < 16; ++j) {
                 if (i < 8) {
-                    Color color = this.animationsCategory.damageColor.get();
+                    Color color = this.hudRenderingCategory.damageColor.get();
                     assert nativeImage != null;
                     nativeImage.setPixelRGBA(j, i, getColorInt(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                 }

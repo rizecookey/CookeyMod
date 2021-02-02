@@ -12,6 +12,16 @@ import java.util.Map;
 public abstract class Category {
     final HashMap<String, Option<?>> options = new HashMap<>();
 
+    final ModConfig modConfig;
+
+    public Category(ModConfig modConfig) {
+        this.modConfig = modConfig;
+    }
+
+    public ModConfig getModConfig() {
+        return this.modConfig;
+    }
+
     public abstract String getId();
 
     public String getTranslationKey() {

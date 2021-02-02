@@ -15,21 +15,22 @@ configurations {
 }
 
 dependencies {
+	String clothConfig = "me.shedaniel.cloth:config-2:${project.cloth_config_api_version}"
+	String toml4j = "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
+	Dependency fabricResourceLoader = fabricApi.module("fabric-resource-loader-v0", project.fabric_version) as Dependency
+
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings minecraft.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	String clothConfig = "me.shedaniel.cloth:config-2:${project.cloth_config_api_version}"
 	modApi(clothConfig) {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	include clothConfig
 
-	String toml4j = "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
 	implementation toml4j
 	includeClasspath toml4j
 
-	Dependency fabricResourceLoader = fabricApi.module("fabric-resource-loader-v0", project.fabric_version) as Dependency
 	modImplementation fabricResourceLoader
 	include fabricResourceLoader
 
