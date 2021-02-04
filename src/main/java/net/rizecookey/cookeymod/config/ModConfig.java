@@ -92,13 +92,13 @@ public class ModConfig {
         }
 
         InputStream resourceStream = getConfigResource();
+        this.defaults = new Toml().read(resourceStream);
         if (!Files.exists(file)) {
             logger.info("Config not found, creating default one...");
-            Files.copy(resourceStream, file);
+            new TomlWriter().write(this.defaults, file.toFile());
             logger.info("Copied default config.");
         }
         else {
-            this.defaults = new Toml().read(resourceStream);
             Map<String, Object> configMap = new Toml().read(file.toFile()).toMap();
             Map<String, Object> fallbackMap = this.defaults.toMap();
             if (!configMap.containsKey("config-version")) configMap.put("config-version", 1);
