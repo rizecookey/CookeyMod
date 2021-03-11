@@ -1,8 +1,5 @@
 package net.rizecookey.cookeymod.mixin.client;
 
-import com.sun.jna.Native;
-import com.sun.jna.NativeLong;
-import com.sun.jna.WString;
 import net.minecraft.client.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
@@ -10,8 +7,14 @@ import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.main.GameConfig;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.CookeyMod;
+import net.rizecookey.cookeymod.config.category.MiscCategory;
+import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.extension.MultiPlayerGameModeExtension;
+import net.rizecookey.cookeymod.extension.PlayerExtension;
 import net.rizecookey.cookeymod.update.GitHubUpdater;
 import net.rizecookey.cookeymod.util.Notifier;
 import org.jetbrains.annotations.Nullable;
@@ -31,11 +34,16 @@ public abstract class MinecraftMixin {
 
     @Shadow @Nullable public abstract Overlay getOverlay();
 
+    @Shadow @Nullable public LocalPlayer player;
+    @Shadow @Nullable public MultiPlayerGameMode gameMode;
     private final Notifier updateNotifier = new Notifier();
+
+    Option<Boolean> fixCooldownDesync;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void checkForUpdates(GameConfig gameConfig, CallbackInfo ci) {
         CookeyMod cookeyMod = CookeyMod.getInstance();
+        fixCooldownDesync = cookeyMod.getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
         String user = "rizecookey", repo = "CookeyMod", branch = this.getGame().getVersion().getId();
 
         new Thread(() -> {
@@ -74,6 +82,21 @@ public abstract class MinecraftMixin {
         GitHubUpdater updater = CookeyMod.getInstance().getUpdater();
         if (updater.isUpdateDownloaded()) {
             updater.applyUpdate();
+        }
+    }
+
+    @Inject(method = "continueAttack", at = @At("TAIL"))
+    public void runPendingResets(boolean bl, CallbackInfo ci) {
+        if (this.fixCooldownDesync.get()) {
+            assert this.player != null;
+            assert this.gameMode != null;
+            MultiPlayerGameModeExtension gameModeExt = ((MultiPlayerGameModeExtension) this.gameMode);
+
+            if (gameModeExt.isAttackResetPending() && !this.gameMode.isDestroying()) {
+                ((PlayerExtension) this.player).setAttackStrengthTicker(1);
+            }
+
+            gameModeExt.setAttackResetPending(false);
         }
     }
 }

@@ -1,12 +1,12 @@
 package net.rizecookey.cookeymod.update;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.fabricmc.loader.util.version.VersionDeserializer;
 import net.rizecookey.cookeymod.update.util.RESTUtils;
 import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +15,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -40,37 +41,70 @@ public class GitHubUpdater {
         logger = new PrefixLogger(LogManager.getLogger(modMetadata.getName() + " Updater"));
     }
 
-    public boolean checkForUpdates(String user, String repo, String branch) {
+    public boolean checkForUpdates(String user, String repo, String mcVersion) {
+        setUpdateDownloaded(false);
+        logger.info("Checking for updates...");
+
+        String tag = null;
+
         try {
-            setUpdateDownloaded(false);
-            logger.info("Checking for updates...");
-            JsonElement result = RESTUtils.makeJsonGetRequest(
-                    "https://api.github.com/repos/" + user + "/" + repo + "/releases?per_page=10&page=1",
+            JsonElement versionData = RESTUtils.makeJsonGetRequest(
+                    "https://raw.githubusercontent.com/" + user + "/" + repo + "/versions/newest.json",
+                    "Accept: application/vnd.github.v3+json");
+            assert versionData != null;
+            JsonObject versions = versionData.getAsJsonObject().get("minecraft").getAsJsonObject();
+            SemanticVersion mcVersionSem = SemanticVersion.parse(mcVersion);
+            for (String s : versions.keySet()) {
+                if (SemanticVersion.parse(s).compareTo(mcVersionSem) <= 0) {
+                    tag = versions.get(s).getAsJsonObject().get("release_tag").getAsString();
+                    break;
+                }
+            }
+            if (tag == null) {
+                logger.warn("No version information for the current Minecraft version, aborting.");
+                return false;
+            }
+        } catch (AssertionError | NullPointerException | IllegalStateException | VersionParsingException e) {
+            logger.warn("Unable to download version info, aborting.");
+            logger.unwrap().warn(e);
+            return false;
+        }
+
+        try {
+            SemanticVersion release = SemanticVersion.parse(tag);
+            SemanticVersion current = SemanticVersion.parse(modMetadata.getVersion().getFriendlyString());
+            if (release.compareTo(current) == 0) {
+                logger.info("Up to date.");
+                return false;
+            }
+            else if (release.compareTo(current) < 0) {
+                logger.info("Using a newer version than the current release, interesting...");
+                return false;
+            }
+
+        } catch (VersionParsingException e) {
+            logger.warn("Unable to parse version, aborting.");
+            logger.unwrap().warn(e);
+        }
+
+        try {
+            JsonElement releaseData = RESTUtils.makeJsonGetRequest(
+                    "https://api.github.com/repos/" + user + "/" + repo + "/releases/tags/" + tag,
                     "Accept: application/vnd.github.v3+json");
 
-            if (result != null) {
-                JsonArray releases = result.getAsJsonArray();
-                for (JsonElement release : releases) {
-                    JsonObject releaseObj = release.getAsJsonObject();
-                    SemanticVersion releaseVersion = SemanticVersion.parse(releaseObj.get("tag_name").getAsString());
-                    SemanticVersion currentModVersion = SemanticVersion.parse(modMetadata.getVersion().getFriendlyString());
-                    String targetCommitish = releaseObj.get("target_commitish").getAsString();
-                    if (releaseVersion.compareTo(currentModVersion) > 0 && targetCommitish.equals(branch)) {
-                        logger.info("Found newer version: " + releaseVersion.getFriendlyString() + ", downloading...");
-                        return downloadUpdate(new URL(releaseObj
-                                .get("assets").getAsJsonArray()
-                                .get(0).getAsJsonObject()
-                                .get("browser_download_url").getAsString()), releaseVersion.getFriendlyString());
-                    }
-                }
-                logger.info("Up to date.");
-            } else {
-                logger.info("Aborting.");
-            }
-        } catch (VersionParsingException | IOException e) {
-            logger.unwrap().error(e);
+            assert releaseData != null;
+
+            return downloadUpdate(new URL(
+                    releaseData.getAsJsonObject()
+                            .get("assets").getAsJsonArray()
+                            .get(0).getAsJsonObject()
+                            .get("browser_download_url").getAsString()
+                    ), tag);
+        } catch (AssertionError | NullPointerException | IllegalStateException | MalformedURLException e) {
+            logger.warn("Unable to fetch release tag, aborting.");
+            logger.unwrap().warn(e);
+            return false;
         }
-        return false;
     }
 
     public synchronized boolean downloadUpdate(URL url, String version) {
