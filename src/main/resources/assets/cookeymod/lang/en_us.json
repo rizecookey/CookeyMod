@@ -57,6 +57,10 @@
   "options.cookeymod.misc.fixLocalPlayerHandling.tooltip.1": "appear and that cancels your sprint even when a hit",
   "options.cookeymod.misc.fixLocalPlayerHandling.tooltip.2": "has been cancelled when attacking a player.",
   "options.cookeymod.misc.fixLocalPlayerHandling.tooltip.3": "(See MC-211708)",
+  "options.cookeymod.misc.fixCooldownDesync": "Fix attack cooldown desync",
+  "options.cookeymod.misc.fixCooldownDesync.tooltip.0": "Fixing the attack cooldown on the client being",
+  "options.cookeymod.misc.fixCooldownDesync.tooltip.1": "desynchronized in some cases when breaking blocks.",
+  "options.cookeymod.misc.fixCooldownDesync.tooltip.2": "(See MC-218570)",
   "options.cookeymod.update.notification.title": "CookeyMod update ready!",
   "options.cookeymod.update.notification.subtitle": "Restart to apply."
 }

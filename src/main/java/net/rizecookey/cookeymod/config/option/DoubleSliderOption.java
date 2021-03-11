@@ -3,7 +3,6 @@ package net.rizecookey.cookeymod.config.option;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.LongSliderBuilder;
 import net.minecraft.client.ProgressOption;
-import net.minecraft.locale.Language;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.config.ModConfig;

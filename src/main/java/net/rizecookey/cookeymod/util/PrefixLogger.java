@@ -18,6 +18,10 @@ public class PrefixLogger {
         logger.error("[" + prefix + "] " + message);
     }
 
+    public void warn(String message) {
+        logger.warn("[" + prefix + "] " + message);
+    }
+
     public Logger unwrap() {
         return logger;
     }
