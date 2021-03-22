@@ -11,12 +11,13 @@ You will need to setup Fabric Loader for the Combat Snapshot.
 Furthermore, I recommend installing [Mod Menu (requires Fabric API)](https://www.curseforge.com/minecraft/mc-mods/modmenu) for universal and compatible access to the mod settings.
 
 ## Setup
-### Downloading Fabric Loader for the Combat Snapshot:
-Download the Fabric Loader Archive here:
-https://combatreforged.com/dl/file/fabric-loader/fabric-loader-0.10.8-1.16_combat-6.zip
+### Installing Fabric Loader for the Combat Snapshot:
+Make sure that you have Java 8 installed on your PC, if not, download it [here](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot)
 
-Extract the .zip file and put the folder inside of it into the versions folder in your Minecraft directory (see ["Where are Minecraft files stored?"](https://help.minecraft.net/hc/en-us/articles/360035131551-Where-are-Minecraft-files-stored-)).
-Afterwards, create a new profile in the Launcher, select "release fabric-loader-0.10.8-1.16_combat-6", customize the profile to your liking (like changing game directory?), and hit save.
+Download the newest custom Fabric Installer binary here: https://github.com/rizecookey/fabric-installer/releases
+
+Double-click to run the installer and make sure to check the "Show Snapshots" check box. Select 1.16_combat-6 in the drop-down list (at the bottom together with older Combat Test versions) and click "Install".
+
 **As of the newest launcher update, you now have to enable "Modded" versions in the Installations tab to find the Fabric loader version!**
 
 ### Installing the mod
