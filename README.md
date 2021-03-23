@@ -14,7 +14,7 @@ Furthermore, I recommend installing [Mod Menu (requires Fabric API)](https://www
 ### Installing Fabric Loader for the Combat Snapshot:
 Make sure that you have Java 8 installed on your PC, if not, download it [here](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot)
 
-Download the newest custom Fabric Installer binary here: https://github.com/rizecookey/fabric-installer/releases
+Download the newest custom Fabric Installer jar here: https://github.com/rizecookey/fabric-installer/releases
 
 Double-click to run the installer and make sure to check the "Show Snapshots" check box. Select 1.16_combat-6 in the drop-down list (at the bottom together with older Combat Test versions) and click "Install".
 
