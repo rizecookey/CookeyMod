@@ -1,4 +1,6 @@
 {
+  "key.categories.cookeymod": "CookeyMod",
+  "key.cookeymod_options": "Open Options",
   "options.cookeymod": "CookeyMod",
   "options.cookeymod.button": "CookeyMod...",
   "options.cookeymod.generic.options.off": "Off",
