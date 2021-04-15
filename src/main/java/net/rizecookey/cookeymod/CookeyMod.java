@@ -5,6 +5,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.rizecookey.cookeymod.config.ModConfig;
+import net.rizecookey.cookeymod.keybind.Keybinds;
 import net.rizecookey.cookeymod.update.GitHubUpdater;
 import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ public class CookeyMod implements ModInitializer {
     PrefixLogger logger = new PrefixLogger(LogManager.getLogger("CookeyMod"));
     ModContainer modContainer;
     ModMetadata modMetadata;
+    Keybinds keybinds;
 
     GitHubUpdater updater;
 
@@ -40,13 +42,14 @@ public class CookeyMod implements ModInitializer {
             config = new ModConfig(this, configDir.resolve("config.toml"));
             updater = new GitHubUpdater(modMetadata, loader.getConfigDir().resolve("mods"));
 
+            keybinds = new Keybinds();
+
             logger.info("CookeyMod " + getModVersion() + " has been loaded.");
         }
         else {
             logger.error("Couldn't find own mod container!");
             System.exit(-1);
         }
-
     }
 
     public Logger getLogger() {
@@ -71,6 +74,10 @@ public class CookeyMod implements ModInitializer {
 
     public GitHubUpdater getUpdater() {
         return updater;
+    }
+
+    public Keybinds getKeybinds() {
+        return keybinds;
     }
 
     public static CookeyMod getInstance() {
