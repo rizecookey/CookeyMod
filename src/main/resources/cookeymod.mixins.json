@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "plugin": "net.rizecookey.cookeymod.implementation.CookeyModMixinPlugin",
   "mixins": [
+    "client.WindowMixin"
   ],
   "client": [
     "client.AbstractClientPlayerMixin",
