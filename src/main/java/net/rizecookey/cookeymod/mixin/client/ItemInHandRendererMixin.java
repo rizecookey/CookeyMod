@@ -42,8 +42,8 @@ public abstract class ItemInHandRendererMixin {
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
-        if (hudRenderingCategory.onlyShowShieldWhenBlocking.get()) {
-            if (itemStack.getItem() instanceof ShieldItem && !abstractClientPlayer.isBlocking()) {
+        if (hudRenderingCategory.onlyShowShieldWhenBlocking.get() || animationsCategory.enableToolBlocking.get()) {
+            if (itemStack.getItem() instanceof ShieldItem && !(!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem)) {
                 ci.cancel();
             }
         }
