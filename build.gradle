@@ -35,40 +35,26 @@ dependencies {
 	implementation includeClasspath("com.moandjiezana.toml:toml4j:${project.toml4j_version}")
 	modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
 	modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version))
+	modImplementation include(fabricApi.module("fabric-screen-api-v1", project.fabric_version))
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 }
 
-// Custom Manifest and Intermediary mappings declaration
 minecraft {
-	/*customManifest = "https://gist.githubusercontent.com/rizecookey/4c6142baaccc3875f9b227fe22f2ace5/raw/c8ed74b19f7a5315813c9d4b199798b692a8f359/1.16_combat-6.json"
-	intermediaryUrl = { mcVersion ->
-		return "https://maven.combatreforged.com/net/fabricmc/intermediary/${mcVersion}/intermediary-${mcVersion}-v2.jar";
-	}*/
 	accessWidener "src/main/resources/cookeymod.accesswidener"
 }
 
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
 	}
 }
 
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-	archiveClassifier = "sources"
-	from sourceSets.main.allSource
 }
 
 jar {
@@ -77,6 +63,6 @@ jar {
 		configurations.includeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
 	}
 	manifest {
-		attributes 'Main-Class': 'net.rizecookey.updater.Updater'
+		attributes ('Main-Class': 'net.rizecookey.updater.Updater')
 	}
 }

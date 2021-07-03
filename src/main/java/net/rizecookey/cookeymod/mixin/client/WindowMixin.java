@@ -19,7 +19,7 @@ public abstract class WindowMixin implements AutoCloseable {
 
     @Shadow public abstract boolean isFullscreen();
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/lwjgl/glfw/GLFW;glfwWindowHint(II)V", ordinal = 4))
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/lwjgl/glfw/GLFW;glfwWindowHint(II)V", ordinal = 4, remap = false))
     public void disableAutoIconify(WindowEventHandler windowEventHandler, ScreenManager screenManager, DisplayData displayData, String string, String string2, CallbackInfo ci) {
         glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
     }
