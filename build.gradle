@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.7-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -14,15 +14,25 @@ configurations {
 	includeClasspath
 }
 
+repositories {
+	maven {
+		url 'https://maven.terraformersmc.com/'
+	}
+	maven {
+		url 'https://maven.shedaniel.me/'
+	}
+}
+
 dependencies {
-	String clothConfig = "me.shedaniel.cloth:config-2:${project.cloth_config_api_version}"
+	String clothConfig = "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_api_version}"
 	String toml4j = "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
-	Dependency fabricResourceLoader = fabricApi.module("fabric-resource-loader-v0", project.fabric_version) as Dependency
-	Dependency fabricKeybindings = fabricApi.module("fabric-key-binding-api-v1", project.fabric_version) as Dependency
 
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings minecraft.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	Dependency fabricResourceLoader = fabricApi.module("fabric-resource-loader-v0", project.fabric_version) as Dependency
+	Dependency fabricKeybindings = fabricApi.module("fabric-key-binding-api-v1", project.fabric_version) as Dependency
 
 	modApi(clothConfig) {
 		exclude(group: "net.fabricmc.fabric-api")
@@ -35,7 +45,7 @@ dependencies {
 	modImplementation include(fabricResourceLoader)
 	modImplementation include(fabricKeybindings)
 
-	modImplementation("io.github.prospector:modmenu:${project.modmenu_version}") {
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 }
