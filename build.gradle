@@ -80,20 +80,3 @@ jar {
 		attributes 'Main-Class': 'net.rizecookey.updater.Updater'
 	}
 }
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-
-	repositories {
-		// mavenLocal()
-	}
-}
