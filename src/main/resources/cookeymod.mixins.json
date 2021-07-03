@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_8",
   "plugin": "net.rizecookey.cookeymod.implementation.CookeyModMixinPlugin",
   "mixins": [
-    "client.WindowMixin"
   ],
   "client": [
     "client.AbstractClientPlayerMixin",
@@ -30,6 +29,7 @@
     "client.PlayerMixin",
     "client.PlayerRendererMixin",
     "client.RemotePlayerMixin",
+    "client.WindowMixin",
     "client.compatibility.optifabric.OFHumanoidArmorLayerMixin"
   ],
   "injectors": {
