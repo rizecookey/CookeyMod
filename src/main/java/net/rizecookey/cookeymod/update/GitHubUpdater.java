@@ -144,10 +144,10 @@ public class GitHubUpdater {
 
             String exec = "java" +
                     " -jar" +
-                    " \"" + newFile.toAbsolutePath().toString() + "\"" +
+                    " \"" + newFile.toAbsolutePath() + "\"" +
                     " applyUpdate" +
-                    " \"" + updateDir.toAbsolutePath().toString() + "\"" +
-                    " \"" + currentFile.toAbsolutePath().toString() + "\"";
+                    " \"" + updateDir.toAbsolutePath() + "\"" +
+                    " \"" + currentFile.toAbsolutePath() + "\"";
             logger.info("Executing updater with arguments as follows:");
             logger.info(exec);
             Runtime.getRuntime().exec(exec);

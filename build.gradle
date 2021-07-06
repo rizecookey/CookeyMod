@@ -35,6 +35,7 @@ dependencies {
 	implementation includeClasspath("com.moandjiezana.toml:toml4j:${project.toml4j_version}")
 	modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
 	modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version))
+	modImplementation include(fabricApi.module("fabric-screen-api-v1", project.fabric_version))
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
@@ -52,13 +53,8 @@ minecraft {
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
 	}
 }
 
