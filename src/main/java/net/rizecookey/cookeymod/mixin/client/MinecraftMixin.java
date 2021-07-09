@@ -53,6 +53,7 @@ public abstract class MinecraftMixin {
         CookeyMod cookeyMod = CookeyMod.getInstance();
         fixCooldownDesync = cookeyMod.getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
         openCookeyModMenu = cookeyMod.getKeybinds().openOptions;
+        /* Disable Updater (will revamp this later)
         String user = "rizecookey", repo = "CookeyMod", branch = this.getGame().getVersion().getId();
 
         new Thread(() -> {
@@ -74,8 +75,10 @@ public abstract class MinecraftMixin {
                 }
             }
         }).start();
+         */
     }
 
+    /*
     @Inject(method = "setOverlay", at = @At("HEAD"))
     public void notifyUpdateThread(Overlay overlay, CallbackInfo ci) {
         Overlay currentOverlay = this.getOverlay();
@@ -93,6 +96,7 @@ public abstract class MinecraftMixin {
             updater.applyUpdate();
         }
     }
+     */
 
     @Inject(method = "continueAttack", at = @At("TAIL"))
     public void runPendingResets(boolean bl, CallbackInfo ci) {
