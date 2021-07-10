@@ -3,22 +3,14 @@ package net.rizecookey.cookeymod.mixin.client;
 import net.minecraft.client.Game;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
-import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.Option;
-import net.rizecookey.cookeymod.extension.MultiPlayerGameModeExtension;
-import net.rizecookey.cookeymod.extension.PlayerExtension;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
-import net.rizecookey.cookeymod.update.GitHubUpdater;
 import net.rizecookey.cookeymod.util.Notifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,13 +37,11 @@ public abstract class MinecraftMixin {
 
     private final Notifier updateNotifier = new Notifier();
 
-    Option<Boolean> fixCooldownDesync;
     KeyMapping openCookeyModMenu;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void checkForUpdates(GameConfig gameConfig, CallbackInfo ci) {
         CookeyMod cookeyMod = CookeyMod.getInstance();
-        fixCooldownDesync = cookeyMod.getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
         openCookeyModMenu = cookeyMod.getKeybinds().openOptions;
         /* Disable Updater (will revamp this later)
         String user = "rizecookey", repo = "CookeyMod", branch = this.getGame().getVersion().getId();
@@ -97,21 +87,6 @@ public abstract class MinecraftMixin {
         }
     }
      */
-
-    @Inject(method = "continueAttack", at = @At("TAIL"))
-    public void runPendingResets(boolean bl, CallbackInfo ci) {
-        if (this.fixCooldownDesync.get()) {
-            assert this.player != null;
-            assert this.gameMode != null;
-            MultiPlayerGameModeExtension gameModeExt = ((MultiPlayerGameModeExtension) this.gameMode);
-
-            if (gameModeExt.isAttackResetPending() && !this.gameMode.isDestroying()) {
-                ((PlayerExtension) this.player).setAttackStrengthTicker(1);
-            }
-
-            gameModeExt.setAttackResetPending(false);
-        }
-    }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void openMenuOnKeyPress(CallbackInfo ci) {

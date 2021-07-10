@@ -1,7 +1,7 @@
 package net.rizecookey.cookeymod.implementation;
 
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
+import io.github.prospector.modmenu.api.ConfigScreenFactory;
+import io.github.prospector.modmenu.api.ModMenuApi;
 import net.minecraft.client.gui.screens.Screen;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
 
