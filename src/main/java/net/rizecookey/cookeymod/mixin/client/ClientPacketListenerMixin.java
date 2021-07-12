@@ -28,7 +28,7 @@ public class ClientPacketListenerMixin {
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             if (this.enableDamageCameraTilt.get()) {
-                livingEntity.hurtDir = (float) (Mth.atan2(clientboundSetEntityMotionPacket.getZa() / 8000D, clientboundSetEntityMotionPacket.getXa() / 8000D) * 57.2957763671875D - (double) livingEntity.yRot);
+                livingEntity.hurtDir = (float) (Mth.atan2(clientboundSetEntityMotionPacket.getZa() / 8000D, clientboundSetEntityMotionPacket.getXa() / 8000D) * 57.2957763671875D - (double) livingEntity.yHeadRot);
             }
         }
     }

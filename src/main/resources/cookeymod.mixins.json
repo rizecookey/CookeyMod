@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.rizecookey.cookeymod.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "plugin": "net.rizecookey.cookeymod.implementation.CookeyModMixinPlugin",
   "mixins": [
   ],

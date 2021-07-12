@@ -25,7 +25,7 @@ public abstract class OptionsScreenMixin extends Screen {
     @Inject(method = "init", at = @At("TAIL"))
     public void injectCookeyModButton(CallbackInfo ci) {
         if (this.showModButton.get()) {
-            this.addButton(new Button(this.width / 2 - 155, this.height / 6 + 24 - 6, 150, 20, new TranslatableComponent("options.cookeymod.button"), (button) -> {
+            this.addWidget(new Button(this.width / 2 - 155, this.height / 6 + 24 - 6, 150, 20, new TranslatableComponent("options.cookeymod.button"), (button) -> {
                 assert this.minecraft != null;
                 this.minecraft.setScreen(ScreenBuilder.buildConfig(this.minecraft.screen));
             }));
