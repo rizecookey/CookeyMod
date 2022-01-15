@@ -27,7 +27,6 @@
   "mixins": [
     "cookeymod.mixins.json"
   ],
-  "accessWidener": "cookeymod.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.7.4",
