@@ -6,7 +6,6 @@ import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.keybind.Keybinds;
-import net.rizecookey.cookeymod.update.GitHubUpdater;
 import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,8 +19,6 @@ public class CookeyMod implements ModInitializer {
     ModConfig config;
     PrefixLogger logger = new PrefixLogger(LogManager.getLogger("CookeyMod"));
     Keybinds keybinds;
-
-    GitHubUpdater updater;
 
     static CookeyMod instance;
 
@@ -40,7 +37,6 @@ public class CookeyMod implements ModInitializer {
             Path configDir = loader.getConfigDir().resolve(getModId());
 
             config = new ModConfig(this, configDir.resolve("config.toml"));
-            updater = new GitHubUpdater(modMetadata, loader.getConfigDir().resolve("mods"));
 
             keybinds = new Keybinds();
 
@@ -70,10 +66,6 @@ public class CookeyMod implements ModInitializer {
 
     public ModContainer getModContainer() {
         return modContainer;
-    }
-
-    public GitHubUpdater getUpdater() {
-        return updater;
     }
 
     public Keybinds getKeybinds() {
