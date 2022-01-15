@@ -14,6 +14,7 @@ import net.minecraft.world.item.UseAnim;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.option.Option;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,10 +23,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidModel.class)
 public abstract class HumanoidModelMixin<T extends LivingEntity> extends AgeableListModel<T> implements ArmedModel, HeadedModel {
-    @Shadow
+    @Final @Shadow
     public ModelPart rightArm;
 
-    @Shadow
+    @Final @Shadow
     public ModelPart leftArm;
 
     Option<Boolean> showEatingInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson;
