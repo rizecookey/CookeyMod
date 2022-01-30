@@ -32,7 +32,10 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
-	implementation includeClasspath("com.moandjiezana.toml:toml4j:${project.toml4j_version}")
+	implementation "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
+	includeClasspath("com.moandjiezana.toml:toml4j:${project.toml4j_version}") {
+		exclude(group: "com.google.code.gson")
+	}
 	modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
 	modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version))
 	modImplementation include(fabricApi.module("fabric-screen-api-v1", project.fabric_version))
