@@ -10,6 +10,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.UseAnim;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
@@ -29,32 +32,55 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     @Final @Shadow
     public ModelPart leftArm;
 
+    @Shadow protected abstract void poseLeftArm(T livingEntity);
+
+    @Shadow protected abstract void poseRightArm(T livingEntity);
+
     Option<Boolean> showEatingInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson;
+    private static final Option<Boolean> enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking;
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    public void addRightEatAnimation(T livingEntity, CallbackInfo ci) {
+    public void addRightArmAnimations(T livingEntity, CallbackInfo ci) {
         HumanoidArm usedHand = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND
                 ? livingEntity.getMainArm()
                 : livingEntity.getMainArm().getOpposite();
+        boolean poseLeftArmAfterwards = false;
+        if (enableToolBlocking.get()) {
+            ItemStack itemInRightArm = livingEntity.getItemInHand(livingEntity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
+            if (itemInRightArm.getItem() instanceof ShieldItem && livingEntity.getUseItem().equals(itemInRightArm)) {
+                poseLeftArmAfterwards = true;
+            }
+        }
         if (this.showEatingInThirdPerson.get()) {
             if (livingEntity.isUsingItem() && usedHand == HumanoidArm.RIGHT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
                 boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
                 if (run) ci.cancel();
+                return;
             }
         }
+        if (poseLeftArmAfterwards) this.poseLeftArm(livingEntity);
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    public void addLeftEatAnimation(T livingEntity, CallbackInfo ci) {
+    public void addLeftArmAnimations(T livingEntity, CallbackInfo ci) {
         HumanoidArm usedHand = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND
                 ? livingEntity.getMainArm()
                 : livingEntity.getMainArm().getOpposite();
+        boolean poseRightArmAfterwards = false;
+        if (enableToolBlocking.get()) {
+            ItemStack itemInLeftArm = livingEntity.getItemInHand(livingEntity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+            if (itemInLeftArm.getItem() instanceof ShieldItem && livingEntity.getUseItem().equals(itemInLeftArm)) {
+                poseRightArmAfterwards = true;
+            }
+        }
         if (this.showEatingInThirdPerson.get()) {
             if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
                 boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
                 if (run) ci.cancel();
+                return;
             }
         }
+        if (poseRightArmAfterwards) this.poseRightArm(livingEntity);
     }
 
     // Animation values and "formula" from ItemInHandRenderer's applyEatAnimation
