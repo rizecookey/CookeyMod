@@ -4,7 +4,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
 import net.rizecookey.cookeymod.config.option.Option;
@@ -25,7 +26,7 @@ public abstract class OptionsScreenMixin extends Screen {
     @Inject(method = "init", at = @At("TAIL"))
     public void injectCookeyModButton(CallbackInfo ci) {
         if (this.showModButton.get()) {
-            this.addRenderableWidget(new Button(this.width / 2 - 155, this.height / 6 + 24 - 6, 150, 20, new TranslatableComponent("options.cookeymod.button"), (button) -> {
+            this.addRenderableWidget(new Button(this.width / 2 - 155, this.height / 6 + 24 - 6, 150, 20, MutableComponent.create(new TranslatableContents("options.cookeymod.button")), (button) -> {
                 assert this.minecraft != null;
                 this.minecraft.setScreen(ScreenBuilder.buildConfig(this.minecraft.screen));
             }));

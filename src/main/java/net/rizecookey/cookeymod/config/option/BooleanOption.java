@@ -2,8 +2,8 @@ package net.rizecookey.cookeymod.config.option;
 
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.BooleanToggleBuilder;
-import net.minecraft.client.CycleOption;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.rizecookey.cookeymod.config.category.Category;
 
 public class BooleanOption extends Option<Boolean> {
@@ -11,14 +11,13 @@ public class BooleanOption extends Option<Boolean> {
         super(id, category, defaultValue, forceRestart);
         this.entry = () -> {
             BooleanToggleBuilder builder = ConfigEntryBuilder.create()
-                    .startBooleanToggle(new TranslatableComponent(this.getTranslationKey()), this.get())
+                    .startBooleanToggle(MutableComponent.create(new TranslatableContents(this.getTranslationKey())), this.get())
                     .setDefaultValue(this.defaultValue)
                     .setSaveConsumer(this::set);
             builder.requireRestart(forceRestart);
             builder.setTooltip(this.getTooltip(this.getTranslationKey()));
             return builder.build();
         };
-        this.mcOption = CycleOption.createOnOff(this.getTranslationKey(), (options -> this.get()), (options, option, value) -> this.set(value));
     }
     public BooleanOption(String id, Category category, Boolean defaultValue) {
         this(id, category, defaultValue, false);

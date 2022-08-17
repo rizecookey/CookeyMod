@@ -5,9 +5,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
 import net.rizecookey.cookeymod.config.option.Option;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,8 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class RemotePlayerMixin extends AbstractClientPlayer {
     Option<Boolean> fixLocalPlayerHandling = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixLocalPlayerHandling;
 
-    public RemotePlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
-        super(clientLevel, gameProfile);
+    public RemotePlayerMixin(ClientLevel clientLevel, GameProfile gameProfile, @Nullable ProfilePublicKey profilePublicKey) {
+        super(clientLevel, gameProfile, profilePublicKey);
     }
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)

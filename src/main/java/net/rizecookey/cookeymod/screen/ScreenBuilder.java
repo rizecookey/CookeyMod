@@ -5,7 +5,8 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.Category;
@@ -17,7 +18,7 @@ public abstract class ScreenBuilder {
         ModConfig config = CookeyMod.getInstance().getConfig();
 
         ConfigBuilder builder = ConfigBuilder.create()
-                .setTitle(new TranslatableComponent(ModConfig.TRANSLATION_KEY))
+                .setTitle(MutableComponent.create(new TranslatableContents(ModConfig.TRANSLATION_KEY)))
                 .setTransparentBackground(Minecraft.getInstance().level != null)
                 .setSavingRunnable(() -> {
                     try {
@@ -31,7 +32,7 @@ public abstract class ScreenBuilder {
 
         for (String id : config.getCategories().keySet()) {
             Category category = config.getCategory(id);
-            ConfigCategory configCategory = builder.getOrCreateCategory(new TranslatableComponent(category.getTranslationKey()));
+            ConfigCategory configCategory = builder.getOrCreateCategory(MutableComponent.create(new TranslatableContents(category.getTranslationKey())));
 
             for (AbstractConfigListEntry<?> entry : category.getConfigEntries()) {
                 configCategory.addEntry(entry);

@@ -3,7 +3,8 @@ package net.rizecookey.cookeymod.config.option;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.ColorFieldBuilder;
 import me.shedaniel.math.Color;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.rizecookey.cookeymod.config.category.Category;
 
 public class ColorOption extends Option<Color> {
@@ -11,14 +12,13 @@ public class ColorOption extends Option<Color> {
         super(id, category, defaultValue);
         this.entry = () -> {
             ColorFieldBuilder builder = ConfigEntryBuilder.create()
-                    .startAlphaColorField(new TranslatableComponent(this.getTranslationKey()), this.get())
+                    .startAlphaColorField(MutableComponent.create(new TranslatableContents(this.getTranslationKey())), this.get())
                     .setSaveConsumer2(this::set)
                     .setAlphaMode(alphaMode)
                     .setDefaultValue(this.getDefault().getColor());
             builder.setTooltip(this.getTooltip(this.getTranslationKey()));
             return builder.build();
         };
-        this.mcOption = null;
     }
 
     @Override
