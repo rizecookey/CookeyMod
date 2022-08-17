@@ -55,8 +55,7 @@ public abstract class GameRendererMixin {
     }
 
     private void alternativeBobView(PoseStack poseStack, float f) {
-        if (this.minecraft.getCameraEntity() instanceof Player) {
-            Player player = (Player)this.minecraft.getCameraEntity();
+        if (this.minecraft.getCameraEntity() instanceof Player player) {
             float g = player.walkDist - player.walkDistO;
             float h = -(player.walkDist + g * f);
             float i = Mth.lerp(f, player.oBob, player.bob);

@@ -37,9 +37,9 @@ dependencies {
 		exclude(group: "com.google.code.gson")
 	}
 	modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
-	modImplementation include(fabricApi.module("fabric-screen-api-v1", project.fabric_version))
+	modImplementation fabricApi.module("fabric-screen-api-v1", project.fabric_version)
 	modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version))
-	modImplementation include(fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version))
+	modImplementation fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version)
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}

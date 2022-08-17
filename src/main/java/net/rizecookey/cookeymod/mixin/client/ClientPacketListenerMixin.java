@@ -25,8 +25,7 @@ public class ClientPacketListenerMixin {
     @Inject(method = "handleSetEntityMotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;lerpMotion(DDD)V"))
     public void injectHurtDir(ClientboundSetEntityMotionPacket clientboundSetEntityMotionPacket, CallbackInfo ci) {
         Entity entity = this.level.getEntity(clientboundSetEntityMotionPacket.getId());
-        if (entity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity) entity;
+        if (entity instanceof LivingEntity livingEntity) {
             if (this.enableDamageCameraTilt.get()) {
                 livingEntity.hurtDir = (float) (Mth.atan2(clientboundSetEntityMotionPacket.getZa() / 8000D, clientboundSetEntityMotionPacket.getXa() / 8000D) * 57.2957763671875D - (double) livingEntity.yHeadRot);
             }
