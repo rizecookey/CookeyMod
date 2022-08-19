@@ -15,6 +15,7 @@ public class HudRenderingCategory extends Category {
     public Option<Boolean> onlyShowShieldWhenBlocking;
     public Option<Boolean> disableEffectBasedFovChange;
     public Option<Boolean> alternativeBobbing;
+    public Option<Boolean> showHandWhenInvisible;
 
     public HudRenderingCategory(ModConfig modConfig) {
         super(modConfig);
@@ -30,6 +31,7 @@ public class HudRenderingCategory extends Category {
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
         disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));
         alternativeBobbing = this.register(new BooleanOption("alternativeBobbing", this, false));
+        showHandWhenInvisible = this.register(new BooleanOption("showHandWhenInvisible", this, false));
     }
 
     @Override

@@ -43,6 +43,8 @@
   "options.cookeymod.hudRendering.disableEffectBasedFovChange.tooltip.1": "effects (sprinting FOV is unaffected by this).",
   "options.cookeymod.hudRendering.alternativeBobbing": "Alternative bobbing",
   "options.cookeymod.hudRendering.alternativeBobbing.tooltip.0": "Enables an alternative bobbing animation.",
+  "options.cookeymod.hudRendering.showHandWhenInvisible": "Show hand when invisible",
+  "options.cookeymod.hudRendering.showHandWhenInvisible.tooltip.0": "Show hand in 1st person when you are invisible.",
   "options.cookeymod.misc": "Miscellaneous",
   "options.cookeymod.misc.showModButton": "Mod button in MC options",
   "options.cookeymod.misc.showModButton.tooltip.0": "Changes whether the CookeyMod button should be",

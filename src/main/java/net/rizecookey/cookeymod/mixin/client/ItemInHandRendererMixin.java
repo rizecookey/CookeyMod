@@ -73,6 +73,11 @@ public abstract class ItemInHandRendererMixin {
         }
     }
 
+    @Redirect(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z", ordinal = 0))
+    public boolean makeArmAppear(AbstractClientPlayer instance) {
+        return !hudRenderingCategory.showHandWhenInvisible.get() && instance.isInvisible();
+    }
+
     @Redirect(method = "renderArmWithItem",
             at = @At(
                     value = "INVOKE",
