@@ -11,7 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_AUTO_ICONIFY;
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_HOVERED;
+import static org.lwjgl.glfw.GLFW.glfwGetWindowAttrib;
+import static org.lwjgl.glfw.GLFW.glfwIconifyWindow;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowFocusCallback;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 
 @Mixin(Window.class)
 public abstract class WindowMixin implements AutoCloseable {

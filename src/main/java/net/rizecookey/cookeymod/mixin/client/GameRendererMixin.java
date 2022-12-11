@@ -1,7 +1,7 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -60,7 +60,7 @@ public abstract class GameRendererMixin {
             float h = -(player.walkDist + g * f);
             float i = Mth.lerp(f, player.oBob, player.bob);
             poseStack.translate(Mth.sin(h * 3.1415927F) * i * 0.5F, -Math.abs(Mth.cos(h * 3.1415927F) * i), 0.0D);
-            poseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.cos(h * 3.1415927F) * i * 3.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.cos(h * 3.1415927F) * i * 3.0F));
         }
     }
 }
