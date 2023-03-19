@@ -3,8 +3,6 @@ package net.rizecookey.cookeymod.config.option;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.rizecookey.cookeymod.config.category.Category;
 
 import java.util.ArrayList;
@@ -13,11 +11,11 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public abstract class Option<T> {
-    String id;
-    Category category;
-    T defaultValue;
-    T value;
-    Supplier<AbstractConfigListEntry<?>> entry;
+    private final String id;
+    private final Category category;
+    private final T defaultValue;
+    private T value;
+    private Supplier<AbstractConfigListEntry<?>> entry;
 
     public Option(String id, Category category, T defaultValue, boolean forceRestart) {
         this.id = id;
@@ -78,10 +76,9 @@ public abstract class Option<T> {
         int i = 0;
         while (i != -1) {
             if (Language.getInstance().has(tooltipKey + i)) {
-                components.add(MutableComponent.create(new TranslatableContents(tooltipKey + i)));
+                components.add(Component.translatable(tooltipKey + i));
                 i++;
-            }
-            else {
+            } else {
                 i = -1;
             }
         }

@@ -42,8 +42,7 @@ public class CookeyModMixinPlugin implements IMixinConfigPlugin {
                 if (mentionsActiveMods(ModSpecific.class, mixin)) {
                     logger.info("[" + getClass().getSimpleName() + "] Loading mod-specific mixin \"" + mixinClassName + "\" since mod \"" + getFirstMentionedActiveMod(ModSpecific.class, mixin) + "\" is present.");
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }

@@ -22,14 +22,16 @@ public class ModConfig {
     public static final String TRANSLATION_KEY = "options.cookeymod";
     public static final String GENERIC_KEYS = TRANSLATION_KEY + "." + "generic.options";
 
-    final CookeyMod mod;
-    final Logger logger;
+    private static final String CONFIG_VERSION_KEY = "config-version";
 
-    Path file;
-    Toml defaults;
-    Toml toml;
-    Map<String, Category> categories = new HashMap<>();
-    long version;
+    private final CookeyMod mod;
+    private final Logger logger;
+
+    private final Path file;
+    private Toml defaults;
+    private Toml toml;
+    private final Map<String, Category> categories = new HashMap<>();
+    private long version;
 
     public ModConfig(CookeyMod mod, Path file) {
         this.mod = mod;
@@ -70,7 +72,7 @@ public class ModConfig {
             categories.get(id).loadOptions(category != null ? category : new HashMap<>());
         }
 
-        this.version = this.defaults.contains("config-version") ? this.defaults.getLong("config-version") : 1;
+        this.version = this.defaults.contains(CONFIG_VERSION_KEY) ? this.defaults.getLong(CONFIG_VERSION_KEY) : 1;
 
         if (updated) {
             try {
@@ -97,18 +99,17 @@ public class ModConfig {
             logger.info("Config not found, creating default one...");
             new TomlWriter().write(this.defaults, file.toFile());
             logger.info("Copied default config.");
-        }
-        else {
+        } else {
             Map<String, Object> configMap = new Toml().read(file.toFile()).toMap();
             Map<String, Object> fallbackMap = this.defaults.toMap();
-            if (!configMap.containsKey("config-version")) configMap.put("config-version", 1);
+            configMap.putIfAbsent(CONFIG_VERSION_KEY, 1);
             this.copyMissingNested(fallbackMap, configMap);
             new TomlWriter().write(configMap, file.toFile());
         }
         resourceStream.close();
 
         this.toml = new Toml().read(file.toFile());
-        this.version = this.toml.contains("config-version") ? this.toml.getLong("config-version") : 1;
+        this.version = this.toml.contains(CONFIG_VERSION_KEY) ? this.toml.getLong(CONFIG_VERSION_KEY) : 1;
         this.loadCategories();
     }
 
@@ -140,21 +141,21 @@ public class ModConfig {
             optionsMap.put(id, categories.get(id).toMap());
         }
 
-        optionsMap.put("config-version", this.version);
+        optionsMap.put(CONFIG_VERSION_KEY, this.version);
 
         new TomlWriter().write(optionsMap, file.toFile());
     }
 
     @SuppressWarnings("rawtypes")
     public <T, U> void copyMissingNested(Map<T, U> from, Map<T, U> to) {
-        for (T fromKey : from.keySet()) {
-            U fromValue = from.get(fromKey);
+        for (Map.Entry<T, U> fromEntry : from.entrySet()) {
+            T fromKey = fromEntry.getKey();
+            U fromValue = fromEntry.getValue();
             Optional<U> toValue = to.containsKey(fromKey) ? Optional.of(to.get(fromKey)) : Optional.empty();
-            if (!toValue.isPresent()) {
+            if (toValue.isEmpty()) {
                 to.put(fromKey, fromValue);
-            }
-            else if (fromValue instanceof Map && toValue.get() instanceof Map) {
-                this.copyMissingNested((Map) fromValue, (Map) toValue.get());
+            } else if (fromValue instanceof Map fromMap && toValue.get() instanceof Map toMap) {
+                this.copyMissingNested(fromMap, toMap);
             }
         }
     }

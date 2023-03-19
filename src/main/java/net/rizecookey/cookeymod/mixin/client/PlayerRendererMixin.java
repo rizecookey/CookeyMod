@@ -30,7 +30,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     private static final Option<Boolean> enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking;
     private static final Option<Boolean> showHandWhenInvisible = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).showHandWhenInvisible;
 
-    public PlayerRendererMixin(EntityRendererProvider.Context context, PlayerModel<AbstractClientPlayer> entityModel, float f) {
+    private PlayerRendererMixin(EntityRendererProvider.Context context, PlayerModel<AbstractClientPlayer> entityModel, float f) {
         super(context, entityModel, f);
     }
 

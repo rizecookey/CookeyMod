@@ -9,13 +9,13 @@ import net.rizecookey.cookeymod.config.option.Option;
 import net.rizecookey.cookeymod.event.OverlayReloadListener;
 
 public class HudRenderingCategory extends Category {
-    public Option<Double> attackCooldownHandOffset;
-    public Option<Color> damageColor;
-    public Option<Boolean> showDamageTintOnArmor;
-    public Option<Boolean> onlyShowShieldWhenBlocking;
-    public Option<Boolean> disableEffectBasedFovChange;
-    public Option<Boolean> alternativeBobbing;
-    public Option<Boolean> showHandWhenInvisible;
+    public final Option<Double> attackCooldownHandOffset;
+    public final Option<Color> damageColor;
+    public final Option<Boolean> showDamageTintOnArmor;
+    public final Option<Boolean> onlyShowShieldWhenBlocking;
+    public final Option<Boolean> disableEffectBasedFovChange;
+    public final Option<Boolean> alternativeBobbing;
+    public final Option<Boolean> showHandWhenInvisible;
 
     public HudRenderingCategory(ModConfig modConfig) {
         super(modConfig);

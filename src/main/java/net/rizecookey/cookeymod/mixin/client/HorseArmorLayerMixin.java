@@ -15,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(HorseArmorLayer.class)
 public abstract class HorseArmorLayerMixin implements OverlayRendered<Horse> {
-    @Shadow public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, Horse horse, float f, float g, float h, float j, float k, float l);
+    @Shadow
+    public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, Horse horse, float f, float g, float h, float j, float k, float l);
 
     int overlayCoords;
     Option<Boolean> showDamageTintOnArmor = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).showDamageTintOnArmor;

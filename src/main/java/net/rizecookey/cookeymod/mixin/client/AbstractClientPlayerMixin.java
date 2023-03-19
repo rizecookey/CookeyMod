@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class AbstractClientPlayerMixin extends Player {
     Option<Boolean> disableEffectBasedFovChange = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).disableEffectBasedFovChange;
 
-    public AbstractClientPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
+    private AbstractClientPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
         super(level, blockPos, f, gameProfile);
     }
 
@@ -29,8 +29,7 @@ public abstract class AbstractClientPlayerMixin extends Player {
                 mov *= 1 + LivingEntityAccessor.SPEED_MODIFIER_SPRINTING().getAmount();
             }
             return mov;
-        }
-        else {
+        } else {
             return player.getAttributeValue(attribute);
         }
     }

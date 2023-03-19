@@ -5,10 +5,10 @@ import com.mojang.math.Axis;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
@@ -33,7 +33,7 @@ public abstract class ItemInHandRendererMixin {
     protected abstract void applyItemArmTransform(PoseStack poseStack, HumanoidArm humanoidArm, float f);
 
     @Shadow
-    public abstract void renderItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean bl, PoseStack poseStack, MultiBufferSource multiBufferSource, int i);
+    public abstract void renderItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, boolean bl, PoseStack poseStack, MultiBufferSource multiBufferSource, int i);
 
     @Shadow
     private ItemStack offHandItem;
@@ -46,17 +46,16 @@ public abstract class ItemInHandRendererMixin {
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
-        if (hudRenderingCategory.onlyShowShieldWhenBlocking.get() || animationsCategory.enableToolBlocking.get()) {
-            if (itemStack.getItem() instanceof ShieldItem && !(!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem)) {
-                ci.cancel();
-            }
+        if ((hudRenderingCategory.onlyShowShieldWhenBlocking.get() || animationsCategory.enableToolBlocking.get())
+                && (itemStack.getItem() instanceof ShieldItem && !(!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem))) {
+            ci.cancel();
+
         }
         if (animationsCategory.enableToolBlocking.get()) {
             ItemStack otherHandItem = interactionHand == InteractionHand.MAIN_HAND ? this.offHandItem : this.mainHandItem;
-            if (itemStack.getItem() instanceof ShieldItem) {
-                if (otherHandItem.getItem() instanceof TieredItem && (!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem)) {
-                    ci.cancel();
-                }
+            if (itemStack.getItem() instanceof ShieldItem && (otherHandItem.getItem() instanceof TieredItem && (!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem))) {
+                ci.cancel();
+
             }
             if (abstractClientPlayer.getUsedItemHand() != interactionHand && (!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem) && itemStack.getItem() instanceof TieredItem) {
                 poseStack.pushPose();
@@ -69,7 +68,7 @@ public abstract class ItemInHandRendererMixin {
                     this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
                 }
                 boolean isRightHand = humanoidArm == HumanoidArm.RIGHT;
-                this.renderItem(abstractClientPlayer, itemStack, isRightHand ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !isRightHand, poseStack, multiBufferSource, j);
+                this.renderItem(abstractClientPlayer, itemStack, isRightHand ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !isRightHand, poseStack, multiBufferSource, j);
 
                 poseStack.popPose();
                 ci.cancel();
@@ -95,7 +94,7 @@ public abstract class ItemInHandRendererMixin {
     @Inject(method = "renderArmWithItem",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemTransforms$TransformType;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+                    target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
                     ordinal = 1, shift = At.Shift.BEFORE))
     public void injectAttackTransform(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
         HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND

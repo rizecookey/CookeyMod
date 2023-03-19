@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     Option<Boolean> fixCooldownDesync = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
 
-    public LocalPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
+    private LocalPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);
     }
 

@@ -18,7 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(OverlayTexture.class)
 public abstract class OverlayTextureMixin implements OverlayTextureExtension, OverlayReloadListener {
-    @Shadow @Final private DynamicTexture texture;
+    @Shadow
+    @Final
+    private DynamicTexture texture;
 
     HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class);
 
@@ -40,8 +42,8 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
     public void reloadOverlay() {
         NativeImage nativeImage = this.texture.getPixels();
 
-        for(int i = 0; i < 16; ++i) {
-            for(int j = 0; j < 16; ++j) {
+        for (int i = 0; i < 16; ++i) {
+            for (int j = 0; j < 16; ++j) {
                 if (i < 8) {
                     Color color = this.hudRenderingCategory.damageColor.get();
                     assert nativeImage != null;

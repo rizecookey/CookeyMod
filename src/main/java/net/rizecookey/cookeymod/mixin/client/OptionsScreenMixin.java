@@ -1,12 +1,10 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.GridWidget;
+import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
 import net.rizecookey.cookeymod.config.option.Option;
@@ -22,7 +20,8 @@ import java.util.function.Supplier;
 
 @Mixin(OptionsScreen.class)
 public abstract class OptionsScreenMixin extends Screen {
-    @Shadow protected abstract Button openScreenButton(Component component, Supplier<Screen> supplier);
+    @Shadow
+    protected abstract Button openScreenButton(Component component, Supplier<Screen> supplier);
 
     protected OptionsScreenMixin(Component component) {
         super(component);
@@ -32,12 +31,12 @@ public abstract class OptionsScreenMixin extends Screen {
 
     @Inject(method = "init",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/GridWidget$RowHelper;addChild(Lnet/minecraft/client/gui/components/AbstractWidget;)Lnet/minecraft/client/gui/components/AbstractWidget;",
+                    target = "Lnet/minecraft/client/gui/layouts/GridLayout$RowHelper;addChild(Lnet/minecraft/client/gui/layouts/LayoutElement;)Lnet/minecraft/client/gui/layouts/LayoutElement;",
                     shift = At.Shift.AFTER, ordinal = 10),
             locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void injectCookeyModButton(CallbackInfo ci, GridWidget gridWidget, GridWidget.RowHelper rowHelper) {
+    public void injectCookeyModButton(CallbackInfo ci, GridLayout gridLayout, GridLayout.RowHelper rowHelper) {
         if (this.showModButton.get()) {
-            rowHelper.addChild(this.openScreenButton(MutableComponent.create(new TranslatableContents("options.cookeymod.button")),
+            rowHelper.addChild(this.openScreenButton(Component.translatable("options.cookeymod.button"),
                     () -> {
                         assert this.minecraft != null;
                         return ScreenBuilder.buildConfig(this.minecraft.screen);

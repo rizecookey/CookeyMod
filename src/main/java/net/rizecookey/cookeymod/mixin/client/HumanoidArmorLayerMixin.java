@@ -18,7 +18,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(HumanoidArmorLayer.class)
 @Incompatible("optifabric")
 public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> implements OverlayRendered<T> {
-    @Shadow public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l);
+    @Shadow
+    public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l);
 
     int overlayCoords;
     Option<Boolean> showDamageTintOnArmor = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).showDamageTintOnArmor;

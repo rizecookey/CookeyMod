@@ -21,9 +21,12 @@ import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 
 @Mixin(Window.class)
 public abstract class WindowMixin implements AutoCloseable {
-    @Shadow @Final private long window;
+    @Shadow
+    @Final
+    private long window;
 
-    @Shadow public abstract boolean isFullscreen();
+    @Shadow
+    public abstract boolean isFullscreen();
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/lwjgl/glfw/GLFW;glfwWindowHint(II)V", ordinal = 4, remap = false))
     public void disableAutoIconify(WindowEventHandler windowEventHandler, ScreenManager screenManager, DisplayData displayData, String string, String string2, CallbackInfo ci) {
@@ -33,9 +36,9 @@ public abstract class WindowMixin implements AutoCloseable {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void iconifyIfBlocking(WindowEventHandler windowEventHandler, ScreenManager screenManager, DisplayData displayData, String string, String string2, CallbackInfo ci) {
-        glfwSetWindowFocusCallback(this.window, (window, focussed) -> {
-            if (this.isFullscreen() && !focussed && glfwGetWindowAttrib(window, GLFW_HOVERED) == 1) {
-                glfwIconifyWindow(window);
+        glfwSetWindowFocusCallback(this.window, (windowId, focussed) -> {
+            if (this.isFullscreen() && !focussed && glfwGetWindowAttrib(windowId, GLFW_HOVERED) == 1) {
+                glfwIconifyWindow(windowId);
             }
         });
     }

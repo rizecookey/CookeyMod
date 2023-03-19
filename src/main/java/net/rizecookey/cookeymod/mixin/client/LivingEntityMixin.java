@@ -13,7 +13,7 @@ public abstract class LivingEntityMixin extends Entity {
     AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
 
     // Default constructor to satisfy compiler :P
-    public LivingEntityMixin(EntityType<?> entityType, Level level) {
+    private LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 }

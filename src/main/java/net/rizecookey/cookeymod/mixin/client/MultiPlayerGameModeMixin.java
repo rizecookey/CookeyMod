@@ -17,7 +17,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeExtension {
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow
+    @Final
+    private Minecraft minecraft;
     private boolean attackResetPending;
 
     Option<Boolean> fixCooldownDesync = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
@@ -34,7 +36,7 @@ public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeExt
             this.attackResetPending = true;
     }
 
-    @Inject(method = { "useItem", "useItemOn", "interact", "interactAt" }, at = @At("RETURN"))
+    @Inject(method = {"useItem", "useItemOn", "interact", "interactAt"}, at = @At("RETURN"))
     public void interactResetAttackStrength(CallbackInfoReturnable<InteractionResult> cir) {
         if (fixCooldownDesync.get() && cir.getReturnValue() == InteractionResult.SUCCESS)
             this.resetAttackStrengthTicker();

@@ -15,13 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Camera.class)
 public abstract class CameraMixin {
-    @Shadow private Entity entity;
+    @Shadow
+    private Entity entity;
 
-    @Shadow private float eyeHeight;
+    @Shadow
+    private float eyeHeight;
 
-    @Shadow public abstract Entity getEntity();
+    @Shadow
+    public abstract Entity getEntity();
 
-    @Shadow private float eyeHeightOld;
+    @Shadow
+    private float eyeHeightOld;
 
     Option<Double> sneakAnimationSpeed = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).sneakAnimationSpeed;
 

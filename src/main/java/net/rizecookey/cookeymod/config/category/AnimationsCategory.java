@@ -6,12 +6,11 @@ import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
 import net.rizecookey.cookeymod.config.option.Option;
 
 public class AnimationsCategory extends Category {
-    public Option<Boolean> swingAndUseItem;
-    public Option<Double> sneakAnimationSpeed;
-    public Option<Boolean> disableCameraBobbing;
-    public Option<Boolean> enableToolBlocking;
-    public Option<Boolean> showEatingInThirdPerson;
-    public Option<Boolean> enableDamageCameraTilt;
+    public final Option<Boolean> swingAndUseItem;
+    public final Option<Double> sneakAnimationSpeed;
+    public final Option<Boolean> disableCameraBobbing;
+    public final Option<Boolean> enableToolBlocking;
+    public final Option<Boolean> showEatingInThirdPerson;
 
     public AnimationsCategory(ModConfig modConfig) {
         super(modConfig);
@@ -20,7 +19,6 @@ public class AnimationsCategory extends Category {
         disableCameraBobbing = this.register(new BooleanOption("disableCameraBobbing", this, false));
         enableToolBlocking = this.register(new BooleanOption("enableToolBlocking", this, false));
         showEatingInThirdPerson = this.register(new BooleanOption("showEatingInThirdPerson", this, false));
-        enableDamageCameraTilt = this.register(new BooleanOption("enableDamageCameraTilt", this, false));
     }
 
     @Override

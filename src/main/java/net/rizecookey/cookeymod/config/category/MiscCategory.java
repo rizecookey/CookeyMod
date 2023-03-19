@@ -6,10 +6,10 @@ import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.Option;
 
 public class MiscCategory extends Category {
-    public Option<Boolean> showOwnNameInThirdPerson;
-    public Option<Boolean> showModButton;
-    public Option<Boolean> fixLocalPlayerHandling;
-    public Option<Boolean> fixCooldownDesync;
+    public final Option<Boolean> showOwnNameInThirdPerson;
+    public final Option<Boolean> showModButton;
+    public final Option<Boolean> fixLocalPlayerHandling;
+    public final Option<Boolean> fixCooldownDesync;
 
     public MiscCategory(ModConfig modConfig) {
         super(modConfig);
@@ -21,5 +21,7 @@ public class MiscCategory extends Category {
     }
 
     @Override
-    public String getId() { return "misc"; }
+    public String getId() {
+        return "misc";
+    }
 }

@@ -33,14 +33,15 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         return 0;
     }
 
-    @Shadow protected abstract float getWhiteOverlayProgress(T livingEntity, float f);
+    @Shadow
+    protected abstract float getWhiteOverlayProgress(T livingEntity, float f);
 
     Option<Boolean> showOwnNameInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showOwnNameInThirdPerson;
 
     @Inject(method = "shouldShowName", at = @At("HEAD"), cancellable = true)
     public void showOwnName(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
         if (livingEntity == Minecraft.getInstance().cameraEntity
-        && this.showOwnNameInThirdPerson.get()) cir.setReturnValue(true);
+                && this.showOwnNameInThirdPerson.get()) cir.setReturnValue(true);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -49,8 +50,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         if (renderLayer instanceof OverlayRendered) {
             int overlayCoords = getOverlayCoords((T) livingEntity, this.getWhiteOverlayProgress((T) livingEntity, g));
             ((OverlayRendered<T>) renderLayer).renderWithOverlay(poseStack, multiBufferSource, i, (T) livingEntity, f, g, h, j, k, l, overlayCoords);
-        }
-        else {
+        } else {
             renderLayer.render(poseStack, multiBufferSource, i, livingEntity, f, g, h, j, k, l);
         }
     }

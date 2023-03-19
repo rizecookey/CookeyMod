@@ -3,7 +3,10 @@ package net.rizecookey.cookeymod.config;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigUpdater {
+public final class ConfigUpdater {
+    private ConfigUpdater() {
+    }
+
     @SuppressWarnings("unchecked")
     public static boolean update(Map<String, Object> map, long from) {
         boolean modified = false;
@@ -16,7 +19,7 @@ public class ConfigUpdater {
             Map<String, Object> hudRenderingMap = map.containsKey(hudRenderingKey)
                     && map.get(hudRenderingKey) instanceof Map
                     ? (Map<String, Object>) map.get(hudRenderingKey) : new HashMap<>();
-            String[] copyToHud = new String[] {
+            String[] copyToHud = new String[]{
                     "disableEffectBasedFovChange",
                     "damageColor",
                     "attackCooldownHandOffset",

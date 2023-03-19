@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Category {
-    final HashMap<String, Option<?>> options = new HashMap<>();
+    private final Map<String, Option<?>> options = new HashMap<>();
 
-    final ModConfig modConfig;
+    private final ModConfig modConfig;
 
-    public Category(ModConfig modConfig) {
+    protected Category(ModConfig modConfig) {
         this.modConfig = modConfig;
     }
 
@@ -28,7 +28,7 @@ public abstract class Category {
         return ModConfig.TRANSLATION_KEY + "." + this.getId();
     }
 
-    public HashMap<String, Option<?>> getOptions() {
+    public Map<String, Option<?>> getOptions() {
         return new HashMap<>(options);
     }
 
@@ -39,14 +39,15 @@ public abstract class Category {
 
     public void loadOptions(Map<String, Object> map) {
         if (map != null) {
-            for (String key : map.keySet()) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
                 Option<?> option = this.options.get(key);
-                if (option != null) option.load(map.get(key));
+                if (option != null) option.load(entry.getValue());
             }
         }
     }
 
-    public Map<String, ?> toMap() {
+    public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         for (Option<?> option : this.getOptions().values()) {
             map.put(option.getId(), option.getInConfigFormat());

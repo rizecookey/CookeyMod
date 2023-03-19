@@ -17,7 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity implements PlayerExtension {
-    @Shadow public abstract void resetAttackStrengthTicker();
+    @Shadow
+    public abstract void resetAttackStrengthTicker();
 
     Option<Boolean> fixCooldownDesync = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
 

@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface OverlayReloadListener {
-    List<OverlayReloadListener> listeners = new ArrayList<>();
+    List<OverlayReloadListener> LISTENERS = new ArrayList<>();
+
     void onOverlayReload();
 
     static void register(OverlayReloadListener listener) {
-        listeners.add(listener);
+        LISTENERS.add(listener);
     }
 
     static void callEvent() {
-        for (OverlayReloadListener listener : listeners) {
+        for (OverlayReloadListener listener : LISTENERS) {
             listener.onOverlayReload();
         }
     }

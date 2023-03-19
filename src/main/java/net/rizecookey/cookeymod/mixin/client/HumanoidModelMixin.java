@@ -25,15 +25,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidModel.class)
 public abstract class HumanoidModelMixin<T extends LivingEntity> extends AgeableListModel<T> implements ArmedModel, HeadedModel {
-    @Final @Shadow
+    @Final
+    @Shadow
     public ModelPart rightArm;
 
-    @Final @Shadow
+    @Final
+    @Shadow
     public ModelPart leftArm;
 
-    @Shadow protected abstract void poseLeftArm(T livingEntity);
+    @Shadow
+    protected abstract void poseLeftArm(T livingEntity);
 
-    @Shadow protected abstract void poseRightArm(T livingEntity);
+    @Shadow
+    protected abstract void poseRightArm(T livingEntity);
 
     Option<Boolean> showEatingInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson;
     private static final Option<Boolean> enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking;
@@ -50,12 +54,11 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
                 poseLeftArmAfterwards = true;
             }
         }
-        if (this.showEatingInThirdPerson.get()) {
-            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.RIGHT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
-                boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
-                if (run) ci.cancel();
-                return;
-            }
+        if (this.showEatingInThirdPerson.get()
+                && livingEntity.isUsingItem() && usedHand == HumanoidArm.RIGHT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
+            boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
+            if (run) ci.cancel();
+            return;
         }
         if (poseLeftArmAfterwards) this.poseLeftArm(livingEntity);
     }
@@ -72,12 +75,11 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
                 poseRightArmAfterwards = true;
             }
         }
-        if (this.showEatingInThirdPerson.get()) {
-            if (livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
-                boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
-                if (run) ci.cancel();
-                return;
-            }
+        if (this.showEatingInThirdPerson.get()
+                && livingEntity.isUsingItem() && usedHand == HumanoidArm.LEFT && (livingEntity.getUseItem().getUseAnimation() == UseAnim.EAT || livingEntity.getUseItem().getUseAnimation() == UseAnim.DRINK)) {
+            boolean run = this.applyEatingAnimation(livingEntity, usedHand, ((MinecraftAccessor) Minecraft.getInstance()).getTimer().partialTick);
+            if (run) ci.cancel();
+            return;
         }
         if (poseRightArmAfterwards) this.poseRightArm(livingEntity);
     }
@@ -96,8 +98,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
         if (h < 0.8F) {
             j = Mth.abs(Mth.cos(g / 4.0F * 3.1415927F) * 0.25F);
             xRot = xRot * 0.5F - 1.57079633F + j;
-        }
-        else {
+        } else {
             xRot = k * (xRot * 0.5F - 1.32079633F);
         }
 

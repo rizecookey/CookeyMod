@@ -8,5 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(LivingEntity.class)
 public interface LivingEntityAccessor {
     @Accessor("SPEED_MODIFIER_SPRINTING")
-    static AttributeModifier SPEED_MODIFIER_SPRINTING() { return null; }
+    static AttributeModifier SPEED_MODIFIER_SPRINTING() {
+        return null;
+    }
 }

@@ -14,19 +14,19 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 public class CookeyMod implements ModInitializer {
-    ModConfig config;
-    PrefixLogger logger = new PrefixLogger(LogManager.getLogger("CookeyMod"));
-    ModContainer modContainer;
-    ModMetadata modMetadata;
-    Keybinds keybinds;
+    private static final PrefixLogger LOGGER = new PrefixLogger(LogManager.getLogger("CookeyMod"));
+    private static CookeyMod INSTANCE;
 
-    static CookeyMod instance;
+    private ModConfig config;
+    private ModContainer modContainer;
+    private ModMetadata modMetadata;
+    private Keybinds keybinds;
 
     @Override
     public void onInitialize() {
-        logger.info("Loading CookeyMod...");
+        LOGGER.info("Loading CookeyMod...");
 
-        CookeyMod.instance = this;
+        INSTANCE = this;
         FabricLoader loader = FabricLoader.getInstance();
 
         Optional<ModContainer> opt = loader.getModContainer("cookeymod");
@@ -40,16 +40,15 @@ public class CookeyMod implements ModInitializer {
 
             keybinds = new Keybinds();
 
-            logger.info("CookeyMod " + getModVersion() + " has been loaded.");
-        }
-        else {
-            logger.error("Couldn't find own mod container!");
+            LOGGER.info("CookeyMod " + getModVersion() + " has been loaded.");
+        } else {
+            LOGGER.error("Couldn't find own mod container!");
             System.exit(-1);
         }
     }
 
     public Logger getLogger() {
-        return this.logger.unwrap();
+        return LOGGER.unwrap();
     }
 
     public ModConfig getConfig() {
@@ -73,6 +72,6 @@ public class CookeyMod implements ModInitializer {
     }
 
     public static CookeyMod getInstance() {
-        return instance;
+        return INSTANCE;
     }
 }
