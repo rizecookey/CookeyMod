@@ -33,7 +33,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerExtensio
 
     @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("RETURN"))
     public void resetAttackStrengthOnDrop(CallbackInfoReturnable<ItemEntity> cir) {
-        if (fixCooldownDesync.get() && cir.getReturnValue() != null && this.level.isClientSide())
+        if (fixCooldownDesync.get() && cir.getReturnValue() != null && this.level().isClientSide())
             this.resetAttackStrengthTicker();
     }
 }
