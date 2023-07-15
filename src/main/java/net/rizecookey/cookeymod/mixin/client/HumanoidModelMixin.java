@@ -39,8 +39,8 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     @Shadow
     protected abstract void poseRightArm(T livingEntity);
 
-    BooleanOption showEatingInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).showEatingInThirdPerson();
-    private static final BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking();
+    BooleanOption showEatingInThirdPerson = CookeyMod.getInstance().getConfig().animations().showEatingInThirdPerson();
+    private static final BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
     public void addRightArmAnimations(T livingEntity, CallbackInfo ci) {

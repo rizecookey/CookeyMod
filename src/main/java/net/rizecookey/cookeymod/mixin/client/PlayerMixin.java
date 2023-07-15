@@ -20,7 +20,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerExtensio
     @Shadow
     public abstract void resetAttackStrengthTicker();
 
-    BooleanOption fixCooldownDesync = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixCooldownDesync();
+    BooleanOption fixCooldownDesync = CookeyMod.getInstance().getConfig().misc().fixCooldownDesync();
 
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);

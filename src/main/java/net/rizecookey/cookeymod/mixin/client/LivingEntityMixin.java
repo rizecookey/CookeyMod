@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
+    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().animations();
 
     // Default constructor to satisfy compiler :P
     private LivingEntityMixin(EntityType<?> entityType, Level level) {

@@ -27,7 +27,7 @@ public abstract class OptionsScreenMixin extends Screen {
         super(component);
     }
 
-    BooleanOption showModButton = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showModButton();
+    BooleanOption showModButton = CookeyMod.getInstance().getConfig().misc().showModButton();
 
     @Inject(method = "init",
             at = @At(value = "INVOKE",

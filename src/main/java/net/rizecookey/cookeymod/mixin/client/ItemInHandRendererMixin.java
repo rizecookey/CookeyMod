@@ -41,8 +41,8 @@ public abstract class ItemInHandRendererMixin {
     @Shadow
     private ItemStack mainHandItem;
 
-    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class);
-    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class);
+    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().animations();
+    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {

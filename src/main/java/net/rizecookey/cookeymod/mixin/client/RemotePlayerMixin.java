@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RemotePlayer.class)
 public abstract class RemotePlayerMixin extends AbstractClientPlayer {
-    BooleanOption fixLocalPlayerHandling = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixLocalPlayerHandling();
+    BooleanOption fixLocalPlayerHandling = CookeyMod.getInstance().getConfig().misc().fixLocalPlayerHandling();
 
     private RemotePlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);

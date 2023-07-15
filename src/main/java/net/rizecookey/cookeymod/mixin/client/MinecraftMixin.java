@@ -40,8 +40,8 @@ public abstract class MinecraftMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initialize(GameConfig gameConfig, CallbackInfo ci) {
         CookeyMod cookeyMod = CookeyMod.getInstance();
-        fixCooldownDesync = cookeyMod.getConfig().getCategory(MiscCategory.class).fixCooldownDesync();
-        openCookeyModMenu = cookeyMod.getKeybinds().openOptions;
+        fixCooldownDesync = cookeyMod.getConfig().misc().fixCooldownDesync();
+        openCookeyModMenu = cookeyMod.getKeybinds().openOptions();
     }
 
     @Inject(method = "continueAttack", at = @At("TAIL"))

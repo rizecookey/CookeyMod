@@ -28,7 +28,7 @@ public abstract class ItemInHandLayerMixin<T extends LivingEntity, M extends Ent
         super(renderLayerParent);
     }
 
-    BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking();
+    BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void hideShieldWithToolBlocking(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {

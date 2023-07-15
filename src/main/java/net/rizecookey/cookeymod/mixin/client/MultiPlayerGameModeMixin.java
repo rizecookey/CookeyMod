@@ -22,7 +22,7 @@ public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeExt
     private Minecraft minecraft;
     private boolean attackResetPending;
 
-    BooleanOption fixCooldownDesync = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixCooldownDesync();
+    BooleanOption fixCooldownDesync = CookeyMod.getInstance().getConfig().misc().fixCooldownDesync();
 
     @Inject(method = "startDestroyBlock", at = @At("RETURN"))
     public void resetAttackStrength(CallbackInfoReturnable<Boolean> cir) {

@@ -22,7 +22,7 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
     @Final
     private DynamicTexture texture;
 
-    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class);
+    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void modifyHitColor(CallbackInfo ci) {

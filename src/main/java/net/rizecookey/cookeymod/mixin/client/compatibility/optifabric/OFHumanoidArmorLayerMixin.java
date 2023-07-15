@@ -24,7 +24,7 @@ public abstract class OFHumanoidArmorLayerMixin<T extends LivingEntity, M extend
     public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l);
 
     int overlayCoords;
-    BooleanOption showDamageTintOnArmor = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).showDamageTintOnArmor();
+    BooleanOption showDamageTintOnArmor = CookeyMod.getInstance().getConfig().hudRendering().showDamageTintOnArmor();
 
     @Redirect(method = "*", at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC, target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I"))
     public int modifyOverlayCoords() {

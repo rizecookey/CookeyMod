@@ -36,7 +36,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     @Shadow
     protected abstract float getWhiteOverlayProgress(T livingEntity, float f);
 
-    BooleanOption showOwnNameInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showOwnNameInThirdPerson();
+    BooleanOption showOwnNameInThirdPerson = CookeyMod.getInstance().getConfig().misc().showOwnNameInThirdPerson();
 
     @Inject(method = "shouldShowName", at = @At("HEAD"), cancellable = true)
     public void showOwnName(T livingEntity, CallbackInfoReturnable<Boolean> cir) {

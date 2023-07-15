@@ -26,8 +26,8 @@ public abstract class GameRendererMixin {
     @Shadow
     @Final
     private Minecraft minecraft;
-    BooleanOption disableCameraBobbing = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).disableCameraBobbing();
-    BooleanOption alternativeBobbing = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).alternativeBobbing();
+    BooleanOption disableCameraBobbing = CookeyMod.getInstance().getConfig().animations().disableCameraBobbing();
+    BooleanOption alternativeBobbing = CookeyMod.getInstance().getConfig().hudRendering().alternativeBobbing();
 
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobView(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"))
     public void cancelCameraShake(GameRenderer gameRenderer, PoseStack poseStack, float f) {

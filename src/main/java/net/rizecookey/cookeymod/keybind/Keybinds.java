@@ -5,10 +5,14 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 
 public class Keybinds {
-    public final KeyMapping openOptions;
+    private final KeyMapping openOptions;
 
     public Keybinds() {
         openOptions = KeyBindingHelper.registerKeyBinding(
                 new KeyMapping("key.cookeymod_options", InputConstants.UNKNOWN.getValue(), "key.categories.cookeymod"));
+    }
+
+    public KeyMapping openOptions() {
+        return openOptions;
     }
 }

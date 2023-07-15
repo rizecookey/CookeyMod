@@ -27,7 +27,7 @@ public abstract class CameraMixin {
     @Shadow
     private float eyeHeightOld;
 
-    DoubleSliderOption sneakAnimationSpeed = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).sneakAnimationSpeed();
+    DoubleSliderOption sneakAnimationSpeed = CookeyMod.getInstance().getConfig().animations().sneakAnimationSpeed();
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void disableSneakAnimation(CallbackInfo ci) {

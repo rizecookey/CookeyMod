@@ -33,12 +33,20 @@ public class ModConfig {
     private final Map<String, Category> categories = new HashMap<>();
     private long version;
 
+    private final AnimationsCategory animations;
+    private final HudRenderingCategory hudRendering;
+    private final MiscCategory misc;
+
     public ModConfig(CookeyMod mod, Path file) {
         this.mod = mod;
         this.logger = mod.getLogger();
 
         this.file = file;
-        this.registerCategories();
+
+        animations = this.registerCategory(new AnimationsCategory(this));
+        hudRendering = this.registerCategory(new HudRenderingCategory(this));
+        misc = this.registerCategory(new MiscCategory(this));
+
         try {
             this.loadConfig();
         } catch (IOException e) {
@@ -51,14 +59,9 @@ public class ModConfig {
         return mod;
     }
 
-    public void registerCategories() {
-        this.registerCategory(new AnimationsCategory(this));
-        this.registerCategory(new HudRenderingCategory(this));
-        this.registerCategory(new MiscCategory(this));
-    }
-
-    public void registerCategory(Category category) {
+    public <T extends Category> T registerCategory(T category) {
         categories.put(category.getId(), category);
+        return category;
     }
 
     public void loadCategories() {
@@ -117,24 +120,6 @@ public class ModConfig {
         return this.categories.get(id);
     }
 
-    public <T extends Category> T getCategory(String id, Class<T> categoryClass) {
-        if (Category.class.isAssignableFrom(categoryClass)) {
-            return (T) this.categories.get(id);
-        }
-        return null;
-    }
-
-    public <T extends Category> T getCategory(Class<T> categoryClass) {
-        if (Category.class.isAssignableFrom(categoryClass)) {
-            for (Category category : this.categories.values()) {
-                if (category.getClass().equals(categoryClass)) {
-                    return (T) category;
-                }
-            }
-        }
-        return null;
-    }
-
     public void saveConfig() throws IOException {
         Map<String, Object> optionsMap = new HashMap<>();
         for (String id : categories.keySet()) {
@@ -175,5 +160,17 @@ public class ModConfig {
 
     public String getTranslationKey() {
         return TRANSLATION_KEY;
+    }
+
+    public AnimationsCategory animations() {
+        return animations;
+    }
+
+    public HudRenderingCategory hudRendering() {
+        return hudRendering;
+    }
+
+    public MiscCategory misc() {
+        return misc;
     }
 }

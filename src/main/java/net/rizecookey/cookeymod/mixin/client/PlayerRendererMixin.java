@@ -27,8 +27,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
-    private static final BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).enableToolBlocking();
-    private static final BooleanOption showHandWhenInvisible = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).showHandWhenInvisible();
+    private static final BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
+    private static final BooleanOption showHandWhenInvisible = CookeyMod.getInstance().getConfig().hudRendering().showHandWhenInvisible();
 
     private PlayerRendererMixin(EntityRendererProvider.Context context, PlayerModel<AbstractClientPlayer> entityModel, float f) {
         super(context, entityModel, f);
