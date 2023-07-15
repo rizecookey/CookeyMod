@@ -10,7 +10,6 @@ import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.extension.PlayerExtension;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -20,7 +19,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerExtensio
     @Shadow
     public abstract void resetAttackStrengthTicker();
 
-    @Unique
+
     BooleanOption fixCooldownDesync = CookeyMod.getInstance().getConfig().misc().fixCooldownDesync();
 
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {

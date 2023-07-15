@@ -11,7 +11,6 @@ import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.extension.OverlayRendered;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
@@ -21,9 +20,9 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, M extends 
     @Shadow
     public abstract void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l);
 
-    @Unique
+
     int overlayCoords;
-    @Unique
+
     BooleanOption showDamageTintOnArmor = CookeyMod.getInstance().getConfig().hudRendering().showDamageTintOnArmor();
 
     @ModifyArg(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"), index = 3)

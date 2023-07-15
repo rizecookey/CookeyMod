@@ -18,7 +18,6 @@ import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -39,9 +38,9 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     @Shadow
     protected abstract void poseRightArm(T livingEntity);
 
-    @Unique
+
     BooleanOption showEatingInThirdPerson = CookeyMod.getInstance().getConfig().animations().showEatingInThirdPerson();
-    @Unique
+
     private static final BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
@@ -87,7 +86,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     }
 
     // Animation values and "formula" from ItemInHandRenderer's applyEatAnimation
-    @Unique
+
     public boolean applyEatingAnimation(LivingEntity livingEntity, HumanoidArm humanoidArm, float f) {
         int side = humanoidArm == HumanoidArm.RIGHT ? 1 : -1;
         float xRot = humanoidArm == HumanoidArm.RIGHT ? this.rightArm.xRot : this.leftArm.xRot;

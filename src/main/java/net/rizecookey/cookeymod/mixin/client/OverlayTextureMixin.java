@@ -12,7 +12,6 @@ import net.rizecookey.cookeymod.extension.OverlayTextureExtension;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,7 +22,7 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
     @Final
     private DynamicTexture texture;
 
-    @Unique
+
     HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
 
     @Inject(method = "<init>", at = @At("TAIL"))
@@ -36,7 +35,7 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
         this.reloadOverlay();
     }
 
-    @Unique
+
     private static int getColorInt(int red, int green, int blue, int alpha) {
         alpha = 255 - alpha;
         return (alpha << 24) + (blue << 16) + (green << 8) + red;

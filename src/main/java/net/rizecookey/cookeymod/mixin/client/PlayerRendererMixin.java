@@ -18,7 +18,6 @@ import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -26,9 +25,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
-    @Unique
+
     private static final BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
-    @Unique
+
     private static final BooleanOption showHandWhenInvisible = CookeyMod.getInstance().getConfig().hudRendering().showHandWhenInvisible();
 
     private PlayerRendererMixin(EntityRendererProvider.Context context, PlayerModel<AbstractClientPlayer> entityModel, float f) {
