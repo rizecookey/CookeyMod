@@ -17,6 +17,7 @@ import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -41,7 +42,9 @@ public abstract class ItemInHandRendererMixin {
     @Shadow
     private ItemStack mainHandItem;
 
+    @Unique
     AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().animations();
+    @Unique
     HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
@@ -116,6 +119,7 @@ public abstract class ItemInHandRendererMixin {
     /* Values from 15w33b, thanks to Fuzss for providing them
     https://github.com/Fuzss/swordblockingcombat/blob/1.15/src/main/java/com/fuzs/swordblockingcombat/client/handler/RenderBlockingHandler.java
      */
+    @Unique
     public void applyItemBlockTransform(PoseStack poseStack, HumanoidArm humanoidArm) {
         int reverse = humanoidArm == HumanoidArm.RIGHT ? 1 : -1;
         poseStack.translate(reverse * -0.14142136F, 0.08F, 0.14142136F);

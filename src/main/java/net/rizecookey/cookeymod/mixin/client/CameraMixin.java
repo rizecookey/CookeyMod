@@ -3,11 +3,11 @@ package net.rizecookey.cookeymod.mixin.client;
 import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -27,6 +27,7 @@ public abstract class CameraMixin {
     @Shadow
     private float eyeHeightOld;
 
+    @Unique
     DoubleSliderOption sneakAnimationSpeed = CookeyMod.getInstance().getConfig().animations().sneakAnimationSpeed();
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
