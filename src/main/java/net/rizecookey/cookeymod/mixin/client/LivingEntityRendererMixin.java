@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.extension.OverlayRendered;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,7 +36,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     @Shadow
     protected abstract float getWhiteOverlayProgress(T livingEntity, float f);
 
-    Option<Boolean> showOwnNameInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showOwnNameInThirdPerson;
+    BooleanOption showOwnNameInThirdPerson = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showOwnNameInThirdPerson();
 
     @Inject(method = "shouldShowName", at = @At("HEAD"), cancellable = true)
     public void showOwnName(T livingEntity, CallbackInfoReturnable<Boolean> cir) {

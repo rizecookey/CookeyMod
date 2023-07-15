@@ -46,12 +46,12 @@ public abstract class ItemInHandRendererMixin {
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
-        if ((hudRenderingCategory.onlyShowShieldWhenBlocking.get() || animationsCategory.enableToolBlocking.get())
+        if ((hudRenderingCategory.onlyShowShieldWhenBlocking().get() || animationsCategory.enableToolBlocking().get())
                 && (itemStack.getItem() instanceof ShieldItem && !(!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem))) {
             ci.cancel();
 
         }
-        if (animationsCategory.enableToolBlocking.get()) {
+        if (animationsCategory.enableToolBlocking().get()) {
             ItemStack otherHandItem = interactionHand == InteractionHand.MAIN_HAND ? this.offHandItem : this.mainHandItem;
             if (itemStack.getItem() instanceof ShieldItem && (otherHandItem.getItem() instanceof TieredItem && (!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem))) {
                 ci.cancel();
@@ -64,7 +64,7 @@ public abstract class ItemInHandRendererMixin {
                         : abstractClientPlayer.getMainArm().getOpposite();
                 this.applyItemArmTransform(poseStack, humanoidArm, i);
                 this.applyItemBlockTransform(poseStack, humanoidArm);
-                if (animationsCategory.swingAndUseItem.get()) {
+                if (animationsCategory.swingAndUseItem().get()) {
                     this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
                 }
                 boolean isRightHand = humanoidArm == HumanoidArm.RIGHT;
@@ -78,7 +78,7 @@ public abstract class ItemInHandRendererMixin {
 
     @Redirect(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z", ordinal = 0))
     public boolean makeArmAppear(AbstractClientPlayer instance) {
-        return !hudRenderingCategory.showHandWhenInvisible.get() && instance.isInvisible();
+        return !hudRenderingCategory.showHandWhenInvisible().get() && instance.isInvisible();
     }
 
     @Redirect(method = "renderArmWithItem",
@@ -87,7 +87,7 @@ public abstract class ItemInHandRendererMixin {
                     target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;applyItemArmAttackTransform(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/entity/HumanoidArm;F)V",
                     ordinal = 1))
     public void cancelAttackTransform(ItemInHandRenderer itemInHandRenderer, PoseStack poseStack, HumanoidArm humanoidArm, float f) {
-        if (!animationsCategory.swingAndUseItem.get())
+        if (!animationsCategory.swingAndUseItem().get())
             this.applyItemArmAttackTransform(poseStack, humanoidArm, f);
     }
 
@@ -100,7 +100,7 @@ public abstract class ItemInHandRendererMixin {
         HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND
                 ? abstractClientPlayer.getMainArm()
                 : abstractClientPlayer.getMainArm().getOpposite();
-        if (animationsCategory.swingAndUseItem.get() && !abstractClientPlayer.isAutoSpinAttack()) {
+        if (animationsCategory.swingAndUseItem().get() && !abstractClientPlayer.isAutoSpinAttack()) {
             this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
         }
     }
@@ -109,7 +109,7 @@ public abstract class ItemInHandRendererMixin {
             from = @At(value = "JUMP", ordinal = 3)
     ), at = @At(value = "FIELD", ordinal = 0))
     public float modifyArmHeight(float f) {
-        double offset = hudRenderingCategory.attackCooldownHandOffset.get();
+        double offset = hudRenderingCategory.attackCooldownHandOffset().get();
         return (float) (f * (1 - offset) + offset);
     }
 

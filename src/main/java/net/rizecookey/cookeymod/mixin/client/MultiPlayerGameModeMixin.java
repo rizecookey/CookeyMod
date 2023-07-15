@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.extension.MultiPlayerGameModeExtension;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,7 @@ public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeExt
     private Minecraft minecraft;
     private boolean attackResetPending;
 
-    Option<Boolean> fixCooldownDesync = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
+    BooleanOption fixCooldownDesync = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixCooldownDesync();
 
     @Inject(method = "startDestroyBlock", at = @At("RETURN"))
     public void resetAttackStrength(CallbackInfoReturnable<Boolean> cir) {

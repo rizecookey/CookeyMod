@@ -1,6 +1,7 @@
 package net.rizecookey.cookeymod.config.option;
 
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.gui.entries.LongSliderEntry;
 import me.shedaniel.clothconfig2.impl.builders.LongSliderBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -13,7 +14,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-public class DoubleSliderOption extends Option<Double> {
+public class DoubleSliderOption extends Option<Double, LongSliderEntry> {
     public DoubleSliderOption(String id, Category category, Double defaultValue, double from, double to) {
         super(id, category, defaultValue);
         this.setConfigEntry(() -> {

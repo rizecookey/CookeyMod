@@ -5,17 +5,16 @@ import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.ColorOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
-import net.rizecookey.cookeymod.config.option.Option;
 import net.rizecookey.cookeymod.event.OverlayReloadListener;
 
 public class HudRenderingCategory extends Category {
-    public final Option<Double> attackCooldownHandOffset;
-    public final Option<Color> damageColor;
-    public final Option<Boolean> showDamageTintOnArmor;
-    public final Option<Boolean> onlyShowShieldWhenBlocking;
-    public final Option<Boolean> disableEffectBasedFovChange;
-    public final Option<Boolean> alternativeBobbing;
-    public final Option<Boolean> showHandWhenInvisible;
+    private final DoubleSliderOption attackCooldownHandOffset;
+    private final ColorOption damageColor;
+    private final BooleanOption showDamageTintOnArmor;
+    private final BooleanOption onlyShowShieldWhenBlocking;
+    private final BooleanOption disableEffectBasedFovChange;
+    private final BooleanOption alternativeBobbing;
+    private final BooleanOption showHandWhenInvisible;
 
     public HudRenderingCategory(ModConfig modConfig) {
         super(modConfig);
@@ -37,5 +36,33 @@ public class HudRenderingCategory extends Category {
     @Override
     public String getId() {
         return "hudRendering";
+    }
+
+    public DoubleSliderOption attackCooldownHandOffset() {
+        return attackCooldownHandOffset;
+    }
+
+    public ColorOption damageColor() {
+        return damageColor;
+    }
+
+    public BooleanOption showDamageTintOnArmor() {
+        return showDamageTintOnArmor;
+    }
+
+    public BooleanOption onlyShowShieldWhenBlocking() {
+        return onlyShowShieldWhenBlocking;
+    }
+
+    public BooleanOption disableEffectBasedFovChange() {
+        return disableEffectBasedFovChange;
+    }
+
+    public BooleanOption alternativeBobbing() {
+        return alternativeBobbing;
+    }
+
+    public BooleanOption showHandWhenInvisible() {
+        return showHandWhenInvisible;
     }
 }

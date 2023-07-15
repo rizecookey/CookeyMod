@@ -8,7 +8,7 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.extension.MultiPlayerGameModeExtension;
 import net.rizecookey.cookeymod.extension.PlayerExtension;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
@@ -34,13 +34,13 @@ public abstract class MinecraftMixin {
     @Shadow
     public abstract void setScreen(@Nullable Screen screen);
 
-    Option<Boolean> fixCooldownDesync;
+    BooleanOption fixCooldownDesync;
     KeyMapping openCookeyModMenu;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initialize(GameConfig gameConfig, CallbackInfo ci) {
         CookeyMod cookeyMod = CookeyMod.getInstance();
-        fixCooldownDesync = cookeyMod.getConfig().getCategory(MiscCategory.class).fixCooldownDesync;
+        fixCooldownDesync = cookeyMod.getConfig().getCategory(MiscCategory.class).fixCooldownDesync();
         openCookeyModMenu = cookeyMod.getKeybinds().openOptions;
     }
 

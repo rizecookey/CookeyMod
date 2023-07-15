@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,8 +26,8 @@ public abstract class GameRendererMixin {
     @Shadow
     @Final
     private Minecraft minecraft;
-    Option<Boolean> disableCameraBobbing = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).disableCameraBobbing;
-    Option<Boolean> alternativeBobbing = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).alternativeBobbing;
+    BooleanOption disableCameraBobbing = CookeyMod.getInstance().getConfig().getCategory(AnimationsCategory.class).disableCameraBobbing();
+    BooleanOption alternativeBobbing = CookeyMod.getInstance().getConfig().getCategory(HudRenderingCategory.class).alternativeBobbing();
 
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobView(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"))
     public void cancelCameraShake(GameRenderer gameRenderer, PoseStack poseStack, float f) {

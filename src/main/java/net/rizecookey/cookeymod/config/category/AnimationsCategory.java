@@ -3,14 +3,13 @@ package net.rizecookey.cookeymod.config.category;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
-import net.rizecookey.cookeymod.config.option.Option;
 
 public class AnimationsCategory extends Category {
-    public final Option<Boolean> swingAndUseItem;
-    public final Option<Double> sneakAnimationSpeed;
-    public final Option<Boolean> disableCameraBobbing;
-    public final Option<Boolean> enableToolBlocking;
-    public final Option<Boolean> showEatingInThirdPerson;
+    private final BooleanOption swingAndUseItem;
+    private final DoubleSliderOption sneakAnimationSpeed;
+    private final BooleanOption disableCameraBobbing;
+    private final BooleanOption enableToolBlocking;
+    private final BooleanOption showEatingInThirdPerson;
 
     public AnimationsCategory(ModConfig modConfig) {
         super(modConfig);
@@ -24,5 +23,25 @@ public class AnimationsCategory extends Category {
     @Override
     public String getId() {
         return "animations";
+    }
+
+    public BooleanOption swingAndUseItem() {
+        return swingAndUseItem;
+    }
+
+    public DoubleSliderOption sneakAnimationSpeed() {
+        return sneakAnimationSpeed;
+    }
+
+    public BooleanOption disableCameraBobbing() {
+        return disableCameraBobbing;
+    }
+
+    public BooleanOption enableToolBlocking() {
+        return enableToolBlocking;
+    }
+
+    public BooleanOption showEatingInThirdPerson() {
+        return showEatingInThirdPerson;
     }
 }

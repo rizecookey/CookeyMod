@@ -10,22 +10,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public abstract class Option<T> {
+public abstract class Option<T, U extends AbstractConfigListEntry<?>> {
     private final String id;
     private final Category category;
     private final T defaultValue;
     private T value;
-    private Supplier<AbstractConfigListEntry<?>> entry;
+    private Supplier<U> entry;
 
-    public Option(String id, Category category, T defaultValue, boolean forceRestart) {
+    protected Option(String id, Category category, T defaultValue) {
         this.id = id;
         this.category = category;
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
-    }
-
-    public Option(String id, Category category, T defaultValue) {
-        this(id, category, defaultValue, false);
     }
 
     public String getId() {
@@ -61,11 +57,11 @@ public abstract class Option<T> {
         this.set((T) object);
     }
 
-    public AbstractConfigListEntry<?> getConfigEntry() {
+    public U getConfigEntry() {
         return entry.get();
     }
 
-    public void setConfigEntry(Supplier<AbstractConfigListEntry<?>> entry) {
+    public void setConfigEntry(Supplier<U> entry) {
         this.entry = entry;
     }
 

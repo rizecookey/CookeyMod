@@ -35,12 +35,18 @@ public class CookeyModMixinPlugin implements IMixinConfigPlugin {
             ClassNode mixin = MixinService.getService().getBytecodeProvider().getClassNode(mixinClassName, false);
 
             if (mentionsActiveMods(Incompatible.class, mixin)) {
-                logger.warn("[" + getClass().getSimpleName() + "] Mod \"" + getFirstMentionedActiveMod(Incompatible.class, mixin) + "\" is marked incompatible with mixin \"" + mixinClassName + "\", cancelling application.");
+                logger.warn("[{}] Mod \"{}\" is marked incompatible with mixin \"{}\", cancelling application.",
+                        getClass().getSimpleName(),
+                        getFirstMentionedActiveMod(Incompatible.class, mixin),
+                        mixinClassName);
                 return false;
             }
             if (hasAnnotation(ModSpecific.class, mixin)) {
                 if (mentionsActiveMods(ModSpecific.class, mixin)) {
-                    logger.info("[" + getClass().getSimpleName() + "] Loading mod-specific mixin \"" + mixinClassName + "\" since mod \"" + getFirstMentionedActiveMod(ModSpecific.class, mixin) + "\" is present.");
+                    logger.info("[{}] Loading mod-specific mixin \"{}\" since mod \"{}\" is present.",
+                            getClass().getSimpleName(),
+                            mixinClassName,
+                            getFirstMentionedActiveMod(ModSpecific.class, mixin));
                     return true;
                 } else {
                     return false;
@@ -82,15 +88,17 @@ public class CookeyModMixinPlugin implements IMixinConfigPlugin {
         FabricLoader fabricLoader = FabricLoader.getInstance();
         AnnotationNode annotationNode = Annotations.getInvisible(mixin, annotationClass);
         List<Object> values;
-        if (annotationNode != null && (values = annotationNode.values) != null) {
-            for (int i = 0; i < values.size(); i += 2) {
-                Object pKey = values.get(i);
-                Object pValue = values.size() > i + 1 ? values.get(i + 1) : null;
-                if ("value".equals(pKey) && pValue instanceof List) {
-                    for (String modId : (List<String>) pValue) {
-                        if (fabricLoader.isModLoaded(modId)) {
-                            return modId;
-                        }
+        if (annotationNode == null || (values = annotationNode.values) == null) {
+            return null;
+        }
+
+        for (int i = 0; i < values.size(); i += 2) {
+            Object pKey = values.get(i);
+            Object pValue = values.size() > i + 1 ? values.get(i + 1) : null;
+            if ("value".equals(pKey) && pValue instanceof List) {
+                for (String modId : (List<String>) pValue) {
+                    if (fabricLoader.isModLoaded(modId)) {
+                        return modId;
                     }
                 }
             }

@@ -3,13 +3,12 @@ package net.rizecookey.cookeymod.config.category;
 import net.fabricmc.loader.api.FabricLoader;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
-import net.rizecookey.cookeymod.config.option.Option;
 
 public class MiscCategory extends Category {
-    public final Option<Boolean> showOwnNameInThirdPerson;
-    public final Option<Boolean> showModButton;
-    public final Option<Boolean> fixLocalPlayerHandling;
-    public final Option<Boolean> fixCooldownDesync;
+    private final BooleanOption showOwnNameInThirdPerson;
+    private final BooleanOption showModButton;
+    private final BooleanOption fixLocalPlayerHandling;
+    private final BooleanOption fixCooldownDesync;
 
     public MiscCategory(ModConfig modConfig) {
         super(modConfig);
@@ -23,5 +22,21 @@ public class MiscCategory extends Category {
     @Override
     public String getId() {
         return "misc";
+    }
+
+    public BooleanOption showOwnNameInThirdPerson() {
+        return showOwnNameInThirdPerson;
+    }
+
+    public BooleanOption showModButton() {
+        return showModButton;
+    }
+
+    public BooleanOption fixLocalPlayerHandling() {
+        return fixLocalPlayerHandling;
+    }
+
+    public BooleanOption fixCooldownDesync() {
+        return fixCooldownDesync;
     }
 }

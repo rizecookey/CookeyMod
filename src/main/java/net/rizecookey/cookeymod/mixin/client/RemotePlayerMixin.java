@@ -7,7 +7,7 @@ import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RemotePlayer.class)
 public abstract class RemotePlayerMixin extends AbstractClientPlayer {
-    Option<Boolean> fixLocalPlayerHandling = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixLocalPlayerHandling;
+    BooleanOption fixLocalPlayerHandling = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).fixLocalPlayerHandling();
 
     private RemotePlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);

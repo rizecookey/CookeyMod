@@ -11,11 +11,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class CookeyMod implements ModInitializer {
     private static final PrefixLogger LOGGER = new PrefixLogger(LogManager.getLogger("CookeyMod"));
-    private static CookeyMod INSTANCE;
+    public static final String MOD_ID = "cookeymod";
+    private static CookeyMod instance;
 
     private ModConfig config;
     private ModContainer modContainer;
@@ -26,25 +26,19 @@ public class CookeyMod implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Loading CookeyMod...");
 
-        INSTANCE = this;
+        instance = this;
         FabricLoader loader = FabricLoader.getInstance();
 
-        Optional<ModContainer> opt = loader.getModContainer("cookeymod");
-        if (opt.isPresent()) {
-            modContainer = opt.get();
-            modMetadata = modContainer.getMetadata();
+        modContainer = loader.getModContainer(MOD_ID).orElseThrow(() ->
+                new IllegalStateException("Could not find own mod container!"));
+        modMetadata = modContainer.getMetadata();
 
-            Path configDir = loader.getConfigDir().resolve(getModId());
+        Path configDir = loader.getConfigDir().resolve(getModId());
+        config = new ModConfig(this, configDir.resolve("config.toml"));
 
-            config = new ModConfig(this, configDir.resolve("config.toml"));
+        keybinds = new Keybinds();
 
-            keybinds = new Keybinds();
-
-            LOGGER.info("CookeyMod " + getModVersion() + " has been loaded.");
-        } else {
-            LOGGER.error("Couldn't find own mod container!");
-            System.exit(-1);
-        }
+        LOGGER.info("CookeyMod " + getModVersion() + " has been loaded.");
     }
 
     public Logger getLogger() {
@@ -72,6 +66,6 @@ public class CookeyMod implements ModInitializer {
     }
 
     public static CookeyMod getInstance() {
-        return INSTANCE;
+        return instance;
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Category {
-    private final Map<String, Option<?>> options = new HashMap<>();
+    private final Map<String, Option<?, ?>> options = new HashMap<>();
 
     private final ModConfig modConfig;
 
@@ -28,11 +28,11 @@ public abstract class Category {
         return ModConfig.TRANSLATION_KEY + "." + this.getId();
     }
 
-    public Map<String, Option<?>> getOptions() {
+    public Map<String, Option<?, ?>> getOptions() {
         return new HashMap<>(options);
     }
 
-    public <T> Option<T> register(Option<T> option) {
+    public <T extends Option<?, ?>> T register(T option) {
         options.put(option.getId(), option);
         return option;
     }
@@ -41,7 +41,7 @@ public abstract class Category {
         if (map != null) {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 String key = entry.getKey();
-                Option<?> option = this.options.get(key);
+                Option<?, ?> option = this.options.get(key);
                 if (option != null) option.load(entry.getValue());
             }
         }
@@ -49,7 +49,7 @@ public abstract class Category {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        for (Option<?> option : this.getOptions().values()) {
+        for (Option<?, ?> option : this.getOptions().values()) {
             map.put(option.getId(), option.getInConfigFormat());
         }
 
@@ -58,7 +58,7 @@ public abstract class Category {
 
     public List<AbstractConfigListEntry<?>> getConfigEntries() {
         List<AbstractConfigListEntry<?>> entries = new ArrayList<>();
-        for (Option<?> option : this.getOptions().values()) {
+        for (Option<?, ?> option : this.getOptions().values()) {
             entries.add(option.getConfigEntry());
         }
 

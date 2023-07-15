@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,7 +27,7 @@ public abstract class OptionsScreenMixin extends Screen {
         super(component);
     }
 
-    Option<Boolean> showModButton = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showModButton;
+    BooleanOption showModButton = CookeyMod.getInstance().getConfig().getCategory(MiscCategory.class).showModButton();
 
     @Inject(method = "init",
             at = @At(value = "INVOKE",

@@ -45,7 +45,7 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
         for (int i = 0; i < 16; ++i) {
             for (int j = 0; j < 16; ++j) {
                 if (i < 8) {
-                    Color color = this.hudRenderingCategory.damageColor.get();
+                    Color color = this.hudRenderingCategory.damageColor().get();
                     assert nativeImage != null;
                     nativeImage.setPixelRGBA(j, i, getColorInt(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                 }
