@@ -52,7 +52,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"))
     public void transparentHandWhenInvisible(ModelPart instance, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, PoseStack poseStack_, MultiBufferSource multiBufferSource, int i_, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2) {
         if (showHandWhenInvisible.get()) {
-            instance.render(poseStack, multiBufferSource.getBuffer(RenderType.entityTranslucentCull(abstractClientPlayer.getSkinTextureLocation())), i, j, 1.0F, 1.0F, 1.0F, abstractClientPlayer.isInvisible() ? 0.15F : 1.0F);
+            instance.render(poseStack, multiBufferSource.getBuffer(RenderType.entityTranslucentCull(abstractClientPlayer.getSkin().texture())), i, j, 1.0F, 1.0F, 1.0F, abstractClientPlayer.isInvisible() ? 0.15F : 1.0F);
         } else {
             instance.render(poseStack, vertexConsumer, i, j);
         }
