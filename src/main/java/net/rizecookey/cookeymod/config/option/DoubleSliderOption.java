@@ -5,7 +5,7 @@ import me.shedaniel.clothconfig2.gui.entries.LongSliderEntry;
 import me.shedaniel.clothconfig2.impl.builders.LongSliderBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
+import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.Category;
@@ -28,7 +28,7 @@ public class DoubleSliderOption extends Option<Double, LongSliderEntry> {
                             return MutableComponent.create(
                                     new TranslatableContents(ModConfig.GENERIC_KEYS + ".off", null, new Object[0]));
                         }
-                        return MutableComponent.create(new LiteralContents(new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US))
+                        return MutableComponent.create(new PlainTextContents.LiteralContents(new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US))
                                 .format(value / 100.0)));
                     }).setSaveConsumer(value -> this.set(value / 100.0))
                     .setDefaultValue((long) (defaultValue * 100.0));
