@@ -41,7 +41,7 @@ public abstract class OptionsScreenMixin extends Screen {
     @Inject(method = "init",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/layouts/GridLayout$RowHelper;addChild(Lnet/minecraft/client/gui/layouts/LayoutElement;)Lnet/minecraft/client/gui/layouts/LayoutElement;",
-                    shift = At.Shift.AFTER, ordinal = 8),
+                    shift = At.Shift.AFTER, ordinal = 9),
             locals = LocalCapture.CAPTURE_FAILSOFT)
     public void injectCookeyModButton(CallbackInfo ci, LinearLayout linearLayout, LinearLayout linearLayout2, GridLayout gridLayout, GridLayout.RowHelper rowHelper) {
         if (showModButton.get()) {
