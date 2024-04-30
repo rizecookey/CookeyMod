@@ -47,7 +47,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     @Unique
     private BooleanOption enableToolBlocking;
 
-    @Inject(method = "<init>*", at = @At("TAIL"))
+    @Inject(method = "<init>(Lnet/minecraft/client/model/geom/ModelPart;Ljava/util/function/Function;)V", at = @At("TAIL"))
     private void injectOptions(CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         showEatingInThirdPerson = modConfig.animations().showEatingInThirdPerson();
