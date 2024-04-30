@@ -4,14 +4,9 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
-import net.minecraft.client.multiplayer.MultiPlayerGameMode;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.world.phys.HitResult;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
-import net.rizecookey.cookeymod.extension.MultiPlayerGameModeExtension;
-import net.rizecookey.cookeymod.extension.PlayerExtension;
+import net.rizecookey.cookeymod.extension.MinecraftExtension;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,17 +14,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
-public abstract class MinecraftMixin {
-    @Shadow
-    @Nullable
-    public LocalPlayer player;
-    @Shadow
-    @Nullable
-    public MultiPlayerGameMode gameMode;
+public abstract class MinecraftMixin implements MinecraftExtension {
     @Shadow
     @Nullable
     public Screen screen;
@@ -37,50 +25,25 @@ public abstract class MinecraftMixin {
     @Shadow
     public abstract void setScreen(@Nullable Screen screen);
 
-
-    @Unique
-    private BooleanOption fixCooldownDesync;
+    @Shadow @Nullable public HitResult hitResult;
 
     @Unique
     private KeyMapping openCookeyModMenu;
 
+    @Unique
+    private boolean isHoldingDownOnBlock;
+
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initialize(GameConfig gameConfig, CallbackInfo ci) {
         CookeyMod cookeyMod = CookeyMod.getInstance();
-        fixCooldownDesync = cookeyMod.getConfig().misc().fixCooldownDesync();
         openCookeyModMenu = cookeyMod.getKeybinds().openOptions();
+
+        isHoldingDownOnBlock = false;
     }
 
-    @Redirect(method = "startAttack", at = @At(value = "INVOKE", target
-            = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;startDestroyBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;)Z"))
-    public boolean injectAttackTickerReset(MultiPlayerGameMode instance, BlockPos blockPos, Direction direction) {
-        boolean returnValue = instance.startDestroyBlock(blockPos, direction);
-
-        if (!fixCooldownDesync.get()) {
-            return returnValue;
-        }
-
-        if (!returnValue) {
-            assert this.player != null;
-            this.player.resetAttackStrengthTicker();
-        }
-
-        return returnValue;
-    }
-
-    @Inject(method = "continueAttack", at = @At("TAIL"))
-    public void runPendingResets(boolean bl, CallbackInfo ci) {
-        if (fixCooldownDesync.get()) {
-            assert this.player != null;
-            assert this.gameMode != null;
-            MultiPlayerGameModeExtension gameModeExt = ((MultiPlayerGameModeExtension) this.gameMode);
-
-            if (gameModeExt.cookeyMod$isAttackResetPending() && !this.gameMode.isDestroying()) {
-                ((PlayerExtension) this.player).cookeyMod$setAttackStrengthTicker(1);
-            }
-
-            gameModeExt.cookeyMod$setAttackResetPending(false);
-        }
+    @Inject(method = "continueAttack", at = @At("RETURN"))
+    private void setHoldingDownOnBlock(boolean bl, CallbackInfo ci) {
+        isHoldingDownOnBlock = bl && hitResult != null && hitResult.getType() == HitResult.Type.BLOCK;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -88,5 +51,10 @@ public abstract class MinecraftMixin {
         if (openCookeyModMenu.isDown() && this.screen == null) {
             this.setScreen(ScreenBuilder.buildConfig(null));
         }
+    }
+
+    @Override
+    public boolean cookeyMod$isHoldingDownOnBlock() {
+        return isHoldingDownOnBlock;
     }
 }

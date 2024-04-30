@@ -19,6 +19,9 @@ import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
+import net.rizecookey.cookeymod.config.category.MiscCategory;
+import net.rizecookey.cookeymod.extension.MinecraftExtension;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -47,17 +50,22 @@ public abstract class ItemInHandRendererMixin {
     private ItemStack mainHandItem;
 
 
+    @Shadow @Final private Minecraft minecraft;
     @Unique
     private AnimationsCategory animationsCategory;
 
     @Unique
     private HudRenderingCategory hudRenderingCategory;
 
+    @Unique
+    private MiscCategory miscCategory;
+
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(Minecraft minecraft, EntityRenderDispatcher entityRenderDispatcher, ItemRenderer itemRenderer, CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         animationsCategory = modConfig.animations();
         hudRenderingCategory = modConfig.hudRendering();
+        miscCategory = modConfig.misc();
     }
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
@@ -125,6 +133,9 @@ public abstract class ItemInHandRendererMixin {
             from = @At(value = "JUMP", ordinal = 3)
     ), at = @At(value = "FIELD", ordinal = 0))
     public float modifyArmHeight(float f) {
+        if (miscCategory.fixCooldownDesync().get() && ((MinecraftExtension) minecraft).cookeyMod$isHoldingDownOnBlock()) {
+            return 1.0f;
+        }
         double offset = hudRenderingCategory.attackCooldownHandOffset().get();
         return (float) (f * (1 - offset) + offset);
     }

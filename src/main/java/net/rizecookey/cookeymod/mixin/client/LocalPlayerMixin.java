@@ -8,6 +8,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.stats.StatsCounter;
+import net.minecraft.world.InteractionHand;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +16,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin extends AbstractClientPlayer {
@@ -31,9 +31,10 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         fixCooldownDesync = CookeyMod.getInstance().getConfig().misc().fixCooldownDesync();
     }
 
-    @Inject(method = "drop", at = @At("RETURN"))
-    public void resetAttackStrengthOnDrop(boolean bl, CallbackInfoReturnable<Boolean> cir) {
-        if (fixCooldownDesync.get() && cir.getReturnValue())
+    @Inject(method = "swing", at = @At("TAIL"))
+    public void resetAttackStrengthOnSwing(InteractionHand interactionHand, CallbackInfo ci) {
+        if (fixCooldownDesync.get()) {
             this.resetAttackStrengthTicker();
+        }
     }
 }
