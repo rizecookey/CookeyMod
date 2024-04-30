@@ -16,7 +16,7 @@ public class OptionsMixin {
         try {
             CookeyMod.getInstance().getConfig().saveConfig();
         } catch (IOException e) {
-            e.printStackTrace();
+            CookeyMod.getInstance().getLogger().error("Failed to save config", e);
         }
     }
 }

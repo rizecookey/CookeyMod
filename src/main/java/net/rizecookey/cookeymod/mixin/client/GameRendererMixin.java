@@ -4,13 +4,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.rizecookey.cookeymod.CookeyMod;
+import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -23,15 +28,24 @@ public abstract class GameRendererMixin {
 
     @Shadow
     @Final
-    private Minecraft minecraft;
+    Minecraft minecraft;
 
-    BooleanOption disableCameraBobbing = CookeyMod.getInstance().getConfig().animations().disableCameraBobbing();
+    @Unique
+    private BooleanOption disableCameraBobbing = CookeyMod.getInstance().getConfig().animations().disableCameraBobbing();
 
-    BooleanOption alternativeBobbing = CookeyMod.getInstance().getConfig().hudRendering().alternativeBobbing();
+    @Unique
+    private BooleanOption alternativeBobbing = CookeyMod.getInstance().getConfig().hudRendering().alternativeBobbing();
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void injectOptions(Minecraft minecraft, ItemInHandRenderer itemInHandRenderer, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
+        ModConfig modConfig = CookeyMod.getInstance().getConfig();
+        disableCameraBobbing = modConfig.animations().disableCameraBobbing();
+        alternativeBobbing = modConfig.hudRendering().alternativeBobbing();
+    }
 
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobView(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"))
     public void cancelCameraShake(GameRenderer gameRenderer, PoseStack poseStack, float f) {
-        if (!this.disableCameraBobbing.get()) {
+        if (!disableCameraBobbing.get()) {
             this.bobView(poseStack, f);
         }
     }
@@ -45,6 +59,7 @@ public abstract class GameRendererMixin {
     }
 
 
+    @Unique
     private void alternativeBobView(PoseStack poseStack, float f) {
         if (this.minecraft.getCameraEntity() instanceof Player player) {
             float g = player.walkDist - player.walkDistO;

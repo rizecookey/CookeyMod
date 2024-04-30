@@ -2,9 +2,12 @@ package net.rizecookey.cookeymod.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,10 +16,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
+import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -42,9 +47,18 @@ public abstract class ItemInHandRendererMixin {
     private ItemStack mainHandItem;
 
 
-    AnimationsCategory animationsCategory = CookeyMod.getInstance().getConfig().animations();
+    @Unique
+    private AnimationsCategory animationsCategory;
 
-    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
+    @Unique
+    private HudRenderingCategory hudRenderingCategory;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void injectOptions(Minecraft minecraft, EntityRenderDispatcher entityRenderDispatcher, ItemRenderer itemRenderer, CallbackInfo ci) {
+        ModConfig modConfig = CookeyMod.getInstance().getConfig();
+        animationsCategory = modConfig.animations();
+        hudRenderingCategory = modConfig.hudRendering();
+    }
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
@@ -119,6 +133,7 @@ public abstract class ItemInHandRendererMixin {
     https://github.com/Fuzss/swordblockingcombat/blob/1.15/src/main/java/com/fuzs/swordblockingcombat/client/handler/RenderBlockingHandler.java
      */
 
+    @Unique
     public void applyItemBlockTransform(PoseStack poseStack, HumanoidArm humanoidArm) {
         int reverse = humanoidArm == HumanoidArm.RIGHT ? 1 : -1;
         poseStack.translate(reverse * -0.14142136F, 0.08F, 0.14142136F);

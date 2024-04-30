@@ -12,6 +12,7 @@ import net.rizecookey.cookeymod.extension.OverlayTextureExtension;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,32 +23,33 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
     @Final
     private DynamicTexture texture;
 
-
-    HudRenderingCategory hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
+    @Unique
+    private HudRenderingCategory hudRenderingCategory;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void modifyHitColor(CallbackInfo ci) {
-        this.reloadOverlay();
+        hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
+        this.cookeyMod$reloadOverlay();
         OverlayReloadListener.register(this);
     }
 
-    public void onOverlayReload() {
-        this.reloadOverlay();
+    public void cookeyMod$onOverlayReload() {
+        this.cookeyMod$reloadOverlay();
     }
 
-
+    @Unique
     private static int getColorInt(int red, int green, int blue, int alpha) {
         alpha = 255 - alpha;
         return (alpha << 24) + (blue << 16) + (green << 8) + red;
     }
 
-    public void reloadOverlay() {
+    public void cookeyMod$reloadOverlay() {
         NativeImage nativeImage = this.texture.getPixels();
 
         for (int i = 0; i < 16; ++i) {
             for (int j = 0; j < 16; ++j) {
                 if (i < 8) {
-                    Color color = this.hudRenderingCategory.damageColor().get();
+                    Color color = hudRenderingCategory.damageColor().get();
                     assert nativeImage != null;
                     nativeImage.setPixelRGBA(j, i, getColorInt(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                 }

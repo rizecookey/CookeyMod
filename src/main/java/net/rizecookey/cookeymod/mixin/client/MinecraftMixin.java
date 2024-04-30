@@ -16,6 +16,7 @@ import net.rizecookey.cookeymod.screen.ScreenBuilder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -37,9 +38,11 @@ public abstract class MinecraftMixin {
     public abstract void setScreen(@Nullable Screen screen);
 
 
-    BooleanOption fixCooldownDesync;
+    @Unique
+    private BooleanOption fixCooldownDesync;
 
-    KeyMapping openCookeyModMenu;
+    @Unique
+    private KeyMapping openCookeyModMenu;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initialize(GameConfig gameConfig, CallbackInfo ci) {
@@ -67,16 +70,16 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "continueAttack", at = @At("TAIL"))
     public void runPendingResets(boolean bl, CallbackInfo ci) {
-        if (this.fixCooldownDesync.get()) {
+        if (fixCooldownDesync.get()) {
             assert this.player != null;
             assert this.gameMode != null;
             MultiPlayerGameModeExtension gameModeExt = ((MultiPlayerGameModeExtension) this.gameMode);
 
-            if (gameModeExt.isAttackResetPending() && !this.gameMode.isDestroying()) {
-                ((PlayerExtension) this.player).setAttackStrengthTicker(1);
+            if (gameModeExt.cookeyMod$isAttackResetPending() && !this.gameMode.isDestroying()) {
+                ((PlayerExtension) this.player).cookeyMod$setAttackStrengthTicker(1);
             }
 
-            gameModeExt.setAttackResetPending(false);
+            gameModeExt.cookeyMod$setAttackResetPending(false);
         }
     }
 

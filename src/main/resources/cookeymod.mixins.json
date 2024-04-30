@@ -16,7 +16,6 @@
     "client.ItemInHandLayerMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityAccessor",
-    "client.LivingEntityMixin",
     "client.LivingEntityRendererMixin",
     "client.LocalPlayerMixin",
     "client.MinecraftAccessor",

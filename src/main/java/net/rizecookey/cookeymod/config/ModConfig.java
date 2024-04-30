@@ -50,8 +50,7 @@ public class ModConfig {
         try {
             this.loadConfig();
         } catch (IOException e) {
-            logger.error("Failed to load CookeyMod config file!");
-            e.printStackTrace();
+            logger.error("Failed to load CookeyMod config file", e);
         }
     }
 
@@ -81,8 +80,7 @@ public class ModConfig {
             try {
                 this.saveConfig();
             } catch (IOException e) {
-                CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file!");
-                e.printStackTrace();
+                CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file", e);
             }
         }
     }

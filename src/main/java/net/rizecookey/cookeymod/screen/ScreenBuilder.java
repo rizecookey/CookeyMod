@@ -26,8 +26,7 @@ public final class ScreenBuilder {
                     try {
                         config.saveConfig();
                     } catch (IOException e) {
-                        CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file!");
-                        e.printStackTrace();
+                        CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file", e);
                     }
                 });
         if (prevScreen != null) builder.setParentScreen(prevScreen);

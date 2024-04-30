@@ -1,7 +1,7 @@
 package net.rizecookey.cookeymod.extension;
 
 public interface MultiPlayerGameModeExtension {
-    void setAttackResetPending(boolean pending);
+    void cookeyMod$setAttackResetPending(boolean pending);
 
-    boolean isAttackResetPending();
+    boolean cookeyMod$isAttackResetPending();
 }

@@ -3,6 +3,7 @@ package net.rizecookey.cookeymod.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,11 +30,17 @@ public abstract class ItemInHandLayerMixin<T extends LivingEntity, M extends Ent
     }
 
 
-    BooleanOption enableToolBlocking = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
+    @Unique
+    private BooleanOption enableToolBlocking;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void injectOptions(RenderLayerParent<T, M> renderLayerParent, ItemInHandRenderer itemInHandRenderer, CallbackInfo ci) {
+        enableToolBlocking = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
+    }
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     public void hideShieldWithToolBlocking(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-        if (this.enableToolBlocking.get()) {
+        if (enableToolBlocking.get()) {
             InteractionHand otherHand = humanoidArm == livingEntity.getMainArm() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
             ItemStack otherHandStack = livingEntity.getItemInHand(otherHand);
             if (itemStack.getItem() instanceof ShieldItem && otherHandStack.getItem() instanceof TieredItem && (!livingEntity.getUseItem().isEmpty() && livingEntity.getUseItem().getItem() instanceof ShieldItem)) {

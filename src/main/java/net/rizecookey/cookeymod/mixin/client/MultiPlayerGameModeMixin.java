@@ -1,6 +1,7 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
@@ -10,8 +11,10 @@ import net.rizecookey.cookeymod.extension.MultiPlayerGameModeExtension;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
@@ -20,10 +23,16 @@ public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeExt
     @Final
     private Minecraft minecraft;
 
+    @Unique
     private boolean attackResetPending;
 
+    @Unique
+    private BooleanOption fixCooldownDesync;
 
-    BooleanOption fixCooldownDesync = CookeyMod.getInstance().getConfig().misc().fixCooldownDesync();
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void injectOptions(Minecraft minecraft, ClientPacketListener clientPacketListener, CallbackInfo ci) {
+         fixCooldownDesync = CookeyMod.getInstance().getConfig().misc().fixCooldownDesync();
+    }
 
     @Inject(method = "destroyBlock", at = @At("TAIL"))
     public void setTicksSinceDestroy(BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
@@ -37,19 +46,19 @@ public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeExt
             this.resetAttackStrengthTicker();
     }
 
-
+    @Unique
     public void resetAttackStrengthTicker() {
         assert this.minecraft.player != null;
         this.minecraft.player.resetAttackStrengthTicker();
     }
 
     @Override
-    public boolean isAttackResetPending() {
+    public boolean cookeyMod$isAttackResetPending() {
         return attackResetPending;
     }
 
     @Override
-    public void setAttackResetPending(boolean attackResetPending) {
+    public void cookeyMod$setAttackResetPending(boolean attackResetPending) {
         this.attackResetPending = attackResetPending;
     }
 }
