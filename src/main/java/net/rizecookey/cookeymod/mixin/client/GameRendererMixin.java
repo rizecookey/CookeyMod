@@ -45,8 +45,9 @@ public abstract class GameRendererMixin {
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"),
             slice = @Slice(
                     from = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobHurt(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"),
-                    to = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;mul(Lorg/joml/Matrix4fc;)Lorg/joml/Matrix4f;")
-            ))
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/Options;screenEffectScale()Lnet/minecraft/client/OptionInstance;")
+            )
+    )
     private Object modifyBobViewInRenderLevel(OptionInstance<Boolean> instance) {
         return instance.get() && !disableCameraBobbing.get();
     }
