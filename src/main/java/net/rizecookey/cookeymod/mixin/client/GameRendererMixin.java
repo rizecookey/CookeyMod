@@ -3,6 +3,7 @@ package net.rizecookey.cookeymod.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
@@ -19,13 +20,11 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
-    @Shadow
-    protected abstract void bobView(PoseStack poseStack, float f);
-
     @Shadow
     @Final
     Minecraft minecraft;
@@ -43,15 +42,17 @@ public abstract class GameRendererMixin {
         alternativeBobbing = modConfig.hudRendering().alternativeBobbing();
     }
 
-    @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobView(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"))
-    public void cancelCameraShake(GameRenderer gameRenderer, PoseStack poseStack, float f) {
-        if (!disableCameraBobbing.get()) {
-            this.bobView(poseStack, f);
-        }
+    @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobHurt(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"),
+                    to = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;mul(Lorg/joml/Matrix4fc;)Lorg/joml/Matrix4f;")
+            ))
+    private Object modifyBobViewInRenderLevel(OptionInstance<Boolean> instance) {
+        return instance.get() && !disableCameraBobbing.get();
     }
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
-    public void changeToAlternativeBob(PoseStack poseStack, float f, CallbackInfo ci) {
+    private void changeToAlternativeBob(PoseStack poseStack, float f, CallbackInfo ci) {
         if (alternativeBobbing.get()) {
             this.alternativeBobView(poseStack, f);
             ci.cancel();
