@@ -1,10 +1,12 @@
 package net.rizecookey.cookeymod.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
-import net.minecraft.world.phys.HitResult;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.extension.MinecraftExtension;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
@@ -25,8 +27,6 @@ public abstract class MinecraftMixin implements MinecraftExtension {
     @Shadow
     public abstract void setScreen(@Nullable Screen screen);
 
-    @Shadow @Nullable public HitResult hitResult;
-
     @Unique
     private KeyMapping openCookeyModMenu;
 
@@ -41,9 +41,20 @@ public abstract class MinecraftMixin implements MinecraftExtension {
         isHoldingDownOnBlock = false;
     }
 
+    @Inject(method = "continueAttack", at = @At("HEAD"))
+    private void setDefault(boolean bl, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
+        isHoldingDownOnBlock.set(false);
+    }
+
+    @ModifyExpressionValue(method = "continueAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;continueDestroyBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;)Z"))
+    private boolean setHoldingDownOnBlock(boolean original, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
+        isHoldingDownOnBlock.set(original);
+        return original;
+    }
+
     @Inject(method = "continueAttack", at = @At("RETURN"))
-    private void setHoldingDownOnBlock(boolean bl, CallbackInfo ci) {
-        isHoldingDownOnBlock = bl && hitResult != null && hitResult.getType() == HitResult.Type.BLOCK;
+    private void setHoldingDownOnBlock(boolean bl, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
+        this.isHoldingDownOnBlock = isHoldingDownOnBlock.get();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
