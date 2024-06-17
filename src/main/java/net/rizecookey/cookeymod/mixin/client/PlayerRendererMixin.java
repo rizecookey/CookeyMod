@@ -18,6 +18,7 @@ import net.minecraft.world.item.TieredItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,6 +35,9 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     @Unique
     private BooleanOption shownHandWhenInvisible;
 
+    @Unique
+    private DoubleSliderOption invisibilityHandOpacity;
+
     private PlayerRendererMixin(EntityRendererProvider.Context context, PlayerModel<AbstractClientPlayer> entityModel, float f) {
         super(context, entityModel, f);
     }
@@ -42,6 +46,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     private void injectOptions(EntityRendererProvider.Context context, boolean bl, CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         shownHandWhenInvisible = modConfig.hudRendering().showHandWhenInvisible();
+        invisibilityHandOpacity = modConfig.hudRendering().invisibilityHandOpacity();
         ENABLE_TOOL_BLOCKING = modConfig.animations().enableToolBlocking();
     }
 
@@ -63,7 +68,8 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"))
     public void transparentHandWhenInvisible(ModelPart instance, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, PoseStack poseStack_, MultiBufferSource multiBufferSource, int i_, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2) {
         if (shownHandWhenInvisible.get()) {
-            instance.render(poseStack, multiBufferSource.getBuffer(RenderType.entityTranslucentCull(abstractClientPlayer.getSkin().texture())), i, j, 1.0F, 1.0F, 1.0F, abstractClientPlayer.isInvisible() ? 0.15F : 1.0F);
+            var color = (int) (0xFFFFFFL + ((long) (invisibilityHandOpacity.get() * 0xFFL) << 24));
+            instance.render(poseStack, multiBufferSource.getBuffer(RenderType.entityTranslucentCull(abstractClientPlayer.getSkin().texture())), i, j, abstractClientPlayer.isInvisible() ? color : 0xFFFFFFFF);
         } else {
             instance.render(poseStack, vertexConsumer, i, j);
         }

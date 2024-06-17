@@ -18,7 +18,6 @@
     "client.LivingEntityAccessor",
     "client.LivingEntityRendererMixin",
     "client.LocalPlayerMixin",
-    "client.MinecraftAccessor",
     "client.MinecraftMixin",
     "client.OptionsMixin",
     "client.OptionsScreenMixin",
