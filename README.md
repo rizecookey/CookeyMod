@@ -18,6 +18,8 @@ This mod originated as a PvP client sort-of alternative for the Combat Tests ver
 - <b>Damage tint on armor</b>: Enables the damage tint to show on armor as well (similar to how it did in 1.7).
 - <b>Alternative bobbing</b>: Enables an alternative bobbing animation (sort-of similar to bedrock).
 - <b>Hide unused shield</b>: Hides your shield in first person when it's not used.
+- <b>Show hand when invisible</b>: Makes your hand appear in 1st person even if you currently have the invisibility effect.
+- <b>Hand opacity when invisible</b>: Changes how transparent your hand is when you are invisible and "Show hand when invisible" is on.
 ## Miscellaneous
 - <b>Fix cooldown desync</b>: Fixes the attack cooldown indicator being out of sync with its actual state on the server in certain cases. (see [MC-218570](https://bugs.mojang.com/browse/MC-218570))
 - <b>Name in 3rd person</b>: Shows your own name in third person.
