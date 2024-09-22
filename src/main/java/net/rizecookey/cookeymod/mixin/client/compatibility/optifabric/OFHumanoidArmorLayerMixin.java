@@ -10,7 +10,8 @@ import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.annotation.mixin.ModSpecific;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
+import net.rizecookey.cookeymod.config.option.EnumOption;
 import net.rizecookey.cookeymod.extension.OverlayRendered;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +33,7 @@ public abstract class OFHumanoidArmorLayerMixin<T extends LivingEntity, M extend
     private int overlayCoords;
 
     @Unique
-    private BooleanOption showDamageTintOnArmor;
+    private EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(RenderLayerParent<T, M> renderLayerParent, A humanoidModel, A humanoidModel2, ModelManager modelManager, CallbackInfo ci) {
@@ -41,7 +42,7 @@ public abstract class OFHumanoidArmorLayerMixin<T extends LivingEntity, M extend
 
     @Redirect(method = "*", at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC, target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I"))
     public int modifyOverlayCoords() {
-        boolean show = showDamageTintOnArmor.get();
+        boolean show = showDamageTintOnArmor.get().isOnRegularArmor();
         return show ? this.overlayCoords : OverlayTexture.NO_OVERLAY;
     }
 

@@ -15,7 +15,7 @@ This mod originated as a PvP client sort-of alternative for the Combat Tests ver
 - <b>Show hand when invisible</b>: Shows a transparent hand when the player has the invisibility effect in first person instead of hiding the hand entirely.
 - <b>Damage color on entities</b>: Changes the color of the damage tint for enemies.
 - <b>Color hand offset</b>: Allows you to change the height your hand will be at when the cooldown has just reset.
-- <b>Damage tint on armor</b>: Enables the damage tint to show on armor as well (similar to how it did in 1.7).
+- <b>Damage tint on armor</b>: Enables the damage tint to show on armor (and optionally on armor trims) as well (similar to how it did in 1.7).
 - <b>Alternative bobbing</b>: Enables an alternative bobbing animation (sort-of similar to bedrock).
 - <b>Hide unused shield</b>: Hides your shield in first person when it's not used.
 - <b>Show hand when invisible</b>: Makes your hand appear in 1st person even if you currently have the invisibility effect.

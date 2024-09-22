@@ -9,7 +9,8 @@ import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.annotation.mixin.Incompatible;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
+import net.rizecookey.cookeymod.config.option.EnumOption;
 import net.rizecookey.cookeymod.extension.OverlayRendered;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +30,7 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, M extends 
     private int overlayCoords;
 
     @Unique
-    private BooleanOption showDamageTintOnArmor;
+    private EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(RenderLayerParent<T, M> renderLayerParent, A humanoidModel, A humanoidModel2, ModelManager modelManager, CallbackInfo ci) {
@@ -38,7 +39,13 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, M extends 
 
     @ModifyArg(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V"), index = 3)
     public int modifyOverlayCoords(int previousCoords) {
-        boolean show = showDamageTintOnArmor.get();
+        boolean show = showDamageTintOnArmor.get().isOnRegularArmor();
+        return show ? this.overlayCoords : previousCoords;
+    }
+
+    @ModifyArg(method = "renderTrim", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"), index = 3)
+    public int modifyTrimOverlayCoords(int previousCoords) {
+        boolean show = showDamageTintOnArmor.get() == ArmorDamageRenderSelection.ARMOR_AND_TRIM;
         return show ? this.overlayCoords : previousCoords;
     }
 

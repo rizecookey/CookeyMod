@@ -1,5 +1,7 @@
 package net.rizecookey.cookeymod.config;
 
+import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,9 +12,9 @@ public final class ConfigUpdater {
     @SuppressWarnings("unchecked")
     public static boolean update(Map<String, Object> map, long from) {
         boolean modified = false;
+        String animationsKey = "animations";
+        String hudRenderingKey = "hudRendering";
         if (from < 2) {
-            String animationsKey = "animations";
-            String hudRenderingKey = "hudRendering";
             Map<String, Object> animationsMap = map.containsKey(animationsKey)
                     && map.get(animationsKey) instanceof Map
                     ? (Map<String, Object>) map.get(animationsKey) : new HashMap<>();
@@ -37,6 +39,16 @@ public final class ConfigUpdater {
             map.put(animationsKey, animationsMap);
             map.put(hudRenderingKey, hudRenderingMap);
             modified = true;
+        }
+
+        if (from < 3) {
+            String armorDamageTintKey = "showDamageTintOnArmor";
+            Map<String, Object> hudRenderingMap = (Map<String, Object>) map.getOrDefault(hudRenderingKey, new HashMap<>());
+            if (hudRenderingMap.containsKey(armorDamageTintKey)) {
+                Object old = hudRenderingMap.get(armorDamageTintKey);
+                boolean oldValue = old instanceof Boolean && (boolean) old;
+                hudRenderingMap.put(armorDamageTintKey, oldValue ? ArmorDamageRenderSelection.ARMOR_AND_TRIM.getInternalName() : ArmorDamageRenderSelection.NONE.getInternalName());
+            }
         }
         return modified;
     }

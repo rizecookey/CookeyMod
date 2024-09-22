@@ -2,15 +2,17 @@ package net.rizecookey.cookeymod.config.category;
 
 import me.shedaniel.math.Color;
 import net.rizecookey.cookeymod.config.ModConfig;
+import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.ColorOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
+import net.rizecookey.cookeymod.config.option.EnumOption;
 import net.rizecookey.cookeymod.event.OverlayReloadListener;
 
 public class HudRenderingCategory extends Category {
     private final DoubleSliderOption attackCooldownHandOffset;
     private final ColorOption damageColor;
-    private final BooleanOption showDamageTintOnArmor;
+    private final EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
     private final BooleanOption onlyShowShieldWhenBlocking;
     private final BooleanOption disableEffectBasedFovChange;
     private final BooleanOption alternativeBobbing;
@@ -27,7 +29,7 @@ public class HudRenderingCategory extends Category {
                 OverlayReloadListener.callEvent();
             }
         });
-        showDamageTintOnArmor = this.register(new BooleanOption("showDamageTintOnArmor", this, false));
+        showDamageTintOnArmor = this.register(new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE));
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
         disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));
         alternativeBobbing = this.register(new BooleanOption("alternativeBobbing", this, false));
@@ -48,7 +50,7 @@ public class HudRenderingCategory extends Category {
         return damageColor;
     }
 
-    public BooleanOption showDamageTintOnArmor() {
+    public EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor() {
         return showDamageTintOnArmor;
     }
 
