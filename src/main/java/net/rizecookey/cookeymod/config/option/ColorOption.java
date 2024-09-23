@@ -1,24 +1,21 @@
 package net.rizecookey.cookeymod.config.option;
 
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.ColorEntry;
-import me.shedaniel.clothconfig2.impl.builders.ColorFieldBuilder;
 import me.shedaniel.math.Color;
 import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.config.category.Category;
+import net.rizecookey.cookeymod.extension.clothconfig.entry.PickableColorEntry;
 
-public class ColorOption extends Option<Color, ColorEntry> {
-    public ColorOption(String id, Category category, Color defaultValue, boolean alphaMode) {
+public class ColorOption extends Option<Color, PickableColorEntry> {
+    public ColorOption(String id, Category category, Color defaultValue) {
         super(id, category, defaultValue);
-        this.setConfigEntry(() -> {
-            ColorFieldBuilder builder = ConfigEntryBuilder.create()
-                    .startAlphaColorField(Component.translatable(this.getTranslationKey()), this.get())
-                    .setSaveConsumer2(this::set)
-                    .setAlphaMode(alphaMode)
-                    .setDefaultValue(this.getDefault().getColor());
-            builder.setTooltip(this.getTooltip(this.getTranslationKey()));
-            return builder.build();
-        });
+        this.setConfigEntry(() -> new PickableColorEntry(Component.translatable(this.getTranslationKey()),
+                this.get(),
+                ConfigEntryBuilder.create().getResetButtonKey(),
+                () -> this.getDefault().getColor(),
+                value -> this.set(Color.ofTransparent(value)),
+                () -> this.getTooltip(this.getTranslationKey()),
+                false));
     }
 
     @Override

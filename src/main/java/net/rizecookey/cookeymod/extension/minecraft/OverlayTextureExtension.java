@@ -1,4 +1,4 @@
-package net.rizecookey.cookeymod.extension;
+package net.rizecookey.cookeymod.extension.minecraft;
 
 public interface OverlayTextureExtension {
     void cookeyMod$reloadOverlay();

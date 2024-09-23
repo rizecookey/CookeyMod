@@ -45,6 +45,10 @@ dependencies {
     }
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/cookeymod.accesswidener")
+}
+
 processResources {
     inputs.property "version", project.version
 

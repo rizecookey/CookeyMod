@@ -12,7 +12,7 @@ import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.annotation.mixin.ModSpecific;
 import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
 import net.rizecookey.cookeymod.config.option.EnumOption;
-import net.rizecookey.cookeymod.extension.OverlayRendered;
+import net.rizecookey.cookeymod.extension.minecraft.OverlayRendered;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

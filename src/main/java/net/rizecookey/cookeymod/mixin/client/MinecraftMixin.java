@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.extension.MinecraftExtension;
+import net.rizecookey.cookeymod.extension.minecraft.MinecraftExtension;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
