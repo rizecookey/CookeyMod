@@ -3,7 +3,6 @@ package net.rizecookey.cookeymod.screen;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.CookeyMod;
@@ -21,7 +20,6 @@ public final class ScreenBuilder {
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setTitle(Component.translatable(ModConfig.TRANSLATION_KEY))
-                .setTransparentBackground(Minecraft.getInstance().level != null)
                 .setSavingRunnable(() -> {
                     try {
                         config.saveConfig();
