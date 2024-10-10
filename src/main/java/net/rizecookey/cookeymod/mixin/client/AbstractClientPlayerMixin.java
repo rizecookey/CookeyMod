@@ -1,11 +1,11 @@
 package net.rizecookey.cookeymod.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.rizecookey.cookeymod.CookeyMod;
@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractClientPlayer.class)
@@ -32,16 +31,15 @@ public abstract class AbstractClientPlayerMixin extends Player {
         disableEffectBasedFovChange = CookeyMod.getInstance().getConfig().hudRendering().disableEffectBasedFovChange();
     }
 
-    @Redirect(method = "getFieldOfViewModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
-    public double disableEffectBasedFov(AbstractClientPlayer instance, Holder<Attribute> attribute) {
-        if (disableEffectBasedFovChange.get()) {
-            double mov = instance.getAttributeBaseValue(attribute);
-            if (this.isSprinting() && LivingEntityAccessor.SPEED_MODIFIER_SPRINTING() != null) {
-                mov *= 1 + LivingEntityAccessor.SPEED_MODIFIER_SPRINTING().amount();
-            }
-            return mov;
-        } else {
-            return instance.getAttributeValue(attribute);
+    @ModifyExpressionValue(method = "getFieldOfViewModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
+    public double disableEffectBasedFov(double original) {
+        if (!disableEffectBasedFovChange.get()) {
+            return original;
         }
+        double mov = getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
+        if (this.isSprinting() && LivingEntityAccessor.SPEED_MODIFIER_SPRINTING() != null) {
+            mov *= 1 + LivingEntityAccessor.SPEED_MODIFIER_SPRINTING().amount();
+        }
+        return mov;
     }
 }

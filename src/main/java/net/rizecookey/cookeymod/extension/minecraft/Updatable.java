@@ -3,6 +3,10 @@ package net.rizecookey.cookeymod.extension.minecraft;
 import java.util.function.Consumer;
 
 public interface Updatable<T> {
-    void cookeyMod$registerOnChange(Consumer<T> listener);
-    void cookeyMod$unregisterOnChange(Consumer<T> listener);
+    default void cookeyMod$registerOnChange(Consumer<T> listener) {
+        throw new IllegalStateException("Extension has not been applied");
+    }
+    default void cookeyMod$unregisterOnChange(Consumer<T> listener) {
+        throw new IllegalStateException("Extension has not been applied");
+    }
 }

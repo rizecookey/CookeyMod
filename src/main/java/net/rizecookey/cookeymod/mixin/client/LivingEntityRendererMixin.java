@@ -1,5 +1,6 @@
 package net.rizecookey.cookeymod.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -9,7 +10,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
@@ -19,24 +20,25 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
-public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements RenderLayerParent<T, M> {
-    protected LivingEntityRendererMixin(EntityRendererProvider.Context context) {
-        super(context);
-    }
-
+public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<? super S>> extends EntityRenderer<T, S> implements RenderLayerParent<S, M> {
     @Shadow
-    public static int getOverlayCoords(LivingEntity livingEntity, float f) {
+    public static int getOverlayCoords(LivingEntityRenderState livingEntityRenderState, float f) {
         return 0;
     }
 
     @Shadow
-    protected abstract float getWhiteOverlayProgress(T livingEntity, float f);
+    protected abstract float getWhiteOverlayProgress(S livingEntityRenderState);
 
+    @Shadow
+    protected M model;
+
+    protected LivingEntityRendererMixin(EntityRendererProvider.Context context) {
+        super(context);
+    }
 
     @Unique
     private BooleanOption showOwnNameInThirdPerson;
@@ -46,20 +48,20 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         showOwnNameInThirdPerson = CookeyMod.getInstance().getConfig().misc().showOwnNameInThirdPerson();
     }
 
-    @Inject(method = "shouldShowName*", at = @At("HEAD"), cancellable = true)
-    public void showOwnName(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At("HEAD"), cancellable = true)
+    public void showOwnName(T livingEntity, double d, CallbackInfoReturnable<Boolean> cir) {
         if (livingEntity == Minecraft.getInstance().cameraEntity
                 && showOwnNameInThirdPerson.get()) cir.setReturnValue(true);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Redirect(method = "render*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/RenderLayer;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/Entity;FFFFFF)V"))
-    public void renderWithOverlay(RenderLayer renderLayer, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, Entity livingEntity, float f, float g, float h, float j, float k, float l) {
-        if (renderLayer instanceof OverlayRendered) {
-            int overlayCoords = getOverlayCoords((T) livingEntity, this.getWhiteOverlayProgress((T) livingEntity, g));
-            ((OverlayRendered<T>) renderLayer).cookeyMod$renderWithOverlay(poseStack, multiBufferSource, i, (T) livingEntity, f, g, h, j, k, l, overlayCoords);
-        } else {
-            renderLayer.render(poseStack, multiBufferSource, i, livingEntity, f, g, h, j, k, l);
+    @Inject(method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/RenderLayer;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/renderer/entity/state/EntityRenderState;FF)V", ordinal = 0))
+    public void renderWithOverlay(S livingEntityRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci, @Local RenderLayer<S, M> renderLayer) {
+        if (!(renderLayer instanceof OverlayRendered overlayRendered)) {
+            return;
         }
+
+        int overlayCoords = getOverlayCoords(livingEntityRenderState, this.getWhiteOverlayProgress(livingEntityRenderState));
+        overlayRendered.cookeyMod$setOverlayCoords(overlayCoords);
     }
 }

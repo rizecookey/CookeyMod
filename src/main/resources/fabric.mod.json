@@ -27,10 +27,20 @@
   "accessWidener": "cookeymod.accesswidener",
   "depends": {
     "fabricloader": ">=0.15",
-    "minecraft": ">=1.21 <1.22"
+    "minecraft": ">=1.21.2-beta.2 <1.22"
   },
   "suggests": {
     "modmenu": "*",
     "nochatreports": "*"
+  },
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_310": ["net/rizecookey/cookeymod/extension/minecraft/MinecraftExtension"],
+      "net/minecraft/class_10034": ["net/rizecookey/cookeymod/extension/minecraft/HumanoidRenderStateExtension"],
+      "net/minecraft/class_10042": ["net/rizecookey/cookeymod/extension/minecraft/LivingEntityRenderStateExtension"],
+      "net/minecraft/class_10197": ["net/rizecookey/cookeymod/extension/minecraft/OverlayRendered"],
+      "net/minecraft/class_342": ["net/rizecookey/cookeymod/extension/minecraft/Updatable<Ljava/lang/String;>"],
+      "net/minecraft/class_1007": ["net/rizecookey/cookeymod/extension/minecraft/PlayerRendererExtension"]
+    }
   }
 }

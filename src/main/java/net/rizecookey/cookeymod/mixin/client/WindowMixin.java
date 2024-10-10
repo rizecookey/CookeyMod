@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.DisplayData;
 import com.mojang.blaze3d.platform.ScreenManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.WindowEventHandler;
+import org.lwjgl.glfw.GLFWWindowFocusCallback;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,10 +37,14 @@ public abstract class WindowMixin implements AutoCloseable {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void iconifyIfBlocking(WindowEventHandler windowEventHandler, ScreenManager screenManager, DisplayData displayData, String string, String string2, CallbackInfo ci) {
-        glfwSetWindowFocusCallback(this.window, (windowId, focussed) -> {
+        GLFWWindowFocusCallback callback = glfwSetWindowFocusCallback(this.window, (windowId, focussed) -> {
             if (this.isFullscreen() && !focussed && glfwGetWindowAttrib(windowId, GLFW_HOVERED) == 1) {
                 glfwIconifyWindow(windowId);
             }
         });
+
+        if (callback != null) {
+            callback.close();
+        }
     }
 }

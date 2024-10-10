@@ -28,8 +28,8 @@ public abstract class RemotePlayerMixin extends AbstractClientPlayer {
         fixLocalPlayerHandling = CookeyMod.getInstance().getConfig().misc().fixLocalPlayerHandling();
     }
 
-    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    public void fixLocalPlayerHandling(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "hurtClient", at = @At("HEAD"), cancellable = true)
+    public void fixLocalPlayerHandling(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         if (fixLocalPlayerHandling.get()) cir.setReturnValue(false);
     }
 }

@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
-import net.rizecookey.cookeymod.extension.minecraft.Updatable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +20,10 @@ import java.util.function.Supplier;
 public class PickableColorEntry extends ColorEntry {
     private final Map<ColorComponent, ColorComponentSlider> colorComponentSliders;
 
-    @SuppressWarnings("unchecked")
     public PickableColorEntry(Component name, Color value, Component resetButtonKey, Supplier<Integer> defaultValue, Consumer<Integer> saveConsumer, Supplier<Optional<Component[]>> tooltipSupplier, boolean requiresRestart) {
         super(name, value.getColor(), resetButtonKey, defaultValue, saveConsumer, tooltipSupplier, requiresRestart);
         this.withAlpha();
-        ((Updatable<String>) this.textFieldWidget).cookeyMod$registerOnChange(string -> updateSlidersToFieldValue(this.getColorValue(string)));
+        this.textFieldWidget.cookeyMod$registerOnChange(string -> updateSlidersToFieldValue(this.getColorValue(string)));
         colorComponentSliders = new HashMap<>();
 
         for (ColorComponent colorComponent : ColorComponent.values()) {

@@ -38,11 +38,13 @@ public abstract class CameraMixin {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void disableSneakAnimation(CallbackInfo ci) {
-        if (sneakAnimationSpeed.get() == 0.0 && this.entity != null) {
-            this.eyeHeight = this.getEntity().getEyeHeight();
-            this.eyeHeightOld = this.eyeHeight;
-            ci.cancel();
+        if (this.sneakAnimationSpeed.get() != 0.0 || this.entity == null) {
+            return;
         }
+
+        this.eyeHeight = this.getEntity().getEyeHeight();
+        this.eyeHeightOld = this.eyeHeight;
+        ci.cancel();
     }
 
     @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Camera;eyeHeight:F", opcode = Opcodes.PUTFIELD))

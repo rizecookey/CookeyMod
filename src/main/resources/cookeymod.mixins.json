@@ -10,14 +10,18 @@
     "client.AbstractClientPlayerMixin",
     "client.CameraMixin",
     "client.EditBoxMixin",
+    "client.EquipmentLayerRendererMixin",
     "client.GameRendererMixin",
     "client.HorseArmorLayerMixin",
     "client.HumanoidArmorLayerMixin",
+    "client.HumanoidMobRendererMixin",
     "client.HumanoidModelMixin",
+    "client.HumanoidRenderStateMixin",
     "client.ItemInHandLayerMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityAccessor",
     "client.LivingEntityRendererMixin",
+    "client.LivingEntityRenderStateMixin",
     "client.LocalPlayerMixin",
     "client.MinecraftMixin",
     "client.OptionsMixin",
@@ -26,8 +30,7 @@
     "client.PlayerRendererMixin",
     "client.RemotePlayerMixin",
     "client.WindowMixin",
-    "client.WolfArmorLayerMixin",
-    "client.compatibility.optifabric.OFHumanoidArmorLayerMixin"
+    "client.WolfArmorLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
