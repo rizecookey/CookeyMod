@@ -12,6 +12,7 @@ public interface HumanoidRenderStateExtension extends LivingEntityRenderStateExt
 
     default HumanoidArm cookeyMod$getUsedArm() {
         return cookeyMod$base().useItemHand.equals(InteractionHand.MAIN_HAND) && cookeyMod$base().mainArm.equals(HumanoidArm.RIGHT)
+                || cookeyMod$base().useItemHand.equals(InteractionHand.OFF_HAND) && cookeyMod$base().mainArm.equals(HumanoidArm.LEFT)
                 ? HumanoidArm.RIGHT
                 : HumanoidArm.LEFT;
     }
