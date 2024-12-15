@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -62,7 +63,7 @@ public abstract class ItemInHandRendererMixin {
     private MiscCategory miscCategory;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(Minecraft minecraft, EntityRenderDispatcher entityRenderDispatcher, ItemRenderer itemRenderer, CallbackInfo ci) {
+    private void injectOptions(Minecraft minecraft, EntityRenderDispatcher entityRenderDispatcher, ItemRenderer itemRenderer, ItemModelResolver itemModelResolver, CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         animationsCategory = modConfig.animations();
         hudRenderingCategory = modConfig.hudRendering();
@@ -106,16 +107,6 @@ public abstract class ItemInHandRendererMixin {
         return !hudRenderingCategory.showHandWhenInvisible().get() && instance.isInvisible();
     }
 
-    @Redirect(method = "renderArmWithItem",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;applyItemArmAttackTransform(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/entity/HumanoidArm;F)V",
-                    ordinal = 1))
-    public void cancelAttackTransform(ItemInHandRenderer itemInHandRenderer, PoseStack poseStack, HumanoidArm humanoidArm, float f) {
-        if (!animationsCategory.swingAndUseItem().get())
-            this.applyItemArmAttackTransform(poseStack, humanoidArm, f);
-    }
-
     @Inject(method = "renderArmWithItem",
             at = @At(
                     value = "INVOKE",
@@ -125,7 +116,7 @@ public abstract class ItemInHandRendererMixin {
         HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND
                 ? abstractClientPlayer.getMainArm()
                 : abstractClientPlayer.getMainArm().getOpposite();
-        if (animationsCategory.swingAndUseItem().get() && !abstractClientPlayer.isAutoSpinAttack()) {
+        if (animationsCategory.swingAndUseItem().get() && abstractClientPlayer.isUsingItem()) {
             this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
         }
     }
