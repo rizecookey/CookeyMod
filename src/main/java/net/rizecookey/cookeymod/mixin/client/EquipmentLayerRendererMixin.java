@@ -2,8 +2,6 @@ package net.rizecookey.cookeymod.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.EquipmentModelSet;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
 import net.rizecookey.cookeymod.config.option.EnumOption;
@@ -25,11 +23,11 @@ public abstract class EquipmentLayerRendererMixin implements OverlayRendered {
     private EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(EquipmentModelSet equipmentModelSet, TextureAtlas textureAtlas, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         showDamageTintOnArmor = CookeyMod.getInstance().getConfig().hudRendering().showDamageTintOnArmor();
     }
 
-    @ModifyExpressionValue(method = "renderLayers(Lnet/minecraft/world/item/equipment/EquipmentModel$LayerType;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/client/model/Model;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/resources/ResourceLocation;)V",
+    @ModifyExpressionValue(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/resources/ResourceLocation;)V",
             slice = @Slice(
                     from = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;getArmorFoilBuffer(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/renderer/RenderType;Z)Lcom/mojang/blaze3d/vertex/VertexConsumer;")
             ),
@@ -39,7 +37,7 @@ public abstract class EquipmentLayerRendererMixin implements OverlayRendered {
         return show ? this.overlayCoords : previousCoords;
     }
 
-    @ModifyExpressionValue(method = "renderLayers(Lnet/minecraft/world/item/equipment/EquipmentModel$LayerType;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/client/model/Model;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/resources/ResourceLocation;)V",
+    @ModifyExpressionValue(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/resources/ResourceLocation;)V",
             slice = @Slice(
                     from = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer;trimSpriteLookup:Ljava/util/function/Function;", opcode = Opcodes.GETFIELD)
             ),

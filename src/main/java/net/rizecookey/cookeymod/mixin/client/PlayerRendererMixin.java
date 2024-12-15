@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.rizecookey.cookeymod.CookeyMod;
@@ -58,15 +59,15 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         ENABLE_TOOL_BLOCKING = modConfig.animations().enableToolBlocking();
     }
 
-    @Inject(method = "getArmPose(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/client/renderer/entity/state/PlayerRenderState$HandState;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;", at = @At("HEAD"), cancellable = true)
-    private static void addItemBlockPose(PlayerRenderState playerRenderState, PlayerRenderState.HandState handState, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
+    @Inject(method = "getArmPose(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;", at = @At("HEAD"), cancellable = true)
+    private static void addItemBlockPose(Player player, ItemStack itemStack, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
         if (!ENABLE_TOOL_BLOCKING.get()) {
             return;
         }
 
-        ItemStack currentHandStack = playerRenderState.cookeyMod$getItemInHand(interactionHand);
-        ItemStack otherHandStack = playerRenderState.cookeyMod$getItemInHand(interactionHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
-        if (playerRenderState.isUsingItem && playerRenderState.cookeyMod$getUsedItem().getItem() instanceof ShieldItem) {
+        ItemStack currentHandStack = player.getItemInHand(interactionHand);
+        ItemStack otherHandStack = player.getItemInHand(interactionHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+        if (player.isUsingItem() && player.getUseItem().getItem() instanceof ShieldItem) {
             if (ItemUtils.isToolItem(currentHandStack.getItem()) && otherHandStack.getItem() instanceof ShieldItem) {
                 cir.setReturnValue(HumanoidModel.ArmPose.BLOCK);
             } else if (currentHandStack.getItem() instanceof ShieldItem && ItemUtils.isToolItem(otherHandStack.getItem())) {

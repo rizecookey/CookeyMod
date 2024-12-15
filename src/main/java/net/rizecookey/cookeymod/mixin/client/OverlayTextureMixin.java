@@ -58,7 +58,9 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
 
         RenderSystem.activeTexture(33985);
         this.texture.bind();
-        nativeImage.upload(0, 0, 0, 0, 0, nativeImage.getWidth(), nativeImage.getHeight(), false, true, false, false);
+        this.texture.setFilter(false, false);
+        this.texture.setClamp(true);
+        nativeImage.upload(0, 0, 0, 0, 0, nativeImage.getWidth(), nativeImage.getHeight(), false);
         RenderSystem.activeTexture(33984);
     }
 }

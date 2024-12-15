@@ -14,6 +14,9 @@ public abstract class HumanoidRenderStateMixin extends LivingEntityRenderState i
     @Unique
     private int itemUseDuration;
 
+    @Unique
+    private boolean itemUseIsEating;
+
     @Override
     public HumanoidRenderState cookeyMod$base() {
         return (HumanoidRenderState) (Object) this;
@@ -37,5 +40,15 @@ public abstract class HumanoidRenderStateMixin extends LivingEntityRenderState i
     @Override
     public void cookeyMod$setUseItemDuration(int ticks) {
         itemUseDuration = ticks;
+    }
+
+    @Override
+    public boolean cookeyMod$itemUseIsEating() {
+        return itemUseIsEating;
+    }
+
+    @Override
+    public void cookeyMod$setItemUseIsEating(boolean useIsEating) {
+        this.itemUseIsEating = useIsEating;
     }
 }
