@@ -1,13 +1,19 @@
 package net.rizecookey.cookeymod.config.category;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.Option;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static net.rizecookey.cookeymod.config.ModConfig.MAPPER;
 
 public abstract class Category {
     private final Map<String, Option<?, ?>> options = new HashMap<>();
@@ -37,23 +43,26 @@ public abstract class Category {
         return option;
     }
 
-    public void loadOptions(Map<String, Object> map) {
-        if (map != null) {
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
-                Option<?, ?> option = this.options.get(key);
-                if (option != null) option.load(entry.getValue());
-            }
+    public void loadOptions(ObjectNode node) {
+        if (node == null) {
+            throw new IllegalArgumentException("Node cannot be null");
+        }
+
+        for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext(); ) {
+            var field = it.next();
+            String key = field.getKey();
+            Option<?, ?> option = this.options.get(key);
+            if (option != null) option.load(field.getValue());
         }
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
+    public ObjectNode toNode() {
+        ObjectNode node = JsonNodeFactory.instance.objectNode();
         for (Option<?, ?> option : this.getOptions().values()) {
-            map.put(option.getId(), option.getInConfigFormat());
+            node.set(option.getId(), MAPPER.convertValue(option.getInConfigFormat(), JsonNode.class));
         }
 
-        return map;
+        return node;
     }
 
     public List<AbstractConfigListEntry<?>> getConfigEntries() {

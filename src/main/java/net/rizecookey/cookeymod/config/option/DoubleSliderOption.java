@@ -1,5 +1,6 @@
 package net.rizecookey.cookeymod.config.option;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.gui.entries.LongSliderEntry;
 import me.shedaniel.clothconfig2.impl.builders.LongSliderBuilder;
@@ -35,5 +36,10 @@ public class DoubleSliderOption extends Option<Double, LongSliderEntry> {
             builder.setTooltip(this.getTooltip(this.getTranslationKey()));
             return builder.build();
         });
+    }
+
+    @Override
+    public void load(JsonNode object) {
+        this.set(object.asDouble());
     }
 }

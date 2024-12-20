@@ -1,5 +1,8 @@
 package net.rizecookey.cookeymod.config.option;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -11,6 +14,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public abstract class Option<T, U extends AbstractConfigListEntry<?>> {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     private final String id;
     private final Category category;
     private final T defaultValue;
@@ -52,9 +57,9 @@ public abstract class Option<T, U extends AbstractConfigListEntry<?>> {
         return defaultValue;
     }
 
-    @SuppressWarnings("unchecked")
-    public void load(Object object) {
-        this.set((T) object);
+    public void load(JsonNode object) {
+        this.set(MAPPER.convertValue(object, new TypeReference<>() {
+        }));
     }
 
     public U getConfigEntry() {

@@ -15,6 +15,7 @@ configurations {
 }
 
 repositories {
+    mavenCentral()
     maven {
         url 'https://maven.terraformersmc.com/'
     }
@@ -32,10 +33,6 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    implementation "com.moandjiezana.toml:toml4j:${project.toml4j_version}"
-    includeClasspath("com.moandjiezana.toml:toml4j:${project.toml4j_version}") {
-        exclude(group: "com.google.code.gson")
-    }
     modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
     modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version))
     modImplementation fabricApi.module("fabric-screen-api-v1", project.fabric_version)
@@ -43,6 +40,9 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    include (implementation "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}")
+    include (implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}")
 }
 
 loom {

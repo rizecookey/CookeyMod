@@ -1,5 +1,6 @@
 package net.rizecookey.cookeymod.config.option;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.math.Color;
 import net.minecraft.network.chat.Component;
@@ -19,8 +20,8 @@ public class ColorOption extends Option<Color, PickableColorEntry> {
     }
 
     @Override
-    public void load(Object object) {
-        this.set(Color.ofTransparent((int) (long) object));
+    public void load(JsonNode object) {
+        this.set(Color.ofTransparent(object.asInt()));
     }
 
     @Override

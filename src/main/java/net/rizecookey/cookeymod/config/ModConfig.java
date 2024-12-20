@@ -1,7 +1,10 @@
 package net.rizecookey.cookeymod.config;
 
-import com.moandjiezana.toml.Toml;
-import com.moandjiezana.toml.TomlWriter;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.LongNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.dataformat.toml.TomlMapper;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.Category;
@@ -14,22 +17,23 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
 
-@SuppressWarnings("unchecked")
 public class ModConfig {
     public static final String TRANSLATION_KEY = "options.cookeymod";
     public static final String GENERIC_KEYS = TRANSLATION_KEY + "." + "generic.options";
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String CONFIG_VERSION_KEY = "config-version";
 
     private final CookeyMod mod;
     private final Logger logger;
+    private final TomlMapper tomlMapper;
 
     private final Path file;
-    private Toml defaults;
-    private Toml toml;
+    private ObjectNode defaults;
+    private ObjectNode config;
     private final Map<String, Category> categories = new HashMap<>();
     private long version;
 
@@ -40,6 +44,7 @@ public class ModConfig {
     public ModConfig(CookeyMod mod, Path file) {
         this.mod = mod;
         this.logger = mod.getLogger();
+        this.tomlMapper = new TomlMapper();
 
         this.file = file;
 
@@ -64,17 +69,16 @@ public class ModConfig {
     }
 
     public void loadCategories() {
-        Map<String, Object> map = toml.toMap();
-        boolean updated = ConfigUpdater.update(map, this.version);
+        boolean updated = ConfigUpdater.update(config, this.version);
 
         if (updated) logger.info("Updated config.");
 
         for (String id : categories.keySet()) {
-            Map<String, Object> category = map.containsKey(id) && map.get(id) instanceof Map ? (Map<String, Object>) map.get(id) : new HashMap<>();
-            categories.get(id).loadOptions(category != null ? category : new HashMap<>());
+            ObjectNode category = ((ObjectNode) config.get(id));
+            categories.get(id).loadOptions(category);
         }
 
-        this.version = this.defaults.contains(CONFIG_VERSION_KEY) ? this.defaults.getLong(CONFIG_VERSION_KEY) : 1;
+        this.version = this.defaults.has(CONFIG_VERSION_KEY) ? this.defaults.get(CONFIG_VERSION_KEY).asLong() : 1;
 
         if (updated) {
             try {
@@ -95,22 +99,24 @@ public class ModConfig {
         }
 
         InputStream resourceStream = getConfigResource();
-        this.defaults = new Toml().read(resourceStream);
+        this.defaults = (ObjectNode) tomlMapper.readTree(resourceStream);
         if (!Files.exists(file)) {
             logger.info("Config not found, creating default one...");
-            new TomlWriter().write(this.defaults, file.toFile());
+            tomlMapper.writeValue(file.toFile(), this.defaults);
             logger.info("Copied default config.");
         } else {
-            Map<String, Object> configMap = new Toml().read(file.toFile()).toMap();
-            Map<String, Object> fallbackMap = this.defaults.toMap();
-            configMap.putIfAbsent(CONFIG_VERSION_KEY, 1);
-            this.copyMissingNested(fallbackMap, configMap);
-            new TomlWriter().write(configMap, file.toFile());
+            ObjectNode config = tomlMapper.readValue(file.toFile(), ObjectNode.class);
+            if (!config.has(CONFIG_VERSION_KEY)) {
+                config.set(CONFIG_VERSION_KEY, LongNode.valueOf(1));
+            }
+
+            this.copyMissingNested(defaults, config);
+            tomlMapper.writeValue(file.toFile(), config);
         }
         resourceStream.close();
 
-        this.toml = new Toml().read(file.toFile());
-        this.version = this.toml.contains(CONFIG_VERSION_KEY) ? this.toml.getLong(CONFIG_VERSION_KEY) : 1;
+        this.config = (ObjectNode) tomlMapper.readTree(file.toFile());
+        this.version = this.config.has(CONFIG_VERSION_KEY) ? this.config.get(CONFIG_VERSION_KEY).asLong() : 1;
         this.loadCategories();
     }
 
@@ -119,26 +125,28 @@ public class ModConfig {
     }
 
     public void saveConfig() throws IOException {
-        Map<String, Object> optionsMap = new HashMap<>();
+        ObjectNode node = tomlMapper.createObjectNode();
         for (String id : categories.keySet()) {
-            optionsMap.put(id, categories.get(id).toMap());
+            node.set(id, categories.get(id).toNode());
         }
 
-        optionsMap.put(CONFIG_VERSION_KEY, this.version);
+        node.set(CONFIG_VERSION_KEY, LongNode.valueOf(this.version));
 
-        new TomlWriter().write(optionsMap, file.toFile());
+        tomlMapper.writeValue(file.toFile(), node);
     }
 
-    @SuppressWarnings("rawtypes")
-    public <T, U> void copyMissingNested(Map<T, U> from, Map<T, U> to) {
-        for (Map.Entry<T, U> fromEntry : from.entrySet()) {
-            T fromKey = fromEntry.getKey();
-            U fromValue = fromEntry.getValue();
-            Optional<U> toValue = to.containsKey(fromKey) ? Optional.of(to.get(fromKey)) : Optional.empty();
-            if (toValue.isEmpty()) {
-                to.put(fromKey, fromValue);
-            } else if (fromValue instanceof Map fromMap && toValue.get() instanceof Map toMap) {
-                this.copyMissingNested(fromMap, toMap);
+    public void copyMissingNested(ObjectNode from, ObjectNode to) {
+        for (Iterator<Map.Entry<String, JsonNode>> it = from.fields(); it.hasNext(); ) {
+            var child = it.next();
+            var key = child.getKey();
+            var value = child.getValue();
+            if (!to.has(key)) {
+                to.set(key, value);
+                continue;
+            }
+            var toValue = to.get(key);
+            if (value.isObject() && toValue.isObject()) {
+                copyMissingNested(((ObjectNode) value), ((ObjectNode) toValue));
             }
         }
     }

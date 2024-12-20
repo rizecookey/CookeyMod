@@ -1,5 +1,6 @@
 package net.rizecookey.cookeymod.config.option;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.gui.entries.EnumListEntry;
 import me.shedaniel.clothconfig2.impl.builders.EnumSelectorBuilder;
@@ -31,9 +32,9 @@ public class EnumOption<T extends Enum<T> & Named> extends Option<T, EnumListEnt
     }
 
     @Override
-    public void load(Object object) {
+    public void load(JsonNode object) {
         this.set(Arrays.stream(enumClass.getEnumConstants())
-                .filter(value -> value.getInternalName().equals(object))
+                .filter(value -> value.getInternalName().equals(object.asText()))
                 .findFirst().orElseThrow());
     }
 
