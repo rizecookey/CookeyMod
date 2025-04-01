@@ -13,7 +13,6 @@
     "client.EditBoxMixin",
     "client.EquipmentLayerRendererMixin",
     "client.GameRendererMixin",
-    "client.HorseArmorLayerMixin",
     "client.HumanoidArmorLayerMixin",
     "client.HumanoidMobRendererMixin",
     "client.HumanoidModelMixin",
@@ -28,6 +27,8 @@
     "client.OverlayTextureMixin",
     "client.PlayerRendererMixin",
     "client.RemotePlayerMixin",
+    "client.RenderPipelinesMixin",
+    "client.SimpleEquipmentLayerMixin",
     "client.WindowMixin",
     "client.WolfArmorLayerMixin"
   ],

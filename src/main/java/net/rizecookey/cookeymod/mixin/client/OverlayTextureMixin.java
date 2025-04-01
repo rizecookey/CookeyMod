@@ -1,7 +1,6 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.RenderSystem;
 import me.shedaniel.math.Color;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -56,11 +55,8 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
             }
         }
 
-        RenderSystem.activeTexture(33985);
-        this.texture.bind();
         this.texture.setFilter(false, false);
         this.texture.setClamp(true);
-        nativeImage.upload(0, 0, 0, 0, 0, nativeImage.getWidth(), nativeImage.getHeight(), false);
-        RenderSystem.activeTexture(33984);
+        this.texture.upload();
     }
 }

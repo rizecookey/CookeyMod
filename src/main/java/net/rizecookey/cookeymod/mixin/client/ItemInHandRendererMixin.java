@@ -43,7 +43,7 @@ public abstract class ItemInHandRendererMixin {
     protected abstract void applyItemArmTransform(PoseStack poseStack, HumanoidArm humanoidArm, float f);
 
     @Shadow
-    public abstract void renderItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, boolean bl, PoseStack poseStack, MultiBufferSource multiBufferSource, int i);
+    public abstract void renderItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i);
 
     @Shadow
     private ItemStack offHandItem;
@@ -94,7 +94,7 @@ public abstract class ItemInHandRendererMixin {
                     this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
                 }
                 boolean isRightHand = humanoidArm == HumanoidArm.RIGHT;
-                this.renderItem(abstractClientPlayer, itemStack, isRightHand ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !isRightHand, poseStack, multiBufferSource, j);
+                this.renderItem(abstractClientPlayer, itemStack, isRightHand ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, poseStack, multiBufferSource, j);
 
                 poseStack.popPose();
                 ci.cancel();
@@ -110,7 +110,7 @@ public abstract class ItemInHandRendererMixin {
     @Inject(method = "renderArmWithItem",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+                    target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
                     ordinal = 1))
     public void injectAttackTransform(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
         HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND

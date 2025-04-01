@@ -1,14 +1,14 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
-import net.minecraft.client.renderer.entity.layers.HorseArmorLayer;
+import net.minecraft.client.renderer.entity.layers.SimpleEquipmentLayer;
 import net.rizecookey.cookeymod.extension.minecraft.OverlayRendered;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(HorseArmorLayer.class)
-public class HorseArmorLayerMixin implements OverlayRendered {
+@Mixin(SimpleEquipmentLayer.class)
+public class SimpleEquipmentLayerMixin implements OverlayRendered {
     @Shadow
     @Final
     private EquipmentLayerRenderer equipmentRenderer;
