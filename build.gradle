@@ -33,6 +33,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    modImplementation include(fabricApi.module("fabric-api-base", project.fabric_version))
     modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
     modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version))
     modImplementation fabricApi.module("fabric-screen-api-v1", project.fabric_version)
