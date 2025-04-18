@@ -75,7 +75,7 @@ public class ModConfig {
 
         for (String id : categories.keySet()) {
             ObjectNode category = ((ObjectNode) config.get(id));
-            categories.get(id).loadOptions(category);
+            categories.get(id).loadOptions(category != null ? category : MAPPER.createObjectNode());
         }
 
         this.version = this.defaults.has(CONFIG_VERSION_KEY) ? this.defaults.get(CONFIG_VERSION_KEY).asLong() : 1;
