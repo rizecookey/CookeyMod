@@ -29,7 +29,6 @@
     "client.RemotePlayerMixin",
     "client.RenderPipelinesMixin",
     "client.SimpleEquipmentLayerMixin",
-    "client.WindowMixin",
     "client.WolfArmorLayerMixin"
   ],
   "injectors": {
