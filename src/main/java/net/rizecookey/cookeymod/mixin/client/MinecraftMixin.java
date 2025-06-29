@@ -6,7 +6,6 @@ import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.main.GameConfig;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.extension.minecraft.MinecraftExtension;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
@@ -34,7 +33,7 @@ public abstract class MinecraftMixin implements MinecraftExtension {
     private boolean isHoldingDownOnBlock;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void initialize(GameConfig gameConfig, CallbackInfo ci) {
+    public void initialize(CallbackInfo ci) {
         CookeyMod cookeyMod = CookeyMod.getInstance();
         openCookeyModMenu = cookeyMod.getKeybinds().openOptions();
 

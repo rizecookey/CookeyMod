@@ -1,6 +1,5 @@
 package net.rizecookey.cookeymod.mixin.client;
 
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -34,7 +33,7 @@ public abstract class OptionsScreenMixin extends Screen {
     private BooleanOption showModButton;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(Screen screen, Options options, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         showModButton = CookeyMod.getInstance().getConfig().misc().showModButton();
     }
 

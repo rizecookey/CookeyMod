@@ -6,9 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.RenderBuffers;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
@@ -36,7 +33,7 @@ public abstract class GameRendererMixin {
     private BooleanOption alternativeBobbing = CookeyMod.getInstance().getConfig().hudRendering().alternativeBobbing();
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(Minecraft minecraft, ItemInHandRenderer itemInHandRenderer, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         disableCameraBobbing = modConfig.animations().disableCameraBobbing();
         alternativeBobbing = modConfig.hudRendering().alternativeBobbing();

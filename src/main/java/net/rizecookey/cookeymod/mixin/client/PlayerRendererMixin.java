@@ -52,7 +52,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(EntityRendererProvider.Context context, boolean bl, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         shownHandWhenInvisible = modConfig.hudRendering().showHandWhenInvisible();
         invisibilityHandOpacity = modConfig.hudRendering().invisibilityHandOpacity();

@@ -1,13 +1,9 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.client.ClientRecipeBook;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.stats.StatsCounter;
 import net.minecraft.world.InteractionHand;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
@@ -27,7 +23,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(Minecraft minecraft, ClientLevel clientLevel, ClientPacketListener clientPacketListener, StatsCounter statsCounter, ClientRecipeBook clientRecipeBook, boolean bl, boolean bl2, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         fixCooldownDesync = CookeyMod.getInstance().getConfig().misc().fixCooldownDesync();
     }
 

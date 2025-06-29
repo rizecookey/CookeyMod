@@ -7,10 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -63,7 +60,7 @@ public abstract class ItemInHandRendererMixin {
     private MiscCategory miscCategory;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(Minecraft minecraft, EntityRenderDispatcher entityRenderDispatcher, ItemRenderer itemRenderer, ItemModelResolver itemModelResolver, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         animationsCategory = modConfig.animations();
         hudRenderingCategory = modConfig.hudRendering();

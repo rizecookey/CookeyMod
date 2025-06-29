@@ -4,10 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,8 +20,8 @@ public abstract class AbstractClientPlayerMixin extends Player {
     @Unique
     private BooleanOption disableEffectBasedFovChange;
 
-    private AbstractClientPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(level, blockPos, f, gameProfile);
+    private AbstractClientPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
+        super(clientLevel, gameProfile);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))

@@ -24,7 +24,7 @@ public abstract class RemotePlayerMixin extends AbstractClientPlayer {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(ClientLevel clientLevel, GameProfile gameProfile, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         fixLocalPlayerHandling = CookeyMod.getInstance().getConfig().misc().fixLocalPlayerHandling();
     }
 

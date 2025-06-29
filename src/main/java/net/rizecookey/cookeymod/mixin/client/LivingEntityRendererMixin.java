@@ -44,7 +44,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private BooleanOption showOwnNameInThirdPerson;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(EntityRendererProvider.Context context, M entityModel, float f, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         showOwnNameInThirdPerson = CookeyMod.getInstance().getConfig().misc().showOwnNameInThirdPerson();
     }
 
