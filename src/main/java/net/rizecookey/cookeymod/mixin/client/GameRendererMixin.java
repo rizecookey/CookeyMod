@@ -66,9 +66,8 @@ public abstract class GameRendererMixin {
             return;
         }
 
-        float g = player.walkDist - player.walkDistO;
-        float h = -(player.walkDist + g * f);
-        float i = Mth.lerp(f, player.oBob, player.bob);
+        float h = player.avatarState().getBackwardsInterpolatedWalkDistance(f);
+        float i = player.avatarState().getInterpolatedBob(f);
         poseStack.translate(Mth.sin(h * 3.1415927F) * i * 0.5F, -Math.abs(Mth.cos(h * 3.1415927F) * i), 0.0D);
         poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.cos(h * 3.1415927F) * i * 3.0F));
     }

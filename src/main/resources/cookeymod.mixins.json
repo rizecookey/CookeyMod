@@ -9,6 +9,7 @@
   "client": [
     "client.AbstractClientPlayerMixin",
     "client.ArmedEntityRenderStateMixin",
+    "client.AvatarRendererMixin",
     "client.CameraMixin",
     "client.EditBoxMixin",
     "client.EquipmentLayerRendererMixin",
@@ -25,7 +26,6 @@
     "client.OptionsMixin",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
-    "client.PlayerRendererMixin",
     "client.RemotePlayerMixin",
     "client.RenderPipelinesMixin",
     "client.SimpleEquipmentLayerMixin",

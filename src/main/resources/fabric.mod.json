@@ -27,7 +27,7 @@
   "accessWidener": "cookeymod.accesswidener",
   "depends": {
     "fabricloader": ">=0.16.9",
-    "minecraft": ">=1.21.6 <1.22"
+    "minecraft": ">=1.21.9-beta.2 <1.22"
   },
   "suggests": {
     "modmenu": "*",
@@ -40,7 +40,7 @@
       "net/minecraft/class_10426": ["net/rizecookey/cookeymod/extension/minecraft/ArmedEntityRenderStateExtension"],
       "net/minecraft/class_10197": ["net/rizecookey/cookeymod/extension/minecraft/OverlayRendered"],
       "net/minecraft/class_342": ["net/rizecookey/cookeymod/extension/minecraft/Updatable<Ljava/lang/String;>"],
-      "net/minecraft/class_1007": ["net/rizecookey/cookeymod/extension/minecraft/PlayerRendererExtension"]
+      "net/minecraft/class_1007": ["net/rizecookey/cookeymod/extension/minecraft/AvatarRendererExtension"]
     }
   }
 }

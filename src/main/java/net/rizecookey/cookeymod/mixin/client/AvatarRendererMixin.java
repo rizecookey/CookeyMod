@@ -2,28 +2,28 @@ package net.rizecookey.cookeymod.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
-import net.rizecookey.cookeymod.extension.minecraft.PlayerRendererExtension;
+import net.rizecookey.cookeymod.extension.minecraft.AvatarRendererExtension;
 import net.rizecookey.cookeymod.util.ItemUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,8 +33,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(PlayerRenderer.class)
-public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, PlayerRenderState, PlayerModel> implements PlayerRendererExtension {
+@Mixin(AvatarRenderer.class)
+public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & ClientAvatarEntity> extends LivingEntityRenderer<AvatarlikeEntity, AvatarRenderState, PlayerModel> implements AvatarRendererExtension {
     @Unique
     private static BooleanOption ENABLE_TOOL_BLOCKING;
 
@@ -47,7 +47,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     @Unique
     private boolean playerInvisible;
 
-    public PlayerRendererMixin(EntityRendererProvider.Context context, PlayerModel entityModel, float f) {
+    public AvatarRendererMixin(EntityRendererProvider.Context context, PlayerModel entityModel, float f) {
         super(context, entityModel, f);
     }
 
@@ -59,15 +59,15 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         ENABLE_TOOL_BLOCKING = modConfig.animations().enableToolBlocking();
     }
 
-    @Inject(method = "getArmPose(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;", at = @At("HEAD"), cancellable = true)
-    private static void addItemBlockPose(Player player, ItemStack itemStack, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
+    @Inject(method = "getArmPose(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;", at = @At("HEAD"), cancellable = true)
+    private static void addItemBlockPose(Avatar avatar, ItemStack itemStack, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
         if (!ENABLE_TOOL_BLOCKING.get()) {
             return;
         }
 
-        ItemStack currentHandStack = player.getItemInHand(interactionHand);
-        ItemStack otherHandStack = player.getItemInHand(interactionHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
-        if (player.isUsingItem() && player.getUseItem().getItem() instanceof ShieldItem) {
+        ItemStack currentHandStack = avatar.getItemInHand(interactionHand);
+        ItemStack otherHandStack = avatar.getItemInHand(interactionHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+        if (avatar.isUsingItem() && avatar.getUseItem().getItem() instanceof ShieldItem) {
             if (ItemUtils.isToolItem(currentHandStack.getItem()) && otherHandStack.getItem() instanceof ShieldItem) {
                 cir.setReturnValue(HumanoidModel.ArmPose.BLOCK);
             } else if (currentHandStack.getItem() instanceof ShieldItem && ItemUtils.isToolItem(otherHandStack.getItem())) {
@@ -76,13 +76,13 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         }
     }
 
-    @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"))
-    public void transparentHandWhenInvisible(ModelPart instance, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, @Local(argsOnly = true) MultiBufferSource multiBufferSource, @Local(argsOnly = true) ResourceLocation resourceLocation) {
+    @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
+    public void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true) ResourceLocation resourceLocation) {
         if (shownHandWhenInvisible.get() && playerInvisible) {
-            var color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
-            instance.render(poseStack, multiBufferSource.getBuffer(RenderType.itemEntityTranslucentCull(resourceLocation)), i, j, color);
+            int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
+            instance.submitModelPart(modelPart, poseStack, RenderType.itemEntityTranslucentCull(resourceLocation), i, j, textureAtlasSprite, color, null);
         } else {
-            instance.render(poseStack, vertexConsumer, i, j);
+            instance.submitModelPart(modelPart, poseStack, renderType, i, j, textureAtlasSprite);
         }
     }
 
