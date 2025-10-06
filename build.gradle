@@ -92,7 +92,7 @@ publishMods {
         minecraftVersions.addAll(mcVersionsList)
         projectDescription = providers.fileContents(layout.projectDirectory.file("README.md")).asText
 
-        requires {
+        optional {
             slug = "modmenu"
         }
     }
