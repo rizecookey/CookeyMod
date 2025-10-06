@@ -7,12 +7,3 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath "org.kohsuke:github-api:1.330"
-    }
-}

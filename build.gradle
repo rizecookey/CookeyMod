@@ -1,11 +1,8 @@
 plugins {
     id 'fabric-loom' version "${loom_version}"
     id 'maven-publish'
-    id "com.modrinth.minotaur" version "2.+"
+    id "me.modmuss50.mod-publish-plugin" version "1.0.0"
 }
-
-import org.kohsuke.github.GitHub
-import org.kohsuke.github.GHReleaseBuilder
 
 version = project.mod_version + "+" + project.minecraft_version
 group = project.maven_group
@@ -82,35 +79,28 @@ jar {
     }
 }
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    projectId = "cookeymod"
-    versionName = "CookeyMod $project.version for Minecraft ${mcVersionsList.join(", ")}"
-    uploadFile = remapJar
-    gameVersions = mcVersionsList
-    changelog = System.getenv("GIT_TAG_CHANGELOG")
-    dependencies {
-        optional.project "modmenu"
+publishMods {
+    displayName = "CookeyMod ${project.version} for Minecraft ${mcVersionsList.join(", ")}"
+    changelog = providers.environmentVariable("GIT_TAG_CHANGELOG")
+    type = STABLE
+    file = remapJar.archiveFile
+    modLoaders.add("fabric")
+
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = "LF4WFeMi"
+        minecraftVersions.addAll(mcVersionsList)
+        projectDescription = providers.fileContents(layout.projectDirectory.file("README.md")).asText
+
+        requires {
+            slug = "modmenu"
+        }
     }
-    syncBodyFrom = project.file("README.md").text
-}
 
-tasks.register("github") {
-    group = "publishing"
-    dependsOn build
-
-    def artifact = layout.buildDirectory.file("libs/${base.archivesName.get()}-${version}.jar").get().asFile
-    def modVersion = version
-    doLast {
-        def github = GitHub.connectUsingOAuth(System.getenv("GITHUB_TOKEN"))
-        def repository = github.getRepository("rizecookey/CookeyMod")
-
-        def releaseBuilder = new GHReleaseBuilder(repository, System.getenv("GIT_TAG"))
-        def release = releaseBuilder.name("[$modVersion] CookeyMod for Minecraft version ${mcVersionsList.join("/")}")
-            .body(System.getenv("GIT_TAG_CHANGELOG"))
-            .makeLatest(GHReleaseBuilder.MakeLatest.TRUE)
-            .create()
-
-        release.uploadAsset(artifact, "application/java-archive")
+    github {
+        accessToken = providers.environmentVariable("GITHUB_TOKEN")
+        repository = "rizecookey/CookeyMod"
+        tagName = providers.environmentVariable("GIT_TAG")
+        commitish = providers.environmentVariable("GIT_COMMIT_SHA")
     }
 }

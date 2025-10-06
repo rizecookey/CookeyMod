@@ -27,18 +27,20 @@ jobs:
           distribution: ${{ matrix.distro }}
           java-version: ${{ matrix.java }}
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build --stacktrace
       - name: Get tag message
         run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           {
             echo 'GIT_TAG_CHANGELOG<<EOF'
-            git fetch --depth=1 origin +refs/tags/*:refs/tags/* && git tag -l --format='%(contents)' ${{ github.ref_name }}
+            git tag -l --format='%(contents)' ${{ github.ref_name }}
             echo EOF
           } >> "$GITHUB_ENV"
-      - name: Publish release to Github and Modrinth
-        run: ./gradlew github modrinth modrinthSyncBody
+      - name: Publish release to GitHub and Modrinth
+        run: ./gradlew publishMods --stacktrace
         env:
           GITHUB_TOKEN: ${{ github.token }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          GIT_COMMIT_SHA: ${{ github.sha }}
           GIT_TAG: ${{ github.ref_name }}
           GIT_TAG_CHANGELOG: ${{ env.GIT_TAG_CHANGELOG }}
