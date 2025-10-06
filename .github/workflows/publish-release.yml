@@ -28,28 +28,17 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Build
         run: ./gradlew build
-      - name: Find release artifacts
-        run: |
-          {
-            echo 'RELEASE_ARTIFACTS<<EOF'
-            find build/libs/ -type f \! -name "*-sources.jar"
-            echo EOF
-          } >> "$GITHUB_ENV"
       - name: Get tag message
         run: |
           {
-            echo 'GITHUB_TAG_CHANGELOG<<EOF'
-            git tag -l --format='%(contents)' ${{ github.ref_name }}
+            echo 'GIT_TAG_CHANGELOG<<EOF'
+            git fetch --depth=1 origin +refs/tags/*:refs/tags/* && git tag -l --format='%(contents)' ${{ github.ref_name }}
             echo EOF
           } >> "$GITHUB_ENV"
-      - name: Publish release on GitHub
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${{ env.RELEASE_ARTIFACTS }}
-          body: ${{ env.GIT_TAG_CHANGELOG }}
-          make_latest: "true"
-      - name: Publish release to Modrinth
-        run: ./gradlew modrinth modrinthSyncBody
+      - name: Publish release to Github and Modrinth
+        run: ./gradlew github modrinth modrinthSyncBody
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          GIT_TAG: ${{ github.ref_name }}
           GIT_TAG_CHANGELOG: ${{ env.GIT_TAG_CHANGELOG }}

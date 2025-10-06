@@ -4,8 +4,13 @@ plugins {
     id "com.modrinth.minotaur" version "2.+"
 }
 
+import org.kohsuke.github.GitHub
+import org.kohsuke.github.GHReleaseBuilder
+
 version = project.mod_version + "+" + project.minecraft_version
 group = project.maven_group
+
+def mc_versions_list = project.supported_mc_versions.split(" ").toList()
 
 base {
     archivesName = project.archives_base_name
@@ -52,10 +57,10 @@ loom {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", version
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": version
     }
 }
 
@@ -81,9 +86,30 @@ modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "cookeymod"
     uploadFile = remapJar
-    gameVersions = ["1.21.9"]
+    gameVersions = mc_versions_list
     changelog = System.getenv("GIT_TAG_CHANGELOG")
     dependencies {
         optional.project "modmenu"
+    }
+    syncBodyFrom = project.file("README.md").text
+}
+
+tasks.register("github") {
+    group = "publishing"
+    dependsOn build
+
+    def artifact = layout.buildDirectory.file("libs/${base.archivesName.get()}-${version}.jar").get().asFile
+
+    doLast {
+        def github = GitHub.connectUsingOAuth(System.getenv("GITHUB_TOKEN"))
+        def repository = github.getRepository("rizecookey/CookeyMod")
+
+        def releaseBuilder = new GHReleaseBuilder(repository, System.getenv("GIT_TAG"))
+        def release = releaseBuilder.name("[$project.version] CookeyMod for Minecraft version ${mc_versions_list.join("/")}")
+            .body(System.getenv("GIT_TAG_CHANGELOG"))
+            .makeLatest(GHReleaseBuilder.MakeLatest.TRUE)
+            .create()
+
+        release.uploadAsset(artifact, "application/java-archive")
     }
 }
