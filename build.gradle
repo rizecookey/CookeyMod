@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version "${loom_version}"
     id 'maven-publish'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 version = project.mod_version + "+" + project.minecraft_version
@@ -73,5 +74,16 @@ jar {
     from "LICENSE"
     from {
         configurations.includeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "cookeymod"
+    uploadFile = remapJar
+    gameVersions = ["1.21.9"]
+    changelog = System.getenv("GIT_TAG_CHANGELOG")
+    dependencies {
+        optional.project "modmenu"
     }
 }
