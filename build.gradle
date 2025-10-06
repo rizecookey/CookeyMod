@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
 
@@ -38,9 +38,9 @@ dependencies {
     modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version))
     modImplementation fabricApi.module("fabric-screen-api-v1", project.fabric_version)
     modImplementation fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version)
-    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") {
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
-    } // TODO change back to modImplementation once ModMenu is updated
+    }
 
     include (implementation "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}")
     include (implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}")
