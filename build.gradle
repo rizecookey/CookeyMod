@@ -10,7 +10,7 @@ import org.kohsuke.github.GHReleaseBuilder
 version = project.mod_version + "+" + project.minecraft_version
 group = project.maven_group
 
-def mc_versions_list = project.supported_mc_versions.split(" ").toList()
+def mcVersionsList = project.supported_mc_versions.split(" ").toList()
 
 base {
     archivesName = project.archives_base_name
@@ -85,8 +85,9 @@ jar {
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "cookeymod"
+    versionName = "CookeyMod $project.version for Minecraft ${mcVersionsList.join(", ")}"
     uploadFile = remapJar
-    gameVersions = mc_versions_list
+    gameVersions = mcVersionsList
     changelog = System.getenv("GIT_TAG_CHANGELOG")
     dependencies {
         optional.project "modmenu"
@@ -99,13 +100,13 @@ tasks.register("github") {
     dependsOn build
 
     def artifact = layout.buildDirectory.file("libs/${base.archivesName.get()}-${version}.jar").get().asFile
-
+    def modVersion = version
     doLast {
         def github = GitHub.connectUsingOAuth(System.getenv("GITHUB_TOKEN"))
         def repository = github.getRepository("rizecookey/CookeyMod")
 
         def releaseBuilder = new GHReleaseBuilder(repository, System.getenv("GIT_TAG"))
-        def release = releaseBuilder.name("[$project.version] CookeyMod for Minecraft version ${mc_versions_list.join("/")}")
+        def release = releaseBuilder.name("[$modVersion] CookeyMod for Minecraft version ${mcVersionsList.join("/")}")
             .body(System.getenv("GIT_TAG_CHANGELOG"))
             .makeLatest(GHReleaseBuilder.MakeLatest.TRUE)
             .create()
