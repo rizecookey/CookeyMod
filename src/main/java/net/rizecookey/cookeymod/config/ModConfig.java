@@ -1,6 +1,5 @@
 package net.rizecookey.cookeymod.config;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -17,7 +16,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class ModConfig {
@@ -136,8 +134,7 @@ public class ModConfig {
     }
 
     public void copyMissingNested(ObjectNode from, ObjectNode to) {
-        for (Iterator<Map.Entry<String, JsonNode>> it = from.fields(); it.hasNext(); ) {
-            var child = it.next();
+        for (var child : from.properties()) {
             var key = child.getKey();
             var value = child.getValue();
             if (!to.has(key)) {

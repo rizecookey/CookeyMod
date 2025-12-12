@@ -35,7 +35,7 @@ public abstract class ArmedEntityRenderStateMixin implements ArmedEntityRenderSt
     }
 
     @Inject(method = "extractArmedEntityRenderState", at = @At("RETURN"))
-    private static void addToolBlocking(LivingEntity livingEntity, ArmedEntityRenderState armedEntityRenderState, ItemModelResolver itemModelResolver, CallbackInfo ci) {
+    private static void addToolBlocking(LivingEntity livingEntity, ArmedEntityRenderState armedEntityRenderState, ItemModelResolver itemModelResolver, float f, CallbackInfo ci) {
         var otherHand = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
         if (!ENABLE_TOOL_BLOCKING.get() || !(livingEntity.getUseItem().getItem() instanceof ShieldItem) || !ItemUtils.isToolItem(livingEntity.getItemInHand(otherHand).getItem())) {
             armedEntityRenderState.cookeyMod$setShouldPoseBothArms(false);
@@ -45,12 +45,12 @@ public abstract class ArmedEntityRenderStateMixin implements ArmedEntityRenderSt
         var usedArm = livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND ? livingEntity.getMainArm() : livingEntity.getMainArm().getOpposite();
         switch (usedArm) {
             case LEFT -> {
-                armedEntityRenderState.leftHandItem.clear();
+                armedEntityRenderState.leftHandItemState.clear();
                 armedEntityRenderState.leftArmPose = HumanoidModel.ArmPose.EMPTY;
                 armedEntityRenderState.rightArmPose = HumanoidModel.ArmPose.BLOCK;
             }
             case RIGHT -> {
-                armedEntityRenderState.rightHandItem.clear();
+                armedEntityRenderState.rightHandItemState.clear();
                 armedEntityRenderState.rightArmPose = HumanoidModel.ArmPose.EMPTY;
                 armedEntityRenderState.leftArmPose = HumanoidModel.ArmPose.BLOCK;
             }

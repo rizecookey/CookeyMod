@@ -22,11 +22,10 @@ public abstract class CameraMixin {
     private float eyeHeight;
 
     @Shadow
-    public abstract Entity getEntity();
-
-    @Shadow
     private float eyeHeightOld;
 
+    @Shadow
+    public abstract Entity entity();
 
     @Unique
     private DoubleSliderOption sneakAnimationSpeed;
@@ -42,7 +41,7 @@ public abstract class CameraMixin {
             return;
         }
 
-        this.eyeHeight = this.getEntity().getEyeHeight();
+        this.eyeHeight = entity().getEyeHeight();
         this.eyeHeightOld = this.eyeHeight;
         ci.cancel();
     }

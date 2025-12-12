@@ -30,9 +30,11 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
     @Shadow
     public ModelPart leftArm;
 
-    @Shadow protected abstract void poseLeftArm(T humanoidRenderState, HumanoidModel.ArmPose armPose);
+    @Shadow
+    protected abstract void poseLeftArm(T humanoidRenderState);
 
-    @Shadow protected abstract void poseRightArm(T humanoidRenderState, HumanoidModel.ArmPose armPose);
+    @Shadow
+    protected abstract void poseRightArm(T humanoidRenderState);
 
     protected HumanoidModelMixin(ModelPart modelPart) {
         super(modelPart);
@@ -47,22 +49,22 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
         showEatingInThirdPerson = modConfig.animations().showEatingInThirdPerson();
     }
 
-    @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseRightArm(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;Lnet/minecraft/client/model/HumanoidModel$ArmPose;)V", ordinal = 0))
+    @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseRightArm(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", ordinal = 0))
     private void potentiallyPoseOtherArm(T humanoidRenderState, CallbackInfo ci) {
         if (humanoidRenderState.cookeyMod$shouldPoseBothArms()) {
-            poseLeftArm(humanoidRenderState, humanoidRenderState.leftArmPose);
+            poseLeftArm(humanoidRenderState);
         }
     }
 
-    @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseLeftArm(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;Lnet/minecraft/client/model/HumanoidModel$ArmPose;)V", ordinal = 0))
+    @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseLeftArm(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", ordinal = 0))
     private void potentiallyPoseOtherArm2(T humanoidRenderState, CallbackInfo ci) {
         if (humanoidRenderState.cookeyMod$shouldPoseBothArms()) {
-            poseRightArm(humanoidRenderState, humanoidRenderState.rightArmPose);
+            poseRightArm(humanoidRenderState);
         }
     }
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    public void addRightArmAnimations(T humanoidRenderState, HumanoidModel.ArmPose armPose, CallbackInfo ci) {
+    public void addRightArmAnimations(T humanoidRenderState, CallbackInfo ci) {
         HumanoidArm usedHand = humanoidRenderState.cookeyMod$getUsedArm();
         if (showEatingInThirdPerson.get()
                 && humanoidRenderState.isUsingItem && usedHand == HumanoidArm.RIGHT && humanoidRenderState.cookeyMod$itemUseIsEating()) {
@@ -72,7 +74,7 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    public void addLeftArmAnimations(T humanoidRenderState, HumanoidModel.ArmPose armPose, CallbackInfo ci) {
+    public void addLeftArmAnimations(T humanoidRenderState, CallbackInfo ci) {
         HumanoidArm usedHand = humanoidRenderState.cookeyMod$getUsedArm();
         if (showEatingInThirdPerson.get()
                 && humanoidRenderState.isUsingItem && usedHand == HumanoidArm.LEFT && humanoidRenderState.cookeyMod$itemUseIsEating()) {

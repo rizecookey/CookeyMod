@@ -46,7 +46,6 @@ public abstract class OptionsScreenMixin extends Screen {
         if (showModButton.get()) {
             rowHelper.addChild(this.openScreenButton(Component.translatable("options.cookeymod.button"),
                     () -> {
-                        assert this.minecraft != null;
                         return ScreenBuilder.buildConfig(this.minecraft.screen);
                     }));
         }

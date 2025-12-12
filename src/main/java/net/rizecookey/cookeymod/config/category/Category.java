@@ -9,7 +9,6 @@ import net.rizecookey.cookeymod.config.option.Option;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -48,8 +47,7 @@ public abstract class Category {
             throw new IllegalArgumentException("Node cannot be null");
         }
 
-        for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext(); ) {
-            var field = it.next();
+        for (var field : node.properties()) {
             String key = field.getKey();
             Option<?, ?> option = this.options.get(key);
             if (option != null) option.load(field.getValue());
