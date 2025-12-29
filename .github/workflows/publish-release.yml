@@ -1,0 +1,46 @@
+# partially taken from ModMenu's release workflow
+
+name: Publish new Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    strategy:
+      matrix:
+        java: [17]
+        distro: [temurin]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: '0'
+      - name: Check Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v5
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: ${{ matrix.distro }}
+          java-version: ${{ matrix.java }}
+      - name: Build
+        run: ./gradlew build --stacktrace
+      - name: Get tag message
+        run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          {
+            echo 'GIT_TAG_CHANGELOG<<EOF'
+            git tag -l --format='%(contents)' ${{ github.ref_name }}
+            echo EOF
+          } >> "$GITHUB_ENV"
+      - name: Publish release to GitHub and Modrinth
+        run: ./gradlew publishMods --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          GIT_COMMIT_SHA: ${{ github.sha }}
+          GIT_TAG: ${{ github.ref_name }}
+          GIT_TAG_CHANGELOG: ${{ env.GIT_TAG_CHANGELOG }}
