@@ -24,7 +24,6 @@
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
     "client.PlayerRendererMixin",
-    "client.RemotePlayerMixin",
     "client.WolfArmorLayerMixin",
     "client.compatibility.optifabric.OFHumanoidArmorLayerMixin"
   ],
