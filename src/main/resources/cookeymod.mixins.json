@@ -26,7 +26,6 @@
     "client.OptionsMixin",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
-    "client.RemotePlayerMixin",
     "client.RenderPipelinesMixin",
     "client.SimpleEquipmentLayerMixin",
     "client.WolfArmorLayerMixin"
