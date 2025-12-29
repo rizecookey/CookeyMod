@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
+    id "me.modmuss50.mod-publish-plugin" version "1.1.0"
 }
 
 version = project.mod_version + "+" + project.minecraft_version
@@ -9,6 +10,8 @@ group = project.maven_group
 base {
     archivesName = project.archives_base_name
 }
+
+def mcVersionsList = project.supported_mc_versions.split(" ").toList()
 
 configurations {
     includeClasspath
@@ -72,5 +75,31 @@ jar {
     from "LICENSE"
     from {
         configurations.includeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+publishMods {
+    displayName = "CookeyMod ${project.version} for Minecraft ${mcVersionsList.join(", ")}"
+    changelog = providers.environmentVariable("GIT_TAG_CHANGELOG")
+    type = STABLE
+    file = remapJar.archiveFile
+    modLoaders.add("fabric")
+
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = "LF4WFeMi"
+        minecraftVersions.addAll(mcVersionsList)
+        projectDescription = providers.fileContents(layout.projectDirectory.file("README.md")).asText
+
+        optional {
+            slug = "modmenu"
+        }
+    }
+
+    github {
+        accessToken = providers.environmentVariable("GITHUB_TOKEN")
+        repository = "rizecookey/CookeyMod"
+        tagName = providers.environmentVariable("GIT_TAG")
+        commitish = providers.environmentVariable("GIT_COMMIT_SHA")
     }
 }
