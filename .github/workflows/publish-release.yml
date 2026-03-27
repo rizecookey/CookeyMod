@@ -10,7 +10,7 @@ jobs:
   publish:
     strategy:
       matrix:
-        java: [21]
+        java: [25]
         distro: [temurin]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
