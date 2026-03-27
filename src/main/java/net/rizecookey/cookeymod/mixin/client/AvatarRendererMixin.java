@@ -82,7 +82,7 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
     public void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true) Identifier Identifier) {
         if (shownHandWhenInvisible.get() && playerInvisible) {
             int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
-            instance.submitModelPart(modelPart, poseStack, RenderTypes.itemEntityTranslucentCull(Identifier), i, j, textureAtlasSprite, color, null);
+            instance.submitModelPart(modelPart, poseStack, RenderTypes.itemTranslucent(Identifier), i, j, textureAtlasSprite, color, null);
         } else {
             instance.submitModelPart(modelPart, poseStack, renderType, i, j, textureAtlasSprite);
         }

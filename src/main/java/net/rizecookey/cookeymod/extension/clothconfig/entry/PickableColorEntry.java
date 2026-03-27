@@ -2,7 +2,7 @@ package net.rizecookey.cookeymod.extension.clothconfig.entry;
 
 import me.shedaniel.clothconfig2.gui.entries.ColorEntry;
 import me.shedaniel.math.Color;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
@@ -42,8 +42,8 @@ public class PickableColorEntry extends ColorEntry {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isHovered, float delta) {
-        super.render(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isHovered, float delta) {
+        super.extractRenderState(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
         int slidersStartX = x + 20;
         int slidersEndX = x + entryWidth - 20;
         int sliderPadding = 5;
@@ -55,7 +55,7 @@ public class PickableColorEntry extends ColorEntry {
             slider.setX(slidersStartX + i * (sliderWidth + sliderPadding));
             slider.setY(y + super.getItemHeight());
             slider.setWidth(sliderWidth);
-            slider.render(graphics, mouseX, mouseY, delta);
+            slider.extractRenderState(graphics, mouseX, mouseY, delta);
         }
     }
 

@@ -26,8 +26,8 @@
   ],
   "accessWidener": "cookeymod.accesswidener",
   "depends": {
-    "fabricloader": ">=0.16.9",
-    "minecraft": ">=1.21.11 <1.22"
+    "fabricloader": ">=0.18.5",
+    "minecraft": ">=26.1 <26.2"
   },
   "suggests": {
     "modmenu": "*",
@@ -35,12 +35,12 @@
   },
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_310": ["net/rizecookey/cookeymod/extension/minecraft/MinecraftExtension"],
-      "net/minecraft/class_10034": ["net/rizecookey/cookeymod/extension/minecraft/HumanoidRenderStateExtension"],
-      "net/minecraft/class_10426": ["net/rizecookey/cookeymod/extension/minecraft/ArmedEntityRenderStateExtension"],
-      "net/minecraft/class_10197": ["net/rizecookey/cookeymod/extension/minecraft/OverlayRendered"],
-      "net/minecraft/class_342": ["net/rizecookey/cookeymod/extension/minecraft/Updatable<Ljava/lang/String;>"],
-      "net/minecraft/class_1007": ["net/rizecookey/cookeymod/extension/minecraft/AvatarRendererExtension"]
+      "net/minecraft/client/Minecraft": ["net/rizecookey/cookeymod/extension/minecraft/MinecraftExtension"],
+      "net/minecraft/client/renderer/entity/state/HumanoidRenderState": ["net/rizecookey/cookeymod/extension/minecraft/HumanoidRenderStateExtension"],
+      "net/minecraft/client/renderer/entity/state/ArmedEntityRenderState": ["net/rizecookey/cookeymod/extension/minecraft/ArmedEntityRenderStateExtension"],
+      "net/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer": ["net/rizecookey/cookeymod/extension/minecraft/OverlayRendered"],
+      "net/minecraft/client/gui/components/EditBox": ["net/rizecookey/cookeymod/extension/minecraft/Updatable<Ljava/lang/String;>"],
+      "net/minecraft/client/renderer/entity/player/AvatarRenderer": ["net/rizecookey/cookeymod/extension/minecraft/AvatarRendererExtension"]
     }
   }
 }
