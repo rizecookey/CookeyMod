@@ -18,6 +18,7 @@
     "client.HumanoidMobRendererMixin",
     "client.HumanoidModelMixin",
     "client.HumanoidRenderStateMixin",
+    "client.ItemInHandLayerMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityAccessor",
     "client.LivingEntityRendererMixin",
@@ -27,6 +28,7 @@
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
     "client.RenderPipelinesMixin",
+    "client.RenderTypesMixin",
     "client.SimpleEquipmentLayerMixin",
     "client.WolfArmorLayerMixin"
   ],
