@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
+import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.Option;
 
@@ -11,11 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static net.rizecookey.cookeymod.config.ModConfig.MAPPER;
 
 public abstract class Category {
     private final Map<String, Option<?, ?>> options = new HashMap<>();
+    private final List<Supplier<AbstractConfigListEntry<?>>> menuEntries = new ArrayList<>();
 
     private final ModConfig modConfig;
 
@@ -39,7 +44,27 @@ public abstract class Category {
 
     public <T extends Option<?, ?>> T register(T option) {
         options.put(option.getId(), option);
+        menuEntries.add(option::getConfigEntry);
         return option;
+    }
+
+    public void registerGroup(String translationKey, Option<?, ?>... options) {
+        for (Option<?, ?> option : options) {
+            this.options.put(option.getId(), option);
+        }
+
+        String translationId = this.getTranslationKey() + "." + translationKey;
+        this.menuEntries.add(() -> {
+            SubCategoryBuilder builder = ConfigEntryBuilder.create()
+                    .startSubCategory(Component.translatable(translationId));
+            builder.setTooltip(Option.getTooltip(translationId));
+
+            for (Option<?, ?> option : options) {
+                builder.add(option.getConfigEntry());
+            }
+
+            return builder.build();
+        });
     }
 
     public void loadOptions(ObjectNode node) {
@@ -64,11 +89,6 @@ public abstract class Category {
     }
 
     public List<AbstractConfigListEntry<?>> getConfigEntries() {
-        List<AbstractConfigListEntry<?>> entries = new ArrayList<>();
-        for (Option<?, ?> option : this.getOptions().values()) {
-            entries.add(option.getConfigEntry());
-        }
-
-        return entries;
+        return menuEntries.stream().<AbstractConfigListEntry<?>>map(Supplier::get).toList();
     }
 }

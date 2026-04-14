@@ -70,7 +70,7 @@ public abstract class Option<T, U extends AbstractConfigListEntry<?>> {
         this.entry = entry;
     }
 
-    public Optional<Component[]> getTooltip(String translationId) {
+    public static Optional<Component[]> getTooltip(String translationId) {
         List<Component> components = new ArrayList<>();
         String tooltipKey = translationId + ".tooltip.";
 

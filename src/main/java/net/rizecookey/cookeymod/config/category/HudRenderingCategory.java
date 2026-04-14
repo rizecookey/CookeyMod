@@ -23,16 +23,19 @@ public class HudRenderingCategory extends Category {
     public HudRenderingCategory(ModConfig modConfig) {
         super(modConfig);
         attackCooldownHandOffset = this.register(new DoubleSliderOption("attackCooldownHandOffset", this, 0.0, -1.0, 1.0));
-        damageColor = this.register(new ColorOption("damageColor", this, Color.ofRGBA(255, 0, 0, 77)) {
+
+        damageColor = new ColorOption("damageColor", this, Color.ofRGBA(255, 0, 0, 77)) {
             @Override
             public void set(Color value) {
                 super.set(value);
                 OverlayReloadListener.callEvent();
             }
-        });
-        showDamageTintOnArmor = this.register(new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE));
-        showDamageTintOnHeldItems = this.register(new BooleanOption("showDamageTintOnHeldItems", this, false));
-        showDamageTintOnCape = this.register(new BooleanOption("showDamageTintOnCape", this, false));
+        };
+        showDamageTintOnArmor = new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE);
+        showDamageTintOnHeldItems = new BooleanOption("showDamageTintOnHeldItems", this, false);
+        showDamageTintOnCape = new BooleanOption("showDamageTintOnCape", this, false);
+        this.registerGroup("damageTint", damageColor, showDamageTintOnArmor, showDamageTintOnHeldItems, showDamageTintOnCape);
+
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
         disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));
         alternativeBobbing = this.register(new BooleanOption("alternativeBobbing", this, false));
