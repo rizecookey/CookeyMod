@@ -91,8 +91,7 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
         int overlayCoords = showDamageTintInFirstPerson.get().isOnHand() ? this.overlayCoords : j;
         if (shownHandWhenInvisible.get() && playerInvisible) {
             int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
-            // TODO fix render type to work with overlay
-            instance.submitModelPart(modelPart, poseStack, RenderTypes.itemTranslucent(Identifier), i, overlayCoords, textureAtlasSprite, color, null);
+            instance.submitModelPart(modelPart, poseStack, RenderTypes.entityTranslucentCullItemTarget(Identifier), i, overlayCoords, textureAtlasSprite, color, null);
         } else {
             instance.submitModelPart(modelPart, poseStack, renderType, i, overlayCoords, textureAtlasSprite);
         }
