@@ -24,6 +24,8 @@ import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
+import net.rizecookey.cookeymod.config.option.EnumOption;
+import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
 import net.rizecookey.cookeymod.extension.minecraft.AvatarRendererExtension;
 import net.rizecookey.cookeymod.util.ItemUtils;
 import org.jspecify.annotations.NonNull;
@@ -41,7 +43,9 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
     private static BooleanOption ENABLE_TOOL_BLOCKING;
 
     @Unique
-    private BooleanOption shownHandWhenInvisible, showDamageTintInFirstPerson;
+    private BooleanOption shownHandWhenInvisible;
+    @Unique
+    private EnumOption<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson;
 
     @Unique
     private DoubleSliderOption invisibilityHandOpacity;
@@ -84,7 +88,7 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
 
     @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
     public void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true) Identifier Identifier) {
-        int overlayCoords = showDamageTintInFirstPerson.get() ? this.overlayCoords : j;
+        int overlayCoords = showDamageTintInFirstPerson.get().isOnHand() ? this.overlayCoords : j;
         if (shownHandWhenInvisible.get() && playerInvisible) {
             int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
             // TODO fix render type to work with overlay

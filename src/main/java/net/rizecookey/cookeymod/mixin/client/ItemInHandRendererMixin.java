@@ -22,6 +22,7 @@ import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
+import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
 import net.rizecookey.cookeymod.util.ItemUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -173,7 +173,7 @@ public abstract class ItemInHandRendererMixin {
 
     @ModifyArg(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"), index = 3)
     private int calculateOverlayCoords(int original) {
-        if (!hudRenderingCategory.showDamageTintInFirstPerson().get()) {
+        if (hudRenderingCategory.showDamageTintInFirstPerson().get() != FirstPersonDamageRenderSelection.HANDS_AND_ITEMS) {
             return original;
         }
 

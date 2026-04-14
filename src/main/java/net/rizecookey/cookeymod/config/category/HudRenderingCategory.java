@@ -7,13 +7,15 @@ import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.ColorOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
 import net.rizecookey.cookeymod.config.option.EnumOption;
+import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
 import net.rizecookey.cookeymod.event.OverlayReloadListener;
 
 public class HudRenderingCategory extends Category {
     private final DoubleSliderOption attackCooldownHandOffset;
     private final ColorOption damageColor;
     private final EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
-    private final BooleanOption showDamageTintOnHeldItems, showDamageTintOnCape, showDamageTintInFirstPerson;
+    private final BooleanOption showDamageTintOnHeldItems, showDamageTintOnCape;
+    private final EnumOption<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson;
     private final BooleanOption onlyShowShieldWhenBlocking;
     private final BooleanOption disableEffectBasedFovChange;
     private final BooleanOption alternativeBobbing;
@@ -34,7 +36,7 @@ public class HudRenderingCategory extends Category {
         showDamageTintOnArmor = new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE);
         showDamageTintOnHeldItems = new BooleanOption("showDamageTintOnHeldItems", this, false);
         showDamageTintOnCape = new BooleanOption("showDamageTintOnCape", this, false);
-        showDamageTintInFirstPerson = new BooleanOption("showDamageTintInFirstPerson", this, false);
+        showDamageTintInFirstPerson = new EnumOption<>("showDamageTintInFirstPerson", this, FirstPersonDamageRenderSelection.class, FirstPersonDamageRenderSelection.NONE);
         this.registerGroup("damageTint", damageColor, showDamageTintOnArmor, showDamageTintOnHeldItems, showDamageTintOnCape, showDamageTintInFirstPerson);
 
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
@@ -69,7 +71,7 @@ public class HudRenderingCategory extends Category {
         return showDamageTintOnCape;
     }
 
-    public BooleanOption showDamageTintInFirstPerson() {
+    public EnumOption<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson() {
         return showDamageTintInFirstPerson;
     }
 
