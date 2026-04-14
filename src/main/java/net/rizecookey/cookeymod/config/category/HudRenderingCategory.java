@@ -13,7 +13,7 @@ public class HudRenderingCategory extends Category {
     private final DoubleSliderOption attackCooldownHandOffset;
     private final ColorOption damageColor;
     private final EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
-    private final BooleanOption showDamageTintOnHeldItems, showDamageTintOnCape;
+    private final BooleanOption showDamageTintOnHeldItems, showDamageTintOnCape, showDamageTintInFirstPerson;
     private final BooleanOption onlyShowShieldWhenBlocking;
     private final BooleanOption disableEffectBasedFovChange;
     private final BooleanOption alternativeBobbing;
@@ -34,7 +34,8 @@ public class HudRenderingCategory extends Category {
         showDamageTintOnArmor = new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE);
         showDamageTintOnHeldItems = new BooleanOption("showDamageTintOnHeldItems", this, false);
         showDamageTintOnCape = new BooleanOption("showDamageTintOnCape", this, false);
-        this.registerGroup("damageTint", damageColor, showDamageTintOnArmor, showDamageTintOnHeldItems, showDamageTintOnCape);
+        showDamageTintInFirstPerson = new BooleanOption("showDamageTintInFirstPerson", this, false);
+        this.registerGroup("damageTint", damageColor, showDamageTintOnArmor, showDamageTintOnHeldItems, showDamageTintOnCape, showDamageTintInFirstPerson);
 
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
         disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));
@@ -66,6 +67,10 @@ public class HudRenderingCategory extends Category {
 
     public BooleanOption showDamageTintOnCape() {
         return showDamageTintOnCape;
+    }
+
+    public BooleanOption showDamageTintInFirstPerson() {
+        return showDamageTintInFirstPerson;
     }
 
     public BooleanOption onlyShowShieldWhenBlocking() {

@@ -41,13 +41,16 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
     private static BooleanOption ENABLE_TOOL_BLOCKING;
 
     @Unique
-    private BooleanOption shownHandWhenInvisible;
+    private BooleanOption shownHandWhenInvisible, showDamageTintInFirstPerson;
 
     @Unique
     private DoubleSliderOption invisibilityHandOpacity;
 
     @Unique
     private boolean playerInvisible;
+
+    @Unique
+    private int overlayCoords;
 
     public AvatarRendererMixin(EntityRendererProvider.Context context, PlayerModel entityModel, float f) {
         super(context, entityModel, f);
@@ -57,6 +60,7 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
     private void injectOptions(CallbackInfo ci) {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         shownHandWhenInvisible = modConfig.hudRendering().showHandWhenInvisible();
+        showDamageTintInFirstPerson = modConfig.hudRendering().showDamageTintInFirstPerson();
         invisibilityHandOpacity = modConfig.hudRendering().invisibilityHandOpacity();
         ENABLE_TOOL_BLOCKING = modConfig.animations().enableToolBlocking();
     }
@@ -80,16 +84,23 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
 
     @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
     public void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true) Identifier Identifier) {
+        int overlayCoords = showDamageTintInFirstPerson.get() ? this.overlayCoords : j;
         if (shownHandWhenInvisible.get() && playerInvisible) {
             int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
-            instance.submitModelPart(modelPart, poseStack, RenderTypes.itemTranslucent(Identifier), i, j, textureAtlasSprite, color, null);
+            // TODO fix render type to work with overlay
+            instance.submitModelPart(modelPart, poseStack, RenderTypes.itemTranslucent(Identifier), i, overlayCoords, textureAtlasSprite, color, null);
         } else {
-            instance.submitModelPart(modelPart, poseStack, renderType, i, j, textureAtlasSprite);
+            instance.submitModelPart(modelPart, poseStack, renderType, i, overlayCoords, textureAtlasSprite);
         }
     }
 
     @Override
     public void cookeyMod$setPlayerInvisible(boolean invisible) {
         this.playerInvisible = invisible;
+    }
+
+    @Override
+    public void cookeyMod$setOverlayCoords(int overlayCoords) {
+        this.overlayCoords = overlayCoords;
     }
 }

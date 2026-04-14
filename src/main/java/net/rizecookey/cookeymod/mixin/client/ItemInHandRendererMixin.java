@@ -1,13 +1,16 @@
 package net.rizecookey.cookeymod.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +29,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
@@ -99,9 +103,14 @@ public abstract class ItemInHandRendererMixin {
         }
     }
 
-    @Redirect(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z", ordinal = 0))
-    public boolean makeArmAppear(AbstractClientPlayer instance) {
-        return !hudRenderingCategory.showHandWhenInvisible().get() && instance.isInvisible();
+    @ModifyExpressionValue(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z"))
+    private boolean makeArmAppear(boolean original) {
+        return !hudRenderingCategory.showHandWhenInvisible().get() && original;
+    }
+
+    @ModifyExpressionValue(method = {"renderOneHandedMap", "renderTwoHandedMap"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInvisible()Z"))
+    private boolean makeArmAppearWithMap(boolean original) {
+        return !hudRenderingCategory.showHandWhenInvisible().get() && original;
     }
 
     @Inject(method = "renderArmWithItem",
@@ -143,8 +152,33 @@ public abstract class ItemInHandRendererMixin {
     }
 
     @Inject(method = "renderPlayerArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;getSkin()Lnet/minecraft/world/entity/player/PlayerSkin;"))
-    private void updateInvisibilityToPlayerRenderer(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int i, float f, float g, HumanoidArm humanoidArm, CallbackInfo ci, @Local AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
-        assert this.minecraft.player != null;
+    private void updateInvisibilityAndOverlayCoordsOnPlayerArmRender(CallbackInfo ci, @Local(name = "avatarRenderer") AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
+        updateInvisibilityAndOverlayCoords(avatarRenderer);
+    }
+
+    @Inject(method = "renderMapHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getSkin()Lnet/minecraft/world/entity/player/PlayerSkin;"))
+    private void updateInvisibilityAndOverlayCoordsOnMapHandRender(CallbackInfo ci, @Local(name = "avatarRenderer") AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
+        updateInvisibilityAndOverlayCoords(avatarRenderer);
+    }
+
+    @Unique
+    private void updateInvisibilityAndOverlayCoords(AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
+        LocalPlayer player = this.minecraft.player;
+        assert player != null;
+        boolean damageTintVisible = player.hurtTime > 0 || player.deathTime > 0;
+        int coords = OverlayTexture.pack(0.0f, damageTintVisible);
+        avatarRenderer.cookeyMod$setOverlayCoords(coords);
         avatarRenderer.cookeyMod$setPlayerInvisible(this.minecraft.player.isInvisible());
+    }
+
+    @ModifyArg(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"), index = 3)
+    private int calculateOverlayCoords(int original) {
+        if (!hudRenderingCategory.showDamageTintInFirstPerson().get()) {
+            return original;
+        }
+
+        LocalPlayer player = this.minecraft.player;
+        assert player != null;
+        return OverlayTexture.pack(0.0f, player.hurtTime > 0 || player.deathTime > 0);
     }
 }
