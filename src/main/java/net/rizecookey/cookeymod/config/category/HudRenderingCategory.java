@@ -13,6 +13,7 @@ public class HudRenderingCategory extends Category {
     private final DoubleSliderOption attackCooldownHandOffset;
     private final ColorOption damageColor;
     private final EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
+    private final BooleanOption showDamageTintOnHeldItems, showDamageTintOnCape;
     private final BooleanOption onlyShowShieldWhenBlocking;
     private final BooleanOption disableEffectBasedFovChange;
     private final BooleanOption alternativeBobbing;
@@ -30,6 +31,8 @@ public class HudRenderingCategory extends Category {
             }
         });
         showDamageTintOnArmor = this.register(new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE));
+        showDamageTintOnHeldItems = this.register(new BooleanOption("showDamageTintOnHeldItems", this, false));
+        showDamageTintOnCape = this.register(new BooleanOption("showDamageTintOnCape", this, false));
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
         disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));
         alternativeBobbing = this.register(new BooleanOption("alternativeBobbing", this, false));
@@ -52,6 +55,14 @@ public class HudRenderingCategory extends Category {
 
     public EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor() {
         return showDamageTintOnArmor;
+    }
+
+    public BooleanOption showDamageTintOnHeldItems() {
+        return showDamageTintOnHeldItems;
+    }
+
+    public BooleanOption showDamageTintOnCape() {
+        return showDamageTintOnCape;
     }
 
     public BooleanOption onlyShowShieldWhenBlocking() {
