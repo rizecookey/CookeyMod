@@ -22,7 +22,7 @@ public class EnumOption<T extends Enum<T> & Named> extends Option<T, EnumListEnt
                     .setDefaultValue(this.getDefault())
                     .setSaveConsumer(this::set);
             builder.requireRestart(forceRestart);
-            builder.setTooltip(this.getTooltip(this.getTranslationKey()));
+            builder.setTooltip(getTooltip(this.getTranslationKey()));
             return builder.build();
         });
     }

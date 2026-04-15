@@ -1,7 +1,6 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.textures.GpuTextureView;
 import me.shedaniel.math.Color;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -22,9 +21,6 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
     @Shadow
     @Final
     private DynamicTexture texture;
-
-    @Shadow
-    public abstract GpuTextureView getTextureView();
 
     @Unique
     private HudRenderingCategory hudRenderingCategory;
@@ -53,7 +49,6 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
             for (int j = 0; j < 16; ++j) {
                 if (i < 8) {
                     Color color = hudRenderingCategory.damageColor().get();
-                    assert nativeImage != null;
                     nativeImage.setPixel(j, i, getColorInt(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                 }
             }

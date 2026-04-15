@@ -15,7 +15,7 @@ public class ColorOption extends Option<Color, PickableColorEntry> {
                 ConfigEntryBuilder.create().getResetButtonKey(),
                 () -> this.getDefault().getColor(),
                 value -> this.set(Color.ofTransparent(value)),
-                () -> this.getTooltip(this.getTranslationKey()),
+                () -> getTooltip(this.getTranslationKey()),
                 false));
     }
 

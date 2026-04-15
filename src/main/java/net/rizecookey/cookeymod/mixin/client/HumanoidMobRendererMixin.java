@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HumanoidMobRenderer.class)
 public abstract class HumanoidMobRendererMixin {
     @Inject(method = "extractHumanoidRenderState", at = @At("TAIL"))
-    private static void extractExtensions(LivingEntity livingEntity, HumanoidRenderState humanoidRenderState, float f, ItemModelResolver itemModelResolver, CallbackInfo ci) {
-        humanoidRenderState.cookeyMod$setUseItemDuration(livingEntity.getUseItem().getUseDuration(livingEntity));
+    private static void extractExtensions(LivingEntity entity, HumanoidRenderState state, float partialTicks, ItemModelResolver itemModelResolver, CallbackInfo ci) {
+        state.cookeyMod$setUseItemDuration(entity.getUseItem().getUseDuration(entity));
 
-        humanoidRenderState.cookeyMod$setItemUseRemainingTicks(livingEntity.getUseItemRemainingTicks());
+        state.cookeyMod$setItemUseRemainingTicks(entity.getUseItemRemainingTicks());
 
-        humanoidRenderState.cookeyMod$setItemUseIsEating(livingEntity.getUseItem().getUseAnimation() == ItemUseAnimation.EAT || livingEntity.getUseItem().getUseAnimation() == ItemUseAnimation.DRINK);
+        state.cookeyMod$setItemUseIsEating(entity.getUseItem().getUseAnimation() == ItemUseAnimation.EAT || entity.getUseItem().getUseAnimation() == ItemUseAnimation.DRINK);
     }
 }

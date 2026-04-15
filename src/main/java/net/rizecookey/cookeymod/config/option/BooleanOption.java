@@ -15,7 +15,7 @@ public class BooleanOption extends Option<Boolean, BooleanListEntry> {
                     .setDefaultValue(this.getDefault())
                     .setSaveConsumer(this::set);
             builder.requireRestart(forceRestart);
-            builder.setTooltip(this.getTooltip(this.getTranslationKey()));
+            builder.setTooltip(getTooltip(this.getTranslationKey()));
             return builder.build();
         });
     }

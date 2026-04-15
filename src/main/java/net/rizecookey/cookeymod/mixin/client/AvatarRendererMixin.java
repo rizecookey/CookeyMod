@@ -70,13 +70,13 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
     }
 
     @Inject(method = "getArmPose(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;", at = @At("HEAD"), cancellable = true)
-    private static void addItemBlockPose(Avatar avatar, ItemStack itemStack, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
+    private static void addItemBlockPose(Avatar avatar, ItemStack itemInHand, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
         if (!ENABLE_TOOL_BLOCKING.get()) {
             return;
         }
 
-        ItemStack currentHandStack = avatar.getItemInHand(interactionHand);
-        ItemStack otherHandStack = avatar.getItemInHand(interactionHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+        ItemStack currentHandStack = avatar.getItemInHand(hand);
+        ItemStack otherHandStack = avatar.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
         if (avatar.isUsingItem() && avatar.getUseItem().getItem() instanceof ShieldItem) {
             if (ItemUtils.isToolItem(currentHandStack.getItem()) && otherHandStack.getItem() instanceof ShieldItem) {
                 cir.setReturnValue(HumanoidModel.ArmPose.BLOCK);
@@ -87,11 +87,11 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
     }
 
     @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
-    public void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true) Identifier Identifier) {
+    public void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true, name = "skinTexture") Identifier skinTexture) {
         int overlayCoords = showDamageTintInFirstPerson.get().isOnHand() ? this.overlayCoords : j;
         if (shownHandWhenInvisible.get() && playerInvisible) {
             int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
-            instance.submitModelPart(modelPart, poseStack, RenderTypes.entityTranslucentCullItemTarget(Identifier), i, overlayCoords, textureAtlasSprite, color, null);
+            instance.submitModelPart(modelPart, poseStack, RenderTypes.entityTranslucentCullItemTarget(skinTexture), i, overlayCoords, textureAtlasSprite, color, null);
         } else {
             instance.submitModelPart(modelPart, poseStack, renderType, i, overlayCoords, textureAtlasSprite);
         }

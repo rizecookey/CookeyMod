@@ -33,7 +33,7 @@ public class DoubleSliderOption extends Option<Double, LongSliderEntry> {
                                 .format(value / 100.0)));
                     }).setSaveConsumer(value -> this.set(value / 100.0))
                     .setDefaultValue((long) (defaultValue * 100.0));
-            builder.setTooltip(this.getTooltip(this.getTranslationKey()));
+            builder.setTooltip(getTooltip(this.getTranslationKey()));
             return builder.build();
         });
     }

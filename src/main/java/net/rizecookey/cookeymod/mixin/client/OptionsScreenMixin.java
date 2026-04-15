@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 @Mixin(OptionsScreen.class)
 public abstract class OptionsScreenMixin extends Screen {
     @Shadow
-    protected abstract Button openScreenButton(Component component, Supplier<Screen> supplier);
+    protected abstract Button openScreenButton(Component message, Supplier<Screen> screenToScreen);
 
     protected OptionsScreenMixin(Component component) {
         super(component);
@@ -38,16 +38,14 @@ public abstract class OptionsScreenMixin extends Screen {
     }
 
     @Inject(method = "init",
-            at = @At(value = "INVOKE",
+            at = @At(value = "INVOKE:LAST",
                     target = "Lnet/minecraft/client/gui/layouts/GridLayout$RowHelper;addChild(Lnet/minecraft/client/gui/layouts/LayoutElement;)Lnet/minecraft/client/gui/layouts/LayoutElement;",
-                    shift = At.Shift.AFTER, ordinal = 9),
+                    shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILSOFT)
     public void injectCookeyModButton(CallbackInfo ci, LinearLayout linearLayout, LinearLayout linearLayout2, GridLayout gridLayout, GridLayout.RowHelper rowHelper) {
         if (showModButton.get()) {
             rowHelper.addChild(this.openScreenButton(Component.translatable("options.cookeymod.button"),
-                    () -> {
-                        return ScreenBuilder.buildConfig(this.minecraft.screen);
-                    }));
+                    () -> ScreenBuilder.buildConfig(this.minecraft.screen)));
         }
     }
 }

@@ -24,7 +24,7 @@ public abstract class RenderPipelinesMixin {
     public static RenderPipeline ITEM_CUTOUT;
 
     @ModifyArg(method = "<clinit>", slice = @Slice(
-            from = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/RenderPipelines;ARMOR_CUTOUT_NO_CULL:Lcom/mojang/blaze3d/pipeline/RenderPipeline;", shift = At.Shift.BEFORE)
+            from = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/RenderPipelines;ARMOR_CUTOUT_NO_CULL:Lcom/mojang/blaze3d/pipeline/RenderPipeline;", shift = At.Shift.BEFORE, opcode = Opcodes.PUTSTATIC)
     ), at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderPipelines;register(Lcom/mojang/blaze3d/pipeline/RenderPipeline;)Lcom/mojang/blaze3d/pipeline/RenderPipeline;", ordinal = 0), index = 0)
     private static RenderPipeline redefineArmorCutoutNoCullWithOverlay(RenderPipeline value) {
         return RenderPipeline.builder(ENTITY_SNIPPET)

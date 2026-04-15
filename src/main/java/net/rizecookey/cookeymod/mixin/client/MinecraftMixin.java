@@ -41,7 +41,7 @@ public abstract class MinecraftMixin implements MinecraftExtension {
     }
 
     @Inject(method = "continueAttack", at = @At("HEAD"))
-    private void setDefault(boolean bl, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
+    private void setDefault(boolean down, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
         isHoldingDownOnBlock.set(false);
     }
 
@@ -52,7 +52,7 @@ public abstract class MinecraftMixin implements MinecraftExtension {
     }
 
     @Inject(method = "continueAttack", at = @At("RETURN"))
-    private void setHoldingDownOnBlock(boolean bl, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
+    private void setHoldingDownOnBlock(boolean down, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
         this.isHoldingDownOnBlock = isHoldingDownOnBlock.get();
     }
 

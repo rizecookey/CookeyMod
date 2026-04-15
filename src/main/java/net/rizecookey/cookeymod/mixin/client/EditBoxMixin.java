@@ -39,11 +39,11 @@ public abstract class EditBoxMixin implements Updatable<String> {
     }
 
     @Inject(method = "onValueChange", at = @At("TAIL"))
-    private void updateListeners(String string, CallbackInfo ci) {
+    private void updateListeners(String value, CallbackInfo ci) {
         if (changeListeners == null) {
             return;
         }
 
-        this.changeListeners.forEach(listener -> listener.accept(string));
+        this.changeListeners.forEach(listener -> listener.accept(value));
     }
 }

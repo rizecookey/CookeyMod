@@ -28,7 +28,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     }
 
     @Inject(method = "swing", at = @At("TAIL"))
-    public void resetAttackStrengthOnSwing(InteractionHand interactionHand, CallbackInfo ci) {
+    public void resetAttackStrengthOnSwing(InteractionHand hand, CallbackInfo ci) {
         if (fixCooldownDesync.get()) {
             this.resetAttackStrengthTicker();
         }

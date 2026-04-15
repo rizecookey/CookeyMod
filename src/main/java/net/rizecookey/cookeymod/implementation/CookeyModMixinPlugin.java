@@ -31,32 +31,33 @@ public class CookeyModMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         Logger logger = LogManager.getLogger("CookeyMod");
+        ClassNode mixin;
         try {
-            ClassNode mixin = MixinService.getService().getBytecodeProvider().getClassNode(mixinClassName, false);
-
-            if (mentionsActiveMods(Incompatible.class, mixin)) {
-                logger.warn("[{}] Mod \"{}\" is marked incompatible with mixin \"{}\", cancelling application.",
-                        getClass().getSimpleName(),
-                        getFirstMentionedActiveMod(Incompatible.class, mixin),
-                        mixinClassName);
-                return false;
-            }
-            if (hasAnnotation(ModSpecific.class, mixin)) {
-                if (mentionsActiveMods(ModSpecific.class, mixin)) {
-                    logger.info("[{}] Loading mod-specific mixin \"{}\" since mod \"{}\" is present.",
-                            getClass().getSimpleName(),
-                            mixinClassName,
-                            getFirstMentionedActiveMod(ModSpecific.class, mixin));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            return true;
+            mixin = MixinService.getService().getBytecodeProvider().getClassNode(mixinClassName, false);
         } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
+            logger.error("Could not retrieve class", e);
             return false;
         }
+
+        if (mentionsActiveMods(Incompatible.class, mixin)) {
+            logger.warn("[{}] Mod \"{}\" is marked incompatible with mixin \"{}\", cancelling application.",
+                    getClass().getSimpleName(),
+                    getFirstMentionedActiveMod(Incompatible.class, mixin),
+                    mixinClassName);
+            return false;
+        }
+        if (hasAnnotation(ModSpecific.class, mixin)) {
+            if (mentionsActiveMods(ModSpecific.class, mixin)) {
+                logger.info("[{}] Loading mod-specific mixin \"{}\" since mod \"{}\" is present.",
+                        getClass().getSimpleName(),
+                        mixinClassName,
+                        getFirstMentionedActiveMod(ModSpecific.class, mixin));
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

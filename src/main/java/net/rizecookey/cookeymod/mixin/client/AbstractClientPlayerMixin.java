@@ -25,7 +25,7 @@ public abstract class AbstractClientPlayerMixin extends Player {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(ClientLevel clientLevel, GameProfile gameProfile, CallbackInfo ci) {
+    private void injectOptions(ClientLevel level, GameProfile gameProfile, CallbackInfo ci) {
         disableEffectBasedFovChange = CookeyMod.getInstance().getConfig().hudRendering().disableEffectBasedFovChange();
     }
 

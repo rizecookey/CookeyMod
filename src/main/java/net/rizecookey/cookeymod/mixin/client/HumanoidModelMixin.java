@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidModel.class)
-public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends EntityModel<T> implements ArmedModel, HeadedModel {
+public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends EntityModel<T> implements ArmedModel<T>, HeadedModel {
     @Final
     @Shadow
     public ModelPart rightArm;
@@ -31,10 +31,10 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
     public ModelPart leftArm;
 
     @Shadow
-    protected abstract void poseLeftArm(T humanoidRenderState);
+    protected abstract void poseLeftArm(T state);
 
     @Shadow
-    protected abstract void poseRightArm(T humanoidRenderState);
+    protected abstract void poseRightArm(T state);
 
     protected HumanoidModelMixin(ModelPart modelPart) {
         super(modelPart);
@@ -50,35 +50,35 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseRightArm(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", ordinal = 0))
-    private void potentiallyPoseOtherArm(T humanoidRenderState, CallbackInfo ci) {
-        if (humanoidRenderState.cookeyMod$shouldPoseBothArms()) {
-            poseLeftArm(humanoidRenderState);
+    private void potentiallyPoseOtherArm(T state, CallbackInfo ci) {
+        if (state.cookeyMod$shouldPoseBothArms()) {
+            poseLeftArm(state);
         }
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseLeftArm(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", ordinal = 0))
-    private void potentiallyPoseOtherArm2(T humanoidRenderState, CallbackInfo ci) {
-        if (humanoidRenderState.cookeyMod$shouldPoseBothArms()) {
-            poseRightArm(humanoidRenderState);
+    private void potentiallyPoseOtherArm2(T state, CallbackInfo ci) {
+        if (state.cookeyMod$shouldPoseBothArms()) {
+            poseRightArm(state);
         }
     }
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    public void addRightArmAnimations(T humanoidRenderState, CallbackInfo ci) {
-        HumanoidArm usedHand = humanoidRenderState.cookeyMod$getUsedArm();
+    public void addRightArmAnimations(T state, CallbackInfo ci) {
+        HumanoidArm usedHand = state.cookeyMod$getUsedArm();
         if (showEatingInThirdPerson.get()
-                && humanoidRenderState.isUsingItem && usedHand == HumanoidArm.RIGHT && humanoidRenderState.cookeyMod$itemUseIsEating()) {
-            boolean run = this.applyEatingAnimation(humanoidRenderState, usedHand, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true));
+                && state.isUsingItem && usedHand == HumanoidArm.RIGHT && state.cookeyMod$itemUseIsEating()) {
+            boolean run = this.applyEatingAnimation(state, usedHand, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true));
             if (run) ci.cancel();
         }
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    public void addLeftArmAnimations(T humanoidRenderState, CallbackInfo ci) {
-        HumanoidArm usedHand = humanoidRenderState.cookeyMod$getUsedArm();
+    public void addLeftArmAnimations(T state, CallbackInfo ci) {
+        HumanoidArm usedHand = state.cookeyMod$getUsedArm();
         if (showEatingInThirdPerson.get()
-                && humanoidRenderState.isUsingItem && usedHand == HumanoidArm.LEFT && humanoidRenderState.cookeyMod$itemUseIsEating()) {
-            boolean run = this.applyEatingAnimation(humanoidRenderState, usedHand, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true));
+                && state.isUsingItem && usedHand == HumanoidArm.LEFT && state.cookeyMod$itemUseIsEating()) {
+            boolean run = this.applyEatingAnimation(state, usedHand, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true));
             if (run) ci.cancel();
         }
     }

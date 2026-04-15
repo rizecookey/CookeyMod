@@ -38,13 +38,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemInHandRenderer.class)
 public abstract class ItemInHandRendererMixin {
     @Shadow
-    protected abstract void applyItemArmAttackTransform(PoseStack poseStack, HumanoidArm humanoidArm, float f);
+    protected abstract void applyItemArmAttackTransform(PoseStack poseStack, HumanoidArm arm, float attackValue);
 
     @Shadow
-    protected abstract void applyItemArmTransform(PoseStack poseStack, HumanoidArm humanoidArm, float f);
+    protected abstract void applyItemArmTransform(PoseStack poseStack, HumanoidArm arm, float inverseArmHeight);
 
     @Shadow
-    public abstract void renderItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int i);
+    public abstract void renderItem(LivingEntity mob, ItemStack itemStack, ItemDisplayContext type, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords);
 
     @Shadow
     private ItemStack offHandItem;
@@ -72,30 +72,30 @@ public abstract class ItemInHandRendererMixin {
     }
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
-    public void onRenderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int j, CallbackInfo ci) {
+    public void onRenderArmWithItem(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
         if ((hudRenderingCategory.onlyShowShieldWhenBlocking().get() || animationsCategory.enableToolBlocking().get())
-                && (itemStack.getItem() instanceof ShieldItem && !(!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem))) {
+                && (itemStack.getItem() instanceof ShieldItem && !(!player.getUseItem().isEmpty() && player.getUseItem().getItem() instanceof ShieldItem))) {
             ci.cancel();
 
         }
         if (animationsCategory.enableToolBlocking().get()) {
-            ItemStack otherHandItem = interactionHand == InteractionHand.MAIN_HAND ? this.offHandItem : this.mainHandItem;
-            if (itemStack.getItem() instanceof ShieldItem && (ItemUtils.isToolItem(otherHandItem.getItem()) && (!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem))) {
+            ItemStack otherHandItem = hand == InteractionHand.MAIN_HAND ? this.offHandItem : this.mainHandItem;
+            if (itemStack.getItem() instanceof ShieldItem && (ItemUtils.isToolItem(otherHandItem.getItem()) && (!player.getUseItem().isEmpty() && player.getUseItem().getItem() instanceof ShieldItem))) {
                 ci.cancel();
             }
 
-            if (abstractClientPlayer.getUsedItemHand() != interactionHand && ((!abstractClientPlayer.getUseItem().isEmpty() && abstractClientPlayer.getUseItem().getItem() instanceof ShieldItem)) && ItemUtils.isToolItem(itemStack.getItem())) {
+            if (player.getUsedItemHand() != hand && ((!player.getUseItem().isEmpty() && player.getUseItem().getItem() instanceof ShieldItem)) && ItemUtils.isToolItem(itemStack.getItem())) {
                 poseStack.pushPose();
-                HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND
-                        ? abstractClientPlayer.getMainArm()
-                        : abstractClientPlayer.getMainArm().getOpposite();
-                this.applyItemArmTransform(poseStack, humanoidArm, i);
+                HumanoidArm humanoidArm = hand == InteractionHand.MAIN_HAND
+                        ? player.getMainArm()
+                        : player.getMainArm().getOpposite();
+                this.applyItemArmTransform(poseStack, humanoidArm, inverseArmHeight);
                 this.applyItemBlockTransform(poseStack, humanoidArm);
                 if (animationsCategory.swingAndUseItem().get()) {
-                    this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
+                    this.applyItemArmAttackTransform(poseStack, humanoidArm, attack);
                 }
                 boolean isRightHand = humanoidArm == HumanoidArm.RIGHT;
-                this.renderItem(abstractClientPlayer, itemStack, isRightHand ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, poseStack, submitNodeCollector, j);
+                this.renderItem(player, itemStack, isRightHand ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, poseStack, submitNodeCollector, lightCoords);
 
                 poseStack.popPose();
                 ci.cancel();
@@ -118,12 +118,12 @@ public abstract class ItemInHandRendererMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
                     ordinal = 1))
-    public void injectAttackTransform(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int j, CallbackInfo ci) {
-        HumanoidArm humanoidArm = interactionHand == InteractionHand.MAIN_HAND
-                ? abstractClientPlayer.getMainArm()
-                : abstractClientPlayer.getMainArm().getOpposite();
-        if (animationsCategory.swingAndUseItem().get() && abstractClientPlayer.isUsingItem()) {
-            this.applyItemArmAttackTransform(poseStack, humanoidArm, h);
+    public void injectAttackTransform(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
+        HumanoidArm humanoidArm = hand == InteractionHand.MAIN_HAND
+                ? player.getMainArm()
+                : player.getMainArm().getOpposite();
+        if (animationsCategory.swingAndUseItem().get() && player.isUsingItem()) {
+            this.applyItemArmAttackTransform(poseStack, humanoidArm, attack);
         }
     }
 
