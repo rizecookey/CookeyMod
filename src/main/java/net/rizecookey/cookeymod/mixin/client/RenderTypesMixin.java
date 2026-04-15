@@ -1,20 +1,76 @@
 package net.rizecookey.cookeymod.mixin.client;
 
-import com.llamalad7.mixinextras.injector.ModifyReceiver;
+import net.minecraft.client.renderer.rendertype.LayeringTransform;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import org.objectweb.asm.Opcodes;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
+import net.rizecookey.cookeymod.CookeyMod;
+import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
+import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.option.EnumOption;
+import net.rizecookey.cookeymod.extension.minecraft.RenderPipelinesExtension;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.function.Function;
 
 @Mixin(RenderTypes.class)
 public abstract class RenderTypesMixin {
-    @ModifyReceiver(method = "lambda$static$10", slice = @Slice(
-            from = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/RenderPipelines;ITEM_CUTOUT:Lcom/mojang/blaze3d/pipeline/RenderPipeline;", opcode = Opcodes.GETSTATIC),
-            to = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderSetup$RenderSetupBuilder;createRenderSetup()Lnet/minecraft/client/renderer/rendertype/RenderSetup;")
-    ), at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderSetup$RenderSetupBuilder;affectsCrumbling()Lnet/minecraft/client/renderer/rendertype/RenderSetup$RenderSetupBuilder;"))
-    private static RenderSetup.RenderSetupBuilder enableOverlayForItemCutout(RenderSetup.RenderSetupBuilder instance) {
-        return instance.useOverlay();
+    @Shadow
+    public static RenderType entityCutout(Identifier texture) {
+        throw new UnsupportedOperationException("Implemented via mixin");
+    }
+
+    @Unique
+    private static final Function<Identifier, RenderType> ARMOR_CUTOUT_NO_CULL_OVERLAY = Util.memoize(
+            texture -> {
+                RenderSetup state = RenderSetup.builder(RenderPipelinesExtension.ARMOR_CUTOUT_NO_CULL_OVERLAY)
+                        .withTexture("Sampler0", texture)
+                        .useLightmap()
+                        .useOverlay()
+                        .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
+                        .affectsCrumbling()
+                        .setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
+                        .createRenderSetup();
+                return RenderTypeAccessor.invokeCreate("armor_cutout_no_cull_overlay", state);
+            });
+
+    @Unique
+    private static EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
+
+    @Unique
+    private static BooleanOption showDamageTintOnHeldItems;
+
+    @Inject(method = "<clinit>", at = @At("TAIL"))
+    private static void injectOptions(CallbackInfo ci) {
+        showDamageTintOnArmor = CookeyMod.getInstance().getConfig().hudRendering().showDamageTintOnArmor();
+        showDamageTintOnHeldItems = CookeyMod.getInstance().getConfig().hudRendering().showDamageTintOnHeldItems();
+    }
+
+    @Inject(method = "armorCutoutNoCull", at = @At("HEAD"), cancellable = true)
+    private static void useOverlayVariant(Identifier texture, CallbackInfoReturnable<RenderType> cir) {
+        if (!showDamageTintOnArmor.get().isOnRegularArmor()) {
+            return;
+        }
+
+        cir.setReturnValue(ARMOR_CUTOUT_NO_CULL_OVERLAY.apply(texture));
+        cir.cancel();
+    }
+
+    @Inject(method = "itemCutout", at = @At("HEAD"), cancellable = true)
+    private static void useEntityVariant(Identifier texture, CallbackInfoReturnable<RenderType> cir) {
+        if (!showDamageTintOnHeldItems.get()) {
+            return;
+        }
+
+        cir.setReturnValue(entityCutout(texture));
+        cir.cancel();
     }
 }

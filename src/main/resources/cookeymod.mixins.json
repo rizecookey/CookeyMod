@@ -28,7 +28,8 @@
     "client.OptionsMixin",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
-    "client.RenderPipelinesMixin",
+    "client.RenderPipelinesAccessor",
+    "client.RenderTypeAccessor",
     "client.RenderTypesMixin",
     "client.SimpleEquipmentLayerMixin",
     "client.WolfArmorLayerMixin"
