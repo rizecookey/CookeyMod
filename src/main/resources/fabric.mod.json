@@ -3,7 +3,7 @@
   "id": "cookeymod",
   "version": "${version}",
   "name": "CookeyMod",
-  "description": "A mod customizing the Combat Tests for PvP.",
+  "description": "A mod tweaking various smaller things such as adding/changing animations similar to PvP clients.",
   "authors": [
     "RizeCookey"
   ],
@@ -30,8 +30,7 @@
     "minecraft": ">=26.1 <26.2"
   },
   "suggests": {
-    "modmenu": "*",
-    "nochatreports": "*"
+    "modmenu": "*"
   },
   "custom": {
     "loom:injected_interfaces": {
