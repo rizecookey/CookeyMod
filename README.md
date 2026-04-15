@@ -24,4 +24,3 @@ This mod originated as a PvP client sort-of alternative for the Combat Tests ver
 - <b>Fix cooldown desync</b>: Fixes the attack cooldown indicator being out of sync with its actual state on the server in certain cases. (see [MC-218570](https://bugs.mojang.com/browse/MC-218570))
 - <b>Name in 3rd person</b>: Shows your own name in third person.
 - <b>Mod button in MC options</b>: Changes whether the CookeyMod options button is shown in the general settings.
-- <b>Fix local player handling</b>: Fixes a bug in the client that shows particles on the client and resets the player's sprint when an attack on an entity was blocked.
