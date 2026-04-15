@@ -1,9 +1,9 @@
 package net.rizecookey.cookeymod.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.state.OptionsRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.util.Mth;
 import net.rizecookey.cookeymod.CookeyMod;
@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -33,14 +32,14 @@ public abstract class GameRendererMixin {
         alternativeBobbing = modConfig.hudRendering().alternativeBobbing();
     }
 
-    @Redirect(method = "renderLevel", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/OptionsRenderState;bobView:Z", opcode = Opcodes.GETFIELD),
+    @ModifyExpressionValue(method = "renderLevel", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/OptionsRenderState;bobView:Z", opcode = Opcodes.GETFIELD),
             slice = @Slice(
                     from = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobHurt(Lnet/minecraft/client/renderer/state/level/CameraRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;)V"),
                     to = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/OptionsRenderState;screenEffectScale:F", opcode = Opcodes.GETFIELD)
             )
     )
-    private boolean modifyBobViewInRenderLevel(OptionsRenderState instance) {
-        return instance.bobView && !disableCameraBobbing.get();
+    private boolean modifyBobViewInRenderLevel(boolean original) {
+        return original && !disableCameraBobbing.get();
     }
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
