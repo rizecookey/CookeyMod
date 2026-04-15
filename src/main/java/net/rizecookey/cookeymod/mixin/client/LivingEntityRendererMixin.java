@@ -50,14 +50,14 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At("HEAD"), cancellable = true)
-    public void showOwnName(T entity, double distanceToCameraSq, CallbackInfoReturnable<Boolean> cir) {
+    private void showOwnName(T entity, double distanceToCameraSq, CallbackInfoReturnable<Boolean> cir) {
         if (entity == Minecraft.getInstance().getCameraEntity()
                 && showOwnNameInThirdPerson.get()) cir.setReturnValue(true);
     }
 
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/RenderLayer;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/EntityRenderState;FF)V", ordinal = 0))
-    public void renderWithOverlay(S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera, CallbackInfo ci, @Local(name = "layer") RenderLayer<S, M> layer) {
+    private void renderWithOverlay(S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera, CallbackInfo ci, @Local(name = "layer") RenderLayer<S, M> layer) {
         if (!(layer instanceof OverlayRendered overlayRendered)) {
             return;
         }

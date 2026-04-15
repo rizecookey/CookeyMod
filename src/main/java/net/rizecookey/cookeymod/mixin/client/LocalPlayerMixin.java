@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.InteractionHand;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +27,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     }
 
     @Inject(method = "swing", at = @At("TAIL"))
-    public void resetAttackStrengthOnSwing(InteractionHand hand, CallbackInfo ci) {
+    private void resetAttackStrengthOnSwing(CallbackInfo ci) {
         if (fixCooldownDesync.get()) {
             this.resetAttackStrengthTicker();
         }

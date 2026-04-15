@@ -26,7 +26,7 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
     private HudRenderingCategory hudRenderingCategory;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void modifyHitColor(CallbackInfo ci) {
+    private void modifyHitColor(CallbackInfo ci) {
         hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
         this.cookeyMod$reloadOverlay();
         OverlayReloadListener.register(this);

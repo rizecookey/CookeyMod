@@ -32,7 +32,7 @@ public abstract class EquipmentLayerRendererMixin implements OverlayRendered {
                     from = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer;getColorForLayer(Lnet/minecraft/client/resources/model/EquipmentClientInfo$Layer;I)I")
             ),
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC, ordinal = 0))
-    public int modifyOverlayCoords(int previousCoords) {
+    private int modifyOverlayCoords(int previousCoords) {
         boolean show = showDamageTintOnArmor.get().isOnRegularArmor();
         return show ? this.overlayCoords : previousCoords;
     }
@@ -42,7 +42,7 @@ public abstract class EquipmentLayerRendererMixin implements OverlayRendered {
                     from = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer;trimSpriteLookup:Ljava/util/function/Function;", opcode = Opcodes.GETFIELD)
             ),
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC, ordinal = 0))
-    public int modifyTrimOverlayCoords(int previousCoords) {
+    private int modifyTrimOverlayCoords(int previousCoords) {
         boolean show = showDamageTintOnArmor.get() == ArmorDamageRenderSelection.ARMOR_AND_TRIM;
         return show ? this.overlayCoords : previousCoords;
     }

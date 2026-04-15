@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WolfArmorLayer.class)
-public class WolfArmorLayerMixin implements OverlayRendered {
+public abstract class WolfArmorLayerMixin implements OverlayRendered {
     @Shadow
     @Final
     private EquipmentLayerRenderer equipmentRenderer;

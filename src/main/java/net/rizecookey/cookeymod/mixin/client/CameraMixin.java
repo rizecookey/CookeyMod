@@ -36,7 +36,7 @@ public abstract class CameraMixin {
     }
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    public void disableSneakAnimation(CallbackInfo ci) {
+    private void disableSneakAnimation(CallbackInfo ci) {
         if (this.sneakAnimationSpeed.get() != 0.0 || this.entity == null) {
             return;
         }
@@ -47,7 +47,7 @@ public abstract class CameraMixin {
     }
 
     @Redirect(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Camera;eyeHeight:F", opcode = Opcodes.PUTFIELD))
-    public void setSneakAnimationSpeed(Camera camera, float value) {
+    private void setSneakAnimationSpeed(Camera camera, float value) {
         this.eyeHeight += (float) ((this.entity.getEyeHeight() - this.eyeHeight) * 0.5F * sneakAnimationSpeed.get());
     }
 }

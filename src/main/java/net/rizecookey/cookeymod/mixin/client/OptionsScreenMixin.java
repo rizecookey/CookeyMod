@@ -28,7 +28,6 @@ public abstract class OptionsScreenMixin extends Screen {
         super(component);
     }
 
-
     @Unique
     private BooleanOption showModButton;
 
@@ -42,7 +41,7 @@ public abstract class OptionsScreenMixin extends Screen {
                     target = "Lnet/minecraft/client/gui/layouts/GridLayout$RowHelper;addChild(Lnet/minecraft/client/gui/layouts/LayoutElement;)Lnet/minecraft/client/gui/layouts/LayoutElement;",
                     shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void injectCookeyModButton(CallbackInfo ci, LinearLayout linearLayout, LinearLayout linearLayout2, GridLayout gridLayout, GridLayout.RowHelper rowHelper) {
+    private void injectCookeyModButton(CallbackInfo ci, LinearLayout linearLayout, LinearLayout linearLayout2, GridLayout gridLayout, GridLayout.RowHelper rowHelper) {
         if (showModButton.get()) {
             rowHelper.addChild(this.openScreenButton(Component.translatable("options.cookeymod.button"),
                     () -> ScreenBuilder.buildConfig(this.minecraft.screen)));

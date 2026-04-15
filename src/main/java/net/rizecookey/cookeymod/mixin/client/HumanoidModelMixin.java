@@ -64,7 +64,7 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
     }
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    public void addRightArmAnimations(T state, CallbackInfo ci) {
+    private void addRightArmAnimations(T state, CallbackInfo ci) {
         HumanoidArm usedHand = state.cookeyMod$getUsedArm();
         if (showEatingInThirdPerson.get()
                 && state.isUsingItem && usedHand == HumanoidArm.RIGHT && state.cookeyMod$itemUseIsEating()) {
@@ -74,7 +74,7 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    public void addLeftArmAnimations(T state, CallbackInfo ci) {
+    private void addLeftArmAnimations(T state, CallbackInfo ci) {
         HumanoidArm usedHand = state.cookeyMod$getUsedArm();
         if (showEatingInThirdPerson.get()
                 && state.isUsingItem && usedHand == HumanoidArm.LEFT && state.cookeyMod$itemUseIsEating()) {
@@ -86,7 +86,7 @@ public abstract class HumanoidModelMixin<T extends HumanoidRenderState> extends 
     // Animation values and "formula" from ItemInHandRenderer's applyEatAnimation
 
     @Unique
-    public boolean applyEatingAnimation(T humanoidRenderState, HumanoidArm humanoidArm, float f) {
+    private boolean applyEatingAnimation(T humanoidRenderState, HumanoidArm humanoidArm, float f) {
         int side = humanoidArm == HumanoidArm.RIGHT ? 1 : -1;
         float xRot = humanoidArm == HumanoidArm.RIGHT ? this.rightArm.xRot : this.leftArm.xRot;
         float yRot;

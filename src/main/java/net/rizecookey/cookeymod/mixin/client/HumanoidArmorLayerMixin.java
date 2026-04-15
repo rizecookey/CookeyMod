@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(HumanoidArmorLayer.class)
-public class HumanoidArmorLayerMixin implements OverlayRendered {
+public abstract class HumanoidArmorLayerMixin implements OverlayRendered {
     @Shadow
     @Final
     private EquipmentLayerRenderer equipmentRenderer;

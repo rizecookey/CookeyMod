@@ -25,12 +25,12 @@ public abstract class AbstractClientPlayerMixin extends Player {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injectOptions(ClientLevel level, GameProfile gameProfile, CallbackInfo ci) {
+    private void injectOptions(CallbackInfo ci) {
         disableEffectBasedFovChange = CookeyMod.getInstance().getConfig().hudRendering().disableEffectBasedFovChange();
     }
 
     @ModifyExpressionValue(method = "getFieldOfViewModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
-    public double disableEffectBasedFov(double original) {
+    private double disableEffectBasedFov(double original) {
         if (!disableEffectBasedFovChange.get()) {
             return original;
         }

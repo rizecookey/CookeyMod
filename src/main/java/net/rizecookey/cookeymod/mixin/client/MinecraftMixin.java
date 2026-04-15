@@ -41,7 +41,7 @@ public abstract class MinecraftMixin implements MinecraftExtension {
     }
 
     @Inject(method = "continueAttack", at = @At("HEAD"))
-    private void setDefault(boolean down, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
+    private void setDefault(CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
         isHoldingDownOnBlock.set(false);
     }
 
@@ -52,12 +52,12 @@ public abstract class MinecraftMixin implements MinecraftExtension {
     }
 
     @Inject(method = "continueAttack", at = @At("RETURN"))
-    private void setHoldingDownOnBlock(boolean down, CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
+    private void setHoldingDownOnBlock(CallbackInfo ci, @Share("isHoldingDownOnBlock") LocalBooleanRef isHoldingDownOnBlock) {
         this.isHoldingDownOnBlock = isHoldingDownOnBlock.get();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    public void openMenuOnKeyPress(CallbackInfo ci) {
+    private void openMenuOnKeyPress(CallbackInfo ci) {
         if (openCookeyModMenu.isDown() && this.screen == null) {
             this.setScreen(ScreenBuilder.buildConfig(null));
         }

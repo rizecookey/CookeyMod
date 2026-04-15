@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.IOException;
 
 @Mixin(Options.class)
-public class OptionsMixin {
+public abstract class OptionsMixin {
     @Inject(method = "save", at = @At("TAIL"))
-    public void saveModConfig(CallbackInfo ci) {
+    private void saveModConfig(CallbackInfo ci) {
         try {
             CookeyMod.getInstance().getConfig().saveConfig();
         } catch (IOException e) {

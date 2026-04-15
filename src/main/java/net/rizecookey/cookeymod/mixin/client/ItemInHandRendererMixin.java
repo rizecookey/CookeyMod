@@ -72,7 +72,7 @@ public abstract class ItemInHandRendererMixin {
     }
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
-    public void onRenderArmWithItem(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
+    private void onRenderArmWithItem(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
         if ((hudRenderingCategory.onlyShowShieldWhenBlocking().get() || animationsCategory.enableToolBlocking().get())
                 && (itemStack.getItem() instanceof ShieldItem && !(!player.getUseItem().isEmpty() && player.getUseItem().getItem() instanceof ShieldItem))) {
             ci.cancel();
@@ -118,7 +118,7 @@ public abstract class ItemInHandRendererMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
                     ordinal = 1))
-    public void injectAttackTransform(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
+    private void injectAttackTransform(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
         HumanoidArm humanoidArm = hand == InteractionHand.MAIN_HAND
                 ? player.getMainArm()
                 : player.getMainArm().getOpposite();
@@ -130,7 +130,7 @@ public abstract class ItemInHandRendererMixin {
     @ModifyVariable(method = "tick", slice = @Slice(
             from = @At(value = "JUMP", ordinal = 3)
     ), at = @At(value = "FIELD", ordinal = 0))
-    public float modifyArmHeight(float f) {
+    private float modifyArmHeight(float f) {
         if (miscCategory.fixCooldownDesync().get() && minecraft.cookeyMod$isHoldingDownOnBlock()) {
             return 1.0f;
         }
@@ -143,7 +143,7 @@ public abstract class ItemInHandRendererMixin {
      */
 
     @Unique
-    public void applyItemBlockTransform(PoseStack poseStack, HumanoidArm humanoidArm) {
+    private void applyItemBlockTransform(PoseStack poseStack, HumanoidArm humanoidArm) {
         int reverse = humanoidArm == HumanoidArm.RIGHT ? 1 : -1;
         poseStack.translate(reverse * -0.14142136F, 0.08F, 0.14142136F);
         poseStack.mulPose(Axis.XP.rotationDegrees(-102.25F));

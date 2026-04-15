@@ -87,7 +87,7 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
     }
 
     @Redirect(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
-    public void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true, name = "skinTexture") Identifier skinTexture) {
+    private void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, @Local(argsOnly = true, name = "skinTexture") Identifier skinTexture) {
         int overlayCoords = showDamageTintInFirstPerson.get().isOnHand() ? this.overlayCoords : j;
         if (shownHandWhenInvisible.get() && playerInvisible) {
             int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
