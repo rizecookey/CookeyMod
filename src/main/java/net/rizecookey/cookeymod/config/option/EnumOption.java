@@ -1,34 +1,30 @@
 package net.rizecookey.cookeymod.config.option;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.EnumListEntry;
-import me.shedaniel.clothconfig2.impl.builders.EnumSelectorBuilder;
-import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.config.category.Category;
 
 import java.util.Arrays;
 
-public class EnumOption<T extends Enum<T> & Named> extends Option<T, EnumListEntry<T>> {
+public class EnumOption<T extends Enum<T> & Named> extends Option<T> {
+    private final boolean forceRestart;
     private final Class<T> enumClass;
 
     public EnumOption(String id, Category category, Class<T> enumClass, T defaultValue, boolean forceRestart) {
         super(id, category, defaultValue);
         this.enumClass = enumClass;
-        this.setConfigEntry(() -> {
-            EnumSelectorBuilder<T> builder = ConfigEntryBuilder.create()
-                    .startEnumSelector(Component.translatable(this.getTranslationKey()), enumClass, this.get())
-                    .setEnumNameProvider(value -> ((Named) value).getDisplayName())
-                    .setDefaultValue(this.getDefault())
-                    .setSaveConsumer(this::set);
-            builder.requireRestart(forceRestart);
-            builder.setTooltip(getTooltip(this.getTranslationKey()));
-            return builder.build();
-        });
+        this.forceRestart = forceRestart;
     }
 
     public EnumOption(String id, Category category, Class<T> enumClass, T defaultValue) {
         this(id, category, enumClass, defaultValue, false);
+    }
+
+    public boolean isForceRestart() {
+        return forceRestart;
+    }
+
+    public Class<T> getEnumClass() {
+        return enumClass;
     }
 
     @Override
@@ -36,6 +32,11 @@ public class EnumOption<T extends Enum<T> & Named> extends Option<T, EnumListEnt
         this.set(Arrays.stream(enumClass.getEnumConstants())
                 .filter(value -> value.getInternalName().equals(object.asText()))
                 .findFirst().orElseThrow());
+    }
+
+    @Override
+    public <I, O> O accept(OptionVisitor<I, O> visitor, I input) {
+        return visitor.visitEnumOption(this, input);
     }
 
     @Override

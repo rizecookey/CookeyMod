@@ -1,6 +1,5 @@
 package net.rizecookey.cookeymod.config.category;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 
@@ -12,8 +11,7 @@ public class MiscCategory extends Category {
     public MiscCategory(ModConfig modConfig) {
         super(modConfig);
         showOwnNameInThirdPerson = this.register(new BooleanOption("showOwnNameInThirdPerson", this, false));
-        BooleanOption modButtonOpt = new BooleanOption("showModButton", this, true);
-        this.showModButton = FabricLoader.getInstance().isModLoaded("modmenu") ? this.register(modButtonOpt) : modButtonOpt;
+        showModButton = this.register(new BooleanOption("showModButton", this, true));
         fixCooldownDesync = this.register(new BooleanOption("fixCooldownDesync", this, true));
     }
 

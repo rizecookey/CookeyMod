@@ -8,7 +8,6 @@ import net.rizecookey.cookeymod.config.option.ColorOption;
 import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
 import net.rizecookey.cookeymod.config.option.EnumOption;
 import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
-import net.rizecookey.cookeymod.event.OverlayReloadListener;
 
 public class HudRenderingCategory extends Category {
     private final DoubleSliderOption attackCooldownHandOffset;
@@ -26,18 +25,11 @@ public class HudRenderingCategory extends Category {
         super(modConfig);
         attackCooldownHandOffset = this.register(new DoubleSliderOption("attackCooldownHandOffset", this, 0.0, -1.0, 1.0));
 
-        damageColor = new ColorOption("damageColor", this, Color.ofRGBA(255, 0, 0, 77)) {
-            @Override
-            public void set(Color value) {
-                super.set(value);
-                OverlayReloadListener.callEvent();
-            }
-        };
-        showDamageTintOnArmor = new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE);
-        showDamageTintOnHeldItems = new BooleanOption("showDamageTintOnHeldItems", this, false);
-        showDamageTintOnCape = new BooleanOption("showDamageTintOnCape", this, false);
-        showDamageTintInFirstPerson = new EnumOption<>("showDamageTintInFirstPerson", this, FirstPersonDamageRenderSelection.class, FirstPersonDamageRenderSelection.NONE);
-        this.registerGroup("damageTint", damageColor, showDamageTintOnArmor, showDamageTintOnHeldItems, showDamageTintOnCape, showDamageTintInFirstPerson);
+        damageColor = this.register(new ColorOption("damageColor", this, Color.ofRGBA(255, 0, 0, 77)));
+        showDamageTintOnArmor = this.register(new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE));
+        showDamageTintOnHeldItems = this.register(new BooleanOption("showDamageTintOnHeldItems", this, false));
+        showDamageTintOnCape = this.register(new BooleanOption("showDamageTintOnCape", this, false));
+        showDamageTintInFirstPerson = this.register(new EnumOption<>("showDamageTintInFirstPerson", this, FirstPersonDamageRenderSelection.class, FirstPersonDamageRenderSelection.NONE));
 
         onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
         disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));

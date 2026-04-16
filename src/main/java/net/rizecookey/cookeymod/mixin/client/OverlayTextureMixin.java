@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
-import net.rizecookey.cookeymod.event.OverlayReloadListener;
+import net.rizecookey.cookeymod.config.option.Option;
 import net.rizecookey.cookeymod.extension.minecraft.OverlayTextureExtension;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(OverlayTexture.class)
-public abstract class OverlayTextureMixin implements OverlayTextureExtension, OverlayReloadListener {
+public abstract class OverlayTextureMixin implements OverlayTextureExtension, Option.ValueChangeListener<Color> {
     @Shadow
     @Final
     private DynamicTexture texture;
@@ -29,11 +29,8 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
     private void modifyHitColor(CallbackInfo ci) {
         hudRenderingCategory = CookeyMod.getInstance().getConfig().hudRendering();
         this.cookeyMod$reloadOverlay();
-        OverlayReloadListener.register(this);
-    }
-
-    public void cookeyMod$onOverlayReload() {
-        this.cookeyMod$reloadOverlay();
+        hudRenderingCategory.damageColor()
+                .registerListener((_, _) -> cookeyMod$reloadOverlay(), this);
     }
 
     @Unique
@@ -42,6 +39,7 @@ public abstract class OverlayTextureMixin implements OverlayTextureExtension, Ov
         return (alpha << 24) + (red << 16) + (green << 8) + blue;
     }
 
+    @Override
     public void cookeyMod$reloadOverlay() {
         NativeImage nativeImage = this.texture.getPixels();
 
