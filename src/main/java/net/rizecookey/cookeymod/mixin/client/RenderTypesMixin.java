@@ -7,9 +7,11 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import net.rizecookey.cookeymod.CookeyMod;
+import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
 import net.rizecookey.cookeymod.config.option.BooleanOption;
 import net.rizecookey.cookeymod.config.option.EnumOption;
+import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
 import net.rizecookey.cookeymod.extension.minecraft.RenderPipelinesExtension;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -48,10 +50,15 @@ public abstract class RenderTypesMixin {
     @Unique
     private static BooleanOption showDamageTintOnHeldItems;
 
+    @Unique
+    private static EnumOption<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson;
+
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void injectOptions(CallbackInfo ci) {
-        showDamageTintOnArmor = CookeyMod.getInstance().getConfig().hudRendering().showDamageTintOnArmor();
-        showDamageTintOnHeldItems = CookeyMod.getInstance().getConfig().hudRendering().showDamageTintOnHeldItems();
+        HudRenderingCategory hudRendering = CookeyMod.getInstance().getConfig().hudRendering();
+        showDamageTintOnArmor = hudRendering.showDamageTintOnArmor();
+        showDamageTintOnHeldItems = hudRendering.showDamageTintOnHeldItems();
+        showDamageTintInFirstPerson = hudRendering.showDamageTintInFirstPerson();
     }
 
     @Inject(method = "armorCutoutNoCull", at = @At("HEAD"), cancellable = true)
@@ -66,7 +73,7 @@ public abstract class RenderTypesMixin {
 
     @Inject(method = "itemCutout", at = @At("HEAD"), cancellable = true)
     private static void useEntityVariant(Identifier texture, CallbackInfoReturnable<RenderType> cir) {
-        if (!showDamageTintOnHeldItems.get()) {
+        if (!showDamageTintOnHeldItems.get() && showDamageTintInFirstPerson.get() != FirstPersonDamageRenderSelection.HANDS_AND_ITEMS) {
             return;
         }
 
