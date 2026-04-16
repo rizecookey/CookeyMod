@@ -30,6 +30,11 @@ public abstract class RenderTypesMixin {
         throw new UnsupportedOperationException("Implemented via mixin");
     }
 
+    @Shadow
+    public static RenderType entityTranslucent(Identifier texture) {
+        throw new UnsupportedOperationException("Implemented via mixin");
+    }
+
     @Unique
     private static final Function<Identifier, RenderType> ARMOR_CUTOUT_NO_CULL_OVERLAY = Util.memoize(
             texture -> {
@@ -72,12 +77,22 @@ public abstract class RenderTypesMixin {
     }
 
     @Inject(method = "itemCutout", at = @At("HEAD"), cancellable = true)
-    private static void useEntityVariant(Identifier texture, CallbackInfoReturnable<RenderType> cir) {
+    private static void useEntityVariantForCutout(Identifier texture, CallbackInfoReturnable<RenderType> cir) {
         if (!showDamageTintOnHeldItems.get() && showDamageTintInFirstPerson.get() != FirstPersonDamageRenderSelection.HANDS_AND_ITEMS) {
             return;
         }
 
         cir.setReturnValue(entityCutout(texture));
+        cir.cancel();
+    }
+
+    @Inject(method = "itemTranslucent", at = @At("HEAD"), cancellable = true)
+    private static void useEntityVariantForTranslucent(Identifier texture, CallbackInfoReturnable<RenderType> cir) {
+        if (!showDamageTintOnHeldItems.get() && showDamageTintInFirstPerson.get() != FirstPersonDamageRenderSelection.HANDS_AND_ITEMS) {
+            return;
+        }
+
+        cir.setReturnValue(entityTranslucent(texture));
         cir.cancel();
     }
 }
