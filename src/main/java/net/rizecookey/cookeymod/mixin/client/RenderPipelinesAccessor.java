@@ -13,6 +13,11 @@ public interface RenderPipelinesAccessor {
         throw new UnsupportedOperationException("Accessor not applied");
     }
 
+    @Accessor("ITEM_SNIPPET")
+    static RenderPipeline.Snippet getItemSnippet() {
+        throw new UnsupportedOperationException("Accessor not applied");
+    }
+
     @Invoker
     static RenderPipeline invokeRegister(RenderPipeline renderPipeline) {
         throw new UnsupportedOperationException("Accessor not applied");
