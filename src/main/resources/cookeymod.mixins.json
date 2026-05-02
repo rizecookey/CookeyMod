@@ -28,7 +28,7 @@
     "client.OptionsMixin",
     "client.OptionsScreenMixin",
     "client.OverlayTextureMixin",
-    "client.RenderPipelinesAccessor",
+    "client.RenderPipelinesMixin",
     "client.RenderTypeAccessor",
     "client.RenderTypesMixin",
     "client.SimpleEquipmentLayerMixin",
