@@ -97,6 +97,17 @@ publishMods {
         }
     }
 
+    curseforge {
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        projectId = "1531879"
+        minecraftVersions.addAll(mcVersionsList)
+        javaVersions.add(java.targetCompatibility)
+        serverRequired = false
+        clientRequired = true
+
+        optional("modmenu")
+    }
+
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
         repository = "rizecookey/CookeyMod"

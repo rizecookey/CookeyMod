@@ -5,6 +5,8 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+
 
 jobs:
   publish:
@@ -36,11 +38,12 @@ jobs:
             git tag -l --format='%(contents)' ${{ github.ref_name }}
             echo EOF
           } >> "$GITHUB_ENV"
-      - name: Publish release to GitHub and Modrinth
+      - name: Publish release to GitHub, Modrinth and CurseForge
         run: ./gradlew publishMods --stacktrace
         env:
           GITHUB_TOKEN: ${{ github.token }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           GIT_COMMIT_SHA: ${{ github.sha }}
           GIT_TAG: ${{ github.ref_name }}
           GIT_TAG_CHANGELOG: ${{ env.GIT_TAG_CHANGELOG }}
