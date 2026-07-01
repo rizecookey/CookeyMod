@@ -44,7 +44,7 @@ public abstract class OptionsScreenMixin extends Screen {
     private void injectCookeyModButton(CallbackInfo ci, LinearLayout linearLayout, LinearLayout linearLayout2, GridLayout gridLayout, GridLayout.RowHelper rowHelper) {
         if (showModButton.get()) {
             rowHelper.addChild(this.openScreenButton(Component.translatable("options.cookeymod.button"),
-                    () -> ScreenBuilder.buildConfig(this.minecraft.screen)));
+                    () -> ScreenBuilder.buildConfig(this.minecraft.gui.screen())));
         }
     }
 }

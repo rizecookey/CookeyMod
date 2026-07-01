@@ -1,7 +1,7 @@
 plugins {
     id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'maven-publish'
-    id "me.modmuss50.mod-publish-plugin" version "1.1.0"
+    id "me.modmuss50.mod-publish-plugin" version "2.1.1"
 }
 
 version = project.mod_version + "+" + project.minecraft_version
@@ -11,10 +11,6 @@ def mcVersionsList = project.supported_mc_versions.split(" ").toList()
 
 base {
     archivesName = project.archives_base_name
-}
-
-configurations {
-    includeClasspath
 }
 
 repositories {
@@ -44,9 +40,13 @@ dependencies {
     implementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+    implementation "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}"
 
-    includeInternal (implementation "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}")
-    includeInternal (implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}")
+    include "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}"
+    include "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}"
+    include "com.fasterxml.jackson.core:jackson-databind:${project.jackson_version}"
+    include "com.fasterxml.jackson.core:jackson-annotations:${project.jackson_annotations_version}"
 }
 
 loom {
@@ -74,9 +74,6 @@ java {
 
 jar {
     from "LICENSE"
-    from {
-        configurations.includeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
 
 publishMods {

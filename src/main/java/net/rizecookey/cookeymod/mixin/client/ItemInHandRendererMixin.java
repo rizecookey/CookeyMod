@@ -71,7 +71,7 @@ public abstract class ItemInHandRendererMixin {
         miscCategory = modConfig.misc();
     }
 
-    @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "submitArmWithItem", at = @At("HEAD"), cancellable = true)
     private void onRenderArmWithItem(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci) {
         if ((hudRenderingCategory.onlyShowShieldWhenBlocking().get() || animationsCategory.enableToolBlocking().get())
                 && (itemStack.getItem() instanceof ShieldItem && !(!player.getUseItem().isEmpty() && player.getUseItem().getItem() instanceof ShieldItem))) {
@@ -103,7 +103,7 @@ public abstract class ItemInHandRendererMixin {
         }
     }
 
-    @ModifyExpressionValue(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z"))
+    @ModifyExpressionValue(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z"))
     private boolean makeArmAppear(boolean original) {
         return !hudRenderingCategory.showHandWhenInvisible().get() && original;
     }
@@ -113,7 +113,7 @@ public abstract class ItemInHandRendererMixin {
         return !hudRenderingCategory.showHandWhenInvisible().get() && original;
     }
 
-    @Inject(method = "renderArmWithItem",
+    @Inject(method = "submitArmWithItem",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",

@@ -5,11 +5,11 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.Gui;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.extension.minecraft.MinecraftExtension;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
-import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,12 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin implements MinecraftExtension {
     @Shadow
-    @Nullable
-    public Screen screen;
-
-    @Shadow
-    public abstract void setScreen(@Nullable Screen screen);
-
+    @Final
+    public Gui gui;
     @Unique
     private KeyMapping openCookeyModMenu;
 
@@ -58,8 +54,8 @@ public abstract class MinecraftMixin implements MinecraftExtension {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void openMenuOnKeyPress(CallbackInfo ci) {
-        if (openCookeyModMenu.isDown() && this.screen == null) {
-            this.setScreen(ScreenBuilder.buildConfig(null));
+        if (openCookeyModMenu.isDown() && this.gui.screen() == null) {
+            this.gui.setScreen(ScreenBuilder.buildConfig(null));
         }
     }
 
