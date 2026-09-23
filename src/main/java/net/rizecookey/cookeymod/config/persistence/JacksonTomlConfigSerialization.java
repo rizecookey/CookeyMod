@@ -1,6 +1,5 @@
 package net.rizecookey.cookeymod.config.persistence;
 
-import me.shedaniel.math.Color;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.Category;
 import net.rizecookey.cookeymod.config.setting.BooleanSetting;
@@ -19,6 +18,7 @@ import tools.jackson.databind.node.LongNode;
 import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.dataformat.toml.TomlMapper;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -114,7 +114,7 @@ public class JacksonTomlConfigSerialization implements ConfigSerialization {
 
         @Override
         public Object visitColorSetting(ColorSetting colorSetting, @Nullable Void input) {
-            return colorSetting.get().getColor();
+            return colorSetting.get().getRGB();
         }
 
         @Override
@@ -138,7 +138,7 @@ public class JacksonTomlConfigSerialization implements ConfigSerialization {
 
         @Override
         public @Nullable Void visitColorSetting(ColorSetting colorSetting, JsonNode input) {
-            colorSetting.set(Color.ofTransparent(input.asInt()));
+            colorSetting.set(new Color(input.asInt(), true));
             return null;
         }
 

@@ -1,6 +1,5 @@
 package net.rizecookey.cookeymod.config.category;
 
-import me.shedaniel.math.Color;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.setting.ArmorDamageRenderSelection;
 import net.rizecookey.cookeymod.config.setting.BooleanSetting;
@@ -8,6 +7,8 @@ import net.rizecookey.cookeymod.config.setting.ColorSetting;
 import net.rizecookey.cookeymod.config.setting.DoubleSliderSetting;
 import net.rizecookey.cookeymod.config.setting.EnumSetting;
 import net.rizecookey.cookeymod.config.setting.FirstPersonDamageRenderSelection;
+
+import java.awt.Color;
 
 public class HudRenderingCategory extends Category {
     private final DoubleSliderSetting attackCooldownHandOffset;
@@ -25,7 +26,7 @@ public class HudRenderingCategory extends Category {
         super(modConfig);
         attackCooldownHandOffset = this.register(new DoubleSliderSetting("attackCooldownHandOffset", this, 0.0, -1.0, 1.0));
 
-        damageColor = this.register(new ColorSetting("damageColor", this, Color.ofRGBA(255, 0, 0, 77)));
+        damageColor = this.register(new ColorSetting("damageColor", this, new Color(255, 0, 0, 77)));
         showDamageTintOnArmor = this.register(new EnumSetting<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE));
         showDamageTintOnHeldItems = this.register(new BooleanSetting("showDamageTintOnHeldItems", this, false));
         showDamageTintOnCape = this.register(new BooleanSetting("showDamageTintOnCape", this, false));

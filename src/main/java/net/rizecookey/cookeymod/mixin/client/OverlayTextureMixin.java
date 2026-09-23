@@ -1,7 +1,6 @@
 package net.rizecookey.cookeymod.mixin.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import me.shedaniel.math.Color;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.rizecookey.cookeymod.CookeyMod;
@@ -15,6 +14,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.awt.Color;
 
 @Mixin(OverlayTexture.class)
 public abstract class OverlayTextureMixin implements OverlayTextureExtension, Setting.ValueChangeListener<Color> {
