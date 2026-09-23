@@ -5,7 +5,6 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.BooleanToggleBuilder;
 import me.shedaniel.clothconfig2.impl.builders.EnumSelectorBuilder;
 import me.shedaniel.clothconfig2.impl.builders.LongSliderBuilder;
-import me.shedaniel.math.Color;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.PlainTextContents;
@@ -19,6 +18,7 @@ import net.rizecookey.cookeymod.config.setting.Named;
 import net.rizecookey.cookeymod.config.setting.SettingVisitor;
 import net.rizecookey.cookeymod.extension.clothconfig.entry.PickableColorEntry;
 
+import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -44,10 +44,10 @@ public final class SettingEntryBuilder implements SettingVisitor<ConfigEntryBuil
     @Override
     public AbstractConfigListEntry<?> visitColorSetting(ColorSetting colorSetting, ConfigEntryBuilder entryBuilder) {
         return new PickableColorEntry(Component.translatable(colorSetting.getTranslationKey()),
-                colorSetting.get(),
+                me.shedaniel.math.Color.ofTransparent(colorSetting.get().getRGB()),
                 ConfigEntryBuilder.create().getResetButtonKey(),
-                () -> colorSetting.getDefault().getColor(),
-                value -> colorSetting.set(Color.ofTransparent(value)),
+                () -> colorSetting.getDefault().getRGB(),
+                value -> colorSetting.set(new Color(value, true)),
                 () -> getTooltip(colorSetting.getTranslationKey()),
                 false);
     }
