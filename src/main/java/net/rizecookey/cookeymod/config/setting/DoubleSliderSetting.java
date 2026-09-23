@@ -1,12 +1,12 @@
-package net.rizecookey.cookeymod.config.option;
+package net.rizecookey.cookeymod.config.setting;
 
 import tools.jackson.databind.JsonNode;
 import net.rizecookey.cookeymod.config.category.Category;
 
-public class DoubleSliderOption extends Option<Double> {
+public class DoubleSliderSetting extends Setting<Double> {
     private final double from, to;
 
-    public DoubleSliderOption(String id, Category category, Double defaultValue, double from, double to) {
+    public DoubleSliderSetting(String id, Category category, Double defaultValue, double from, double to) {
         super(id, category, defaultValue);
         this.from = from;
         this.to = to;
@@ -18,8 +18,8 @@ public class DoubleSliderOption extends Option<Double> {
     }
 
     @Override
-    public <I, O> O accept(OptionVisitor<I, O> visitor, I input) {
-        return visitor.visitDoubleSliderOption(this, input);
+    public <I, O> O accept(SettingVisitor<I, O> visitor, I input) {
+        return visitor.visitDoubleSliderSetting(this, input);
     }
 
     public double getFrom() {

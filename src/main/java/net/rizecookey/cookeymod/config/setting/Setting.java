@@ -1,4 +1,4 @@
-package net.rizecookey.cookeymod.config.option;
+package net.rizecookey.cookeymod.config.setting;
 
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JsonNode;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
 
-public abstract class Option<T> {
+public abstract class Setting<T> {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final String id;
@@ -28,7 +28,7 @@ public abstract class Option<T> {
         void onValueChanged(T oldValue, T newValue);
     }
 
-    protected Option(String id, Category category, T defaultValue) {
+    protected Setting(String id, Category category, T defaultValue) {
         this.id = id;
         this.category = category;
         this.defaultValue = defaultValue;
@@ -85,7 +85,7 @@ public abstract class Option<T> {
         valueChangeListeners.get(owner).remove(valueChangeListener);
     }
 
-    public abstract <I, O> O accept(OptionVisitor<I, O> visitor, I input);
+    public abstract <I, O> O accept(SettingVisitor<I, O> visitor, I input);
 
     public static Optional<Component[]> getTooltip(String translationId) {
         List<Component> components = new ArrayList<>();

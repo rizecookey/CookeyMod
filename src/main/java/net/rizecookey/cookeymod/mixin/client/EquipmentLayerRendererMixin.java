@@ -3,8 +3,8 @@ package net.rizecookey.cookeymod.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
-import net.rizecookey.cookeymod.config.option.EnumOption;
+import net.rizecookey.cookeymod.config.setting.ArmorDamageRenderSelection;
+import net.rizecookey.cookeymod.config.setting.EnumSetting;
 import net.rizecookey.cookeymod.extension.minecraft.OverlayRendered;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +20,7 @@ public abstract class EquipmentLayerRendererMixin implements OverlayRendered {
     private int overlayCoords;
 
     @Unique
-    private EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
+    private EnumSetting<ArmorDamageRenderSelection> showDamageTintOnArmor;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(CallbackInfo ci) {

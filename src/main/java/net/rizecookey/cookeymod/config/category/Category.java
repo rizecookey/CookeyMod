@@ -4,7 +4,7 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.JsonNodeFactory;
 import tools.jackson.databind.node.ObjectNode;
 import net.rizecookey.cookeymod.config.ModConfig;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.setting.Setting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
 import static net.rizecookey.cookeymod.config.ModConfig.MAPPER;
 
 public abstract class Category {
-    private final Map<String, Option<?>> options = new HashMap<>();
+    private final Map<String, Setting<?>> settings = new HashMap<>();
 
     private final ModConfig modConfig;
 
@@ -30,31 +30,31 @@ public abstract class Category {
         return ModConfig.TRANSLATION_KEY + "." + this.getId();
     }
 
-    public Map<String, Option<?>> getOptions() {
-        return new HashMap<>(options);
+    public Map<String, Setting<?>> getSettings() {
+        return new HashMap<>(settings);
     }
 
-    public <T extends Option<?>> T register(T option) {
-        options.put(option.getId(), option);
-        return option;
+    public <T extends Setting<?>> T register(T setting) {
+        settings.put(setting.getId(), setting);
+        return setting;
     }
 
-    public void loadOptions(ObjectNode node) {
+    public void loadSettings(ObjectNode node) {
         if (node == null) {
             throw new IllegalArgumentException("Node cannot be null");
         }
 
         for (var field : node.properties()) {
             String key = field.getKey();
-            Option<?> option = this.options.get(key);
-            if (option != null) option.load(field.getValue());
+            Setting<?> setting = this.settings.get(key);
+            if (setting != null) setting.load(field.getValue());
         }
     }
 
     public ObjectNode toNode() {
         ObjectNode node = JsonNodeFactory.instance.objectNode();
-        for (Option<?> option : this.getOptions().values()) {
-            node.set(option.getId(), MAPPER.convertValue(option.getInConfigFormat(), JsonNode.class));
+        for (Setting<?> setting : this.getSettings().values()) {
+            node.set(setting.getId(), MAPPER.convertValue(setting.getInConfigFormat(), JsonNode.class));
         }
 
         return node;

@@ -7,7 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ShieldItem;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
 import net.rizecookey.cookeymod.extension.minecraft.ArmedEntityRenderStateExtension;
 import net.rizecookey.cookeymod.util.ItemUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ArmedEntityRenderState.class)
 public abstract class ArmedEntityRenderStateMixin implements ArmedEntityRenderStateExtension {
     @Unique
-    private static final BooleanOption ENABLE_TOOL_BLOCKING = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
+    private static final BooleanSetting ENABLE_TOOL_BLOCKING = CookeyMod.getInstance().getConfig().animations().enableToolBlocking();
 
     @Unique
     private boolean poseBothArms;

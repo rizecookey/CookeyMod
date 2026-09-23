@@ -2,7 +2,7 @@ package net.rizecookey.cookeymod.config;
 
 import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.node.StringNode;
-import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
+import net.rizecookey.cookeymod.config.setting.ArmorDamageRenderSelection;
 
 import static net.rizecookey.cookeymod.config.ModConfig.MAPPER;
 

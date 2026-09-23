@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
+import net.rizecookey.cookeymod.config.setting.DoubleSliderSetting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,7 +29,7 @@ public abstract class CameraMixin {
     public abstract Entity entity();
 
     @Unique
-    private DoubleSliderOption sneakAnimationSpeed;
+    private DoubleSliderSetting sneakAnimationSpeed;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(CallbackInfo ci) {

@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.util.Mth;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
     @Unique
-    private BooleanOption disableCameraBobbing = CookeyMod.getInstance().getConfig().animations().disableCameraBobbing();
+    private BooleanSetting disableCameraBobbing = CookeyMod.getInstance().getConfig().animations().disableCameraBobbing();
 
     @Unique
-    private BooleanOption alternativeBobbing = CookeyMod.getInstance().getConfig().hudRendering().alternativeBobbing();
+    private BooleanSetting alternativeBobbing = CookeyMod.getInstance().getConfig().hudRendering().alternativeBobbing();
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(CallbackInfo ci) {

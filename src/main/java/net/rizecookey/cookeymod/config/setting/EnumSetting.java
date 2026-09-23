@@ -1,21 +1,21 @@
-package net.rizecookey.cookeymod.config.option;
+package net.rizecookey.cookeymod.config.setting;
 
 import tools.jackson.databind.JsonNode;
 import net.rizecookey.cookeymod.config.category.Category;
 
 import java.util.Arrays;
 
-public class EnumOption<T extends Enum<T> & Named> extends Option<T> {
+public class EnumSetting<T extends Enum<T> & Named> extends Setting<T> {
     private final boolean forceRestart;
     private final Class<T> enumClass;
 
-    public EnumOption(String id, Category category, Class<T> enumClass, T defaultValue, boolean forceRestart) {
+    public EnumSetting(String id, Category category, Class<T> enumClass, T defaultValue, boolean forceRestart) {
         super(id, category, defaultValue);
         this.enumClass = enumClass;
         this.forceRestart = forceRestart;
     }
 
-    public EnumOption(String id, Category category, Class<T> enumClass, T defaultValue) {
+    public EnumSetting(String id, Category category, Class<T> enumClass, T defaultValue) {
         this(id, category, enumClass, defaultValue, false);
     }
 
@@ -35,8 +35,8 @@ public class EnumOption<T extends Enum<T> & Named> extends Option<T> {
     }
 
     @Override
-    public <I, O> O accept(OptionVisitor<I, O> visitor, I input) {
-        return visitor.visitEnumOption(this, input);
+    public <I, O> O accept(SettingVisitor<I, O> visitor, I input) {
+        return visitor.visitEnumSetting(this, input);
     }
 
     @Override
