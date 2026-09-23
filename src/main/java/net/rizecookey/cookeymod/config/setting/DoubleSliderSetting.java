@@ -1,6 +1,5 @@
 package net.rizecookey.cookeymod.config.setting;
 
-import tools.jackson.databind.JsonNode;
 import net.rizecookey.cookeymod.config.category.Category;
 
 public class DoubleSliderSetting extends Setting<Double> {
@@ -10,11 +9,6 @@ public class DoubleSliderSetting extends Setting<Double> {
         super(id, category, defaultValue);
         this.from = from;
         this.to = to;
-    }
-
-    @Override
-    public void load(JsonNode object) {
-        this.set(object.asDouble());
     }
 
     @Override

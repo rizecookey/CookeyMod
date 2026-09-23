@@ -1,8 +1,5 @@
 package net.rizecookey.cookeymod.config.setting;
 
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.config.category.Category;
@@ -14,8 +11,6 @@ import java.util.Optional;
 import java.util.WeakHashMap;
 
 public abstract class Setting<T> {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     private final String id;
     private final Category category;
     private final T defaultValue;
@@ -51,10 +46,6 @@ public abstract class Setting<T> {
         return this.value;
     }
 
-    public Object getInConfigFormat() {
-        return this.value;
-    }
-
     public void set(T newValue) {
         T oldValue = this.value;
         this.value = newValue;
@@ -65,11 +56,6 @@ public abstract class Setting<T> {
 
     public T getDefault() {
         return defaultValue;
-    }
-
-    public void load(JsonNode object) {
-        this.set(MAPPER.convertValue(object, new TypeReference<>() {
-        }));
     }
 
     public void registerListener(ValueChangeListener<? super T> valueChangeListener, Object owner) {

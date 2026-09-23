@@ -15,7 +15,6 @@ import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
 import net.rizecookey.cookeymod.config.setting.Setting;
 
-import java.io.IOException;
 import java.util.Map;
 
 public final class ScreenBuilder {
@@ -27,13 +26,8 @@ public final class ScreenBuilder {
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setTitle(Component.translatable(ModConfig.TRANSLATION_KEY))
-                .setSavingRunnable(() -> {
-                    try {
-                        config.saveConfig();
-                    } catch (IOException e) {
-                        CookeyMod.getInstance().getLogger().error("Failed to save CookeyMod config file", e);
-                    }
-                });
+                .setSavingRunnable(config::saveConfig);
+
         if (prevScreen != null) builder.setParentScreen(prevScreen);
         createGenericScreenCategory(builder, config.animations());
         createHudRenderingScreenCategory(builder, config.hudRendering());

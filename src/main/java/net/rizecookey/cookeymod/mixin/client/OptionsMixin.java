@@ -7,16 +7,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.IOException;
-
 @Mixin(Options.class)
 public abstract class OptionsMixin {
     @Inject(method = "save", at = @At("TAIL"))
     private void saveModConfig(CallbackInfo ci) {
-        try {
-            CookeyMod.getInstance().getConfig().saveConfig();
-        } catch (IOException e) {
-            CookeyMod.getInstance().getLogger().error("Failed to save config", e);
-        }
+        CookeyMod.getInstance().getConfig().saveConfig();
     }
 }

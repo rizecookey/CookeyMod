@@ -1,13 +1,13 @@
-package net.rizecookey.cookeymod.config;
+package net.rizecookey.cookeymod.config.persistence;
 
 import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.node.StringNode;
 import net.rizecookey.cookeymod.config.setting.ArmorDamageRenderSelection;
 
-import static net.rizecookey.cookeymod.config.ModConfig.MAPPER;
+import static net.rizecookey.cookeymod.config.persistence.JacksonTomlConfigSerialization.MAPPER;
 
-public final class ConfigUpdater {
-    private ConfigUpdater() {
+public final class JacksonTomlConfigUpdater {
+    private JacksonTomlConfigUpdater() {
     }
 
     public static boolean update(ObjectNode config, long from) {
