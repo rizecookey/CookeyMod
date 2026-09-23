@@ -40,13 +40,9 @@ dependencies {
     implementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    implementation "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}"
 
-    include "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}"
-    include "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}"
-    include "com.fasterxml.jackson.core:jackson-databind:${project.jackson_version}"
-    include "com.fasterxml.jackson.core:jackson-annotations:${project.jackson_annotations_version}"
+    includeInternal (implementation "tools.jackson.core:jackson-core:${project.jackson_version}")
+    includeInternal (implementation "tools.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}")
 }
 
 loom {
@@ -92,17 +88,6 @@ publishMods {
         optional {
             slug = "modmenu"
         }
-    }
-
-    curseforge {
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        projectId = "1531879"
-        minecraftVersions.addAll(mcVersionsList)
-        javaVersions.add(java.targetCompatibility)
-        serverRequired = false
-        clientRequired = true
-
-        optional("modmenu")
     }
 
     github {

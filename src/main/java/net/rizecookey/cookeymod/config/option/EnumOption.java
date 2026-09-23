@@ -1,6 +1,6 @@
 package net.rizecookey.cookeymod.config.option;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import net.rizecookey.cookeymod.config.category.Category;
 
 import java.util.Arrays;
@@ -30,7 +30,7 @@ public class EnumOption<T extends Enum<T> & Named> extends Option<T> {
     @Override
     public void load(JsonNode object) {
         this.set(Arrays.stream(enumClass.getEnumConstants())
-                .filter(value -> value.getInternalName().equals(object.asText()))
+                .filter(value -> value.getInternalName().equals(object.asString()))
                 .findFirst().orElseThrow());
     }
 

@@ -1,7 +1,7 @@
 package net.rizecookey.cookeymod.config;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.StringNode;
 import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
 
 import static net.rizecookey.cookeymod.config.ModConfig.MAPPER;
@@ -46,8 +46,8 @@ public final class ConfigUpdater {
             if (hudRenderingNode.has(armorDamageTintKey) && hudRenderingNode.isObject()) {
                 boolean old = hudRenderingNode.get(armorDamageTintKey).asBoolean();
                 hudRenderingNode.set(armorDamageTintKey, old
-                        ? TextNode.valueOf(ArmorDamageRenderSelection.ARMOR_AND_TRIM.getInternalName())
-                        : TextNode.valueOf(ArmorDamageRenderSelection.NONE.getInternalName()));
+                        ? StringNode.valueOf(ArmorDamageRenderSelection.ARMOR_AND_TRIM.getInternalName())
+                        : StringNode.valueOf(ArmorDamageRenderSelection.NONE.getInternalName()));
             }
         }
         return modified;
