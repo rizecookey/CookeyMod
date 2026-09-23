@@ -1,11 +1,11 @@
 package net.rizecookey.cookeymod.config;
 
-import net.rizecookey.cookeymod.config.persistence.ConfigSerialization;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.Category;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
+import net.rizecookey.cookeymod.config.persistence.ConfigSerialization;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;

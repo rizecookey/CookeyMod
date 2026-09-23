@@ -1,8 +1,8 @@
 package net.rizecookey.cookeymod.config.persistence;
 
+import net.rizecookey.cookeymod.config.setting.ArmorDamageRenderSelection;
 import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.node.StringNode;
-import net.rizecookey.cookeymod.config.setting.ArmorDamageRenderSelection;
 
 import static net.rizecookey.cookeymod.config.persistence.JacksonTomlConfigSerialization.MAPPER;
 

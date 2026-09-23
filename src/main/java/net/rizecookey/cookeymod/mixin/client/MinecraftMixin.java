@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.extension.minecraft.MinecraftExtension;
-import net.rizecookey.cookeymod.screen.ScreenBuilder;
+import net.rizecookey.cookeymod.screen.YACLScreenBuilder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -59,7 +59,7 @@ public abstract class MinecraftMixin implements MinecraftExtension {
     @Inject(method = "tick", at = @At("TAIL"))
     private void openMenuOnKeyPress(CallbackInfo ci) {
         if (openCookeyModMenu.isDown() && this.screen == null) {
-            this.setScreen(ScreenBuilder.buildConfig(null));
+            this.setScreen(YACLScreenBuilder.buildConfig(null));
         }
     }
 
