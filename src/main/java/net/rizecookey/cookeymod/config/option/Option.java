@@ -1,8 +1,8 @@
 package net.rizecookey.cookeymod.config.option;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.config.category.Category;

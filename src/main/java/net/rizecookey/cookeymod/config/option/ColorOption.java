@@ -1,6 +1,6 @@
 package net.rizecookey.cookeymod.config.option;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import me.shedaniel.math.Color;
 import net.rizecookey.cookeymod.config.category.Category;
 

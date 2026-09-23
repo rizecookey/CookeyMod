@@ -45,8 +45,8 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    includeInternal (implementation "com.fasterxml.jackson.core:jackson-core:${project.jackson_version}")
-    includeInternal (implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}")
+    includeInternal (implementation "tools.jackson.core:jackson-core:${project.jackson_version}")
+    includeInternal (implementation "tools.jackson.dataformat:jackson-dataformat-toml:${project.jackson_version}")
 }
 
 loom {
