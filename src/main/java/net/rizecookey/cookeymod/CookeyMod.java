@@ -5,6 +5,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.rizecookey.cookeymod.config.ModConfig;
+import net.rizecookey.cookeymod.config.persistence.JacksonTomlConfigSerialization;
 import net.rizecookey.cookeymod.keybind.Keybinds;
 import net.rizecookey.cookeymod.util.PrefixLogger;
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +35,8 @@ public class CookeyMod implements ModInitializer {
         modMetadata = modContainer.getMetadata();
 
         Path configDir = loader.getConfigDir().resolve(getModId());
-        config = new ModConfig(this, configDir.resolve("config.toml"));
+        config = new ModConfig(this, configDir.resolve("config.toml"), new JacksonTomlConfigSerialization());
+        config.loadConfig();
 
         keybinds = new Keybinds();
 
