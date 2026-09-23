@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screens.options.OptionsScreen;
 import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.setting.BooleanSetting;
-import net.rizecookey.cookeymod.screen.ScreenBuilder;
+import net.rizecookey.cookeymod.screen.YACLScreenBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,7 +44,7 @@ public abstract class OptionsScreenMixin extends Screen {
     private void injectCookeyModButton(CallbackInfo ci, LinearLayout linearLayout, LinearLayout linearLayout2, GridLayout gridLayout, GridLayout.RowHelper rowHelper) {
         if (showModButton.get()) {
             rowHelper.addChild(this.openScreenButton(Component.translatable("options.cookeymod.button"),
-                    () -> ScreenBuilder.buildConfig(this.minecraft.gui.screen())));
+                    () -> YACLScreenBuilder.buildConfig(this.minecraft.gui.screen())));
         }
     }
 }

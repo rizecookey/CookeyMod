@@ -1,13 +1,10 @@
 package net.rizecookey.cookeymod.config.setting;
 
-import net.minecraft.locale.Language;
-import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.config.category.Category;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.WeakHashMap;
 
 public abstract class Setting<T> {
@@ -36,6 +33,10 @@ public abstract class Setting<T> {
 
     public String getTranslationKey() {
         return this.category.getTranslationKey() + "." + id;
+    }
+
+    public String getDescriptionTranslationKey() {
+        return getTranslationKey() + ".tooltip";
     }
 
     public Category getCategory() {
@@ -72,22 +73,4 @@ public abstract class Setting<T> {
     }
 
     public abstract <I, O> O accept(SettingVisitor<I, O> visitor, I input);
-
-    public static Optional<Component[]> getTooltip(String translationId) {
-        List<Component> components = new ArrayList<>();
-        String tooltipKey = translationId + ".tooltip.";
-
-        int i = 0;
-        while (i != -1) {
-            if (Language.getInstance().has(tooltipKey + i)) {
-                components.add(Component.translatable(tooltipKey + i));
-                i++;
-            } else {
-                i = -1;
-            }
-        }
-        Component[] array = components.toArray(new Component[0]);
-
-        return Optional.ofNullable(array.length != 0 ? array : null);
-    }
 }

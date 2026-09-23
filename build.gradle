@@ -19,7 +19,7 @@ repositories {
         url = 'https://maven.terraformersmc.com/'
     }
     maven {
-        url = 'https://maven.shedaniel.me/'
+        url = "https://maven.isxander.dev/releases"
     }
 }
 
@@ -27,9 +27,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    api include("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_api_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
+    api include("dev.isxander:yet-another-config-lib:${project.yacl_version}")
 
     implementation include(fabricApi.module("fabric-api-base", project.fabric_version))
     implementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
