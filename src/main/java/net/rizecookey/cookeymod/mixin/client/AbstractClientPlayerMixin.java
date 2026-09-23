@@ -7,7 +7,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AbstractClientPlayerMixin extends Player {
 
     @Unique
-    private BooleanOption disableEffectBasedFovChange;
+    private BooleanSetting disableEffectBasedFovChange;
 
     private AbstractClientPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);

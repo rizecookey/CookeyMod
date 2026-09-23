@@ -1,4 +1,4 @@
-package net.rizecookey.cookeymod.config.option;
+package net.rizecookey.cookeymod.config.setting;
 
 import net.minecraft.network.chat.Component;
 

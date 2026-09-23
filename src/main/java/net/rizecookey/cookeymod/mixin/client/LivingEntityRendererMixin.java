@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
 import net.rizecookey.cookeymod.extension.minecraft.OverlayRendered;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,7 +42,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     }
 
     @Unique
-    private BooleanOption showOwnNameInThirdPerson;
+    private BooleanSetting showOwnNameInThirdPerson;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(CallbackInfo ci) {

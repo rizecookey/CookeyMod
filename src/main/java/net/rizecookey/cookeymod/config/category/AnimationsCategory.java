@@ -1,23 +1,23 @@
 package net.rizecookey.cookeymod.config.category;
 
 import net.rizecookey.cookeymod.config.ModConfig;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
-import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
+import net.rizecookey.cookeymod.config.setting.DoubleSliderSetting;
 
 public class AnimationsCategory extends Category {
-    private final BooleanOption swingAndUseItem;
-    private final DoubleSliderOption sneakAnimationSpeed;
-    private final BooleanOption disableCameraBobbing;
-    private final BooleanOption enableToolBlocking;
-    private final BooleanOption showEatingInThirdPerson;
+    private final BooleanSetting swingAndUseItem;
+    private final DoubleSliderSetting sneakAnimationSpeed;
+    private final BooleanSetting disableCameraBobbing;
+    private final BooleanSetting enableToolBlocking;
+    private final BooleanSetting showEatingInThirdPerson;
 
     public AnimationsCategory(ModConfig modConfig) {
         super(modConfig);
-        swingAndUseItem = this.register(new BooleanOption("swingAndUseItem", this, false));
-        sneakAnimationSpeed = this.register(new DoubleSliderOption("sneakAnimationSpeed", this, 1.0, 0.0, 2.0));
-        disableCameraBobbing = this.register(new BooleanOption("disableCameraBobbing", this, false));
-        enableToolBlocking = this.register(new BooleanOption("enableToolBlocking", this, false));
-        showEatingInThirdPerson = this.register(new BooleanOption("showEatingInThirdPerson", this, false));
+        swingAndUseItem = this.register(new BooleanSetting("swingAndUseItem", this, false));
+        sneakAnimationSpeed = this.register(new DoubleSliderSetting("sneakAnimationSpeed", this, 1.0, 0.0, 2.0));
+        disableCameraBobbing = this.register(new BooleanSetting("disableCameraBobbing", this, false));
+        enableToolBlocking = this.register(new BooleanSetting("enableToolBlocking", this, false));
+        showEatingInThirdPerson = this.register(new BooleanSetting("showEatingInThirdPerson", this, false));
     }
 
     @Override
@@ -25,23 +25,23 @@ public class AnimationsCategory extends Category {
         return "animations";
     }
 
-    public BooleanOption swingAndUseItem() {
+    public BooleanSetting swingAndUseItem() {
         return swingAndUseItem;
     }
 
-    public DoubleSliderOption sneakAnimationSpeed() {
+    public DoubleSliderSetting sneakAnimationSpeed() {
         return sneakAnimationSpeed;
     }
 
-    public BooleanOption disableCameraBobbing() {
+    public BooleanSetting disableCameraBobbing() {
         return disableCameraBobbing;
     }
 
-    public BooleanOption enableToolBlocking() {
+    public BooleanSetting enableToolBlocking() {
         return enableToolBlocking;
     }
 
-    public BooleanOption showEatingInThirdPerson() {
+    public BooleanSetting showEatingInThirdPerson() {
         return showEatingInThirdPerson;
     }
 }

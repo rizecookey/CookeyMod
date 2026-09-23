@@ -22,7 +22,7 @@ import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.AnimationsCategory;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
+import net.rizecookey.cookeymod.config.setting.FirstPersonDamageRenderSelection;
 import net.rizecookey.cookeymod.util.ItemUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

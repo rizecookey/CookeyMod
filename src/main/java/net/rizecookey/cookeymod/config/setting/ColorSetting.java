@@ -1,11 +1,11 @@
-package net.rizecookey.cookeymod.config.option;
+package net.rizecookey.cookeymod.config.setting;
 
 import tools.jackson.databind.JsonNode;
 import me.shedaniel.math.Color;
 import net.rizecookey.cookeymod.config.category.Category;
 
-public class ColorOption extends Option<Color> {
-    public ColorOption(String id, Category category, Color defaultValue) {
+public class ColorSetting extends Setting<Color> {
+    public ColorSetting(String id, Category category, Color defaultValue) {
         super(id, category, defaultValue);
     }
 
@@ -15,8 +15,8 @@ public class ColorOption extends Option<Color> {
     }
 
     @Override
-    public <I, O> O accept(OptionVisitor<I, O> visitor, I input) {
-        return visitor.visitColorOption(this, input);
+    public <I, O> O accept(SettingVisitor<I, O> visitor, I input) {
+        return visitor.visitColorSetting(this, input);
     }
 
     @Override

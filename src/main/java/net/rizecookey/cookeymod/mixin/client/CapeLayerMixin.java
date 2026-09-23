@@ -2,7 +2,7 @@ package net.rizecookey.cookeymod.mixin.client;
 
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
 import net.rizecookey.cookeymod.extension.minecraft.OverlayRendered;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,7 +22,7 @@ public abstract class CapeLayerMixin implements OverlayRendered {
     }
 
     @Unique
-    private BooleanOption showDamageTintOnCape;
+    private BooleanSetting showDamageTintOnCape;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(CallbackInfo ci) {

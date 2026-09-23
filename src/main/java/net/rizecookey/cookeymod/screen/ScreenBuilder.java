@@ -13,7 +13,7 @@ import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.category.Category;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
 import net.rizecookey.cookeymod.config.category.MiscCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.setting.Setting;
 
 import java.io.IOException;
 import java.util.Map;
@@ -45,7 +45,7 @@ public final class ScreenBuilder {
     private static void createGenericScreenCategory(ConfigBuilder builder, Category category) {
         ConfigCategory configCategory = builder.getOrCreateCategory(Component.translatable(category.getTranslationKey()));
 
-        for (Map.Entry<String, Option<?>> entry : category.getOptions().entrySet()) {
+        for (Map.Entry<String, Setting<?>> entry : category.getSettings().entrySet()) {
             createCategoryEntry(configCategory, entry.getValue());
         }
     }
@@ -57,24 +57,24 @@ public final class ScreenBuilder {
         String damageTintCategoryTranslationKey = category.getTranslationKey() + ".damageTint";
         SubCategoryBuilder damageTintCategoryBuilder = ConfigEntryBuilder.create()
                 .startSubCategory(Component.translatable(damageTintCategoryTranslationKey))
-                .setTooltip(Option.getTooltip(damageTintCategoryTranslationKey));
-        for (Option<?> option : new Option<?>[] {
+                .setTooltip(Setting.getTooltip(damageTintCategoryTranslationKey));
+        for (Setting<?> setting : new Setting<?>[] {
                 category.damageColor(),
                 category.showDamageTintOnArmor(),
                 category.showDamageTintOnHeldItems(),
                 category.showDamageTintOnCape(),
                 category.showDamageTintInFirstPerson() }) {
-            damageTintCategoryBuilder.add(createEntry(option));
+            damageTintCategoryBuilder.add(createEntry(setting));
         }
         configCategory.addEntry(damageTintCategoryBuilder.build());
 
-        for (Option<?> option : new Option<?>[] {
+        for (Setting<?> setting : new Setting<?>[] {
                 category.onlyShowShieldWhenBlocking(),
                 category.disableEffectBasedFovChange(),
                 category.alternativeBobbing(),
                 category.showHandWhenInvisible(),
                 category.invisibilityHandOpacity() }) {
-            createCategoryEntry(configCategory, option);
+            createCategoryEntry(configCategory, setting);
         }
     }
 
@@ -87,11 +87,11 @@ public final class ScreenBuilder {
         createCategoryEntry(configCategory, category.fixCooldownDesync());
     }
 
-    private static void createCategoryEntry(ConfigCategory configCategory, Option<?> option) {
-        configCategory.addEntry(createEntry(option));
+    private static void createCategoryEntry(ConfigCategory configCategory, Setting<?> setting) {
+        configCategory.addEntry(createEntry(setting));
     }
 
-    private static AbstractConfigListEntry<?> createEntry(Option<?> option) {
-        return option.accept(OptionEntryBuilder.INSTANCE, ConfigEntryBuilder.create());
+    private static AbstractConfigListEntry<?> createEntry(Setting<?> setting) {
+        return setting.accept(SettingEntryBuilder.INSTANCE, ConfigEntryBuilder.create());
     }
 }

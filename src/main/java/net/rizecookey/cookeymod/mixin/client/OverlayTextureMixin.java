@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.category.HudRenderingCategory;
-import net.rizecookey.cookeymod.config.option.Option;
+import net.rizecookey.cookeymod.config.setting.Setting;
 import net.rizecookey.cookeymod.extension.minecraft.OverlayTextureExtension;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(OverlayTexture.class)
-public abstract class OverlayTextureMixin implements OverlayTextureExtension, Option.ValueChangeListener<Color> {
+public abstract class OverlayTextureMixin implements OverlayTextureExtension, Setting.ValueChangeListener<Color> {
     @Shadow
     @Final
     private DynamicTexture texture;

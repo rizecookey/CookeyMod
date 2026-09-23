@@ -2,40 +2,40 @@ package net.rizecookey.cookeymod.config.category;
 
 import me.shedaniel.math.Color;
 import net.rizecookey.cookeymod.config.ModConfig;
-import net.rizecookey.cookeymod.config.option.ArmorDamageRenderSelection;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
-import net.rizecookey.cookeymod.config.option.ColorOption;
-import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
-import net.rizecookey.cookeymod.config.option.EnumOption;
-import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
+import net.rizecookey.cookeymod.config.setting.ArmorDamageRenderSelection;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
+import net.rizecookey.cookeymod.config.setting.ColorSetting;
+import net.rizecookey.cookeymod.config.setting.DoubleSliderSetting;
+import net.rizecookey.cookeymod.config.setting.EnumSetting;
+import net.rizecookey.cookeymod.config.setting.FirstPersonDamageRenderSelection;
 
 public class HudRenderingCategory extends Category {
-    private final DoubleSliderOption attackCooldownHandOffset;
-    private final ColorOption damageColor;
-    private final EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor;
-    private final BooleanOption showDamageTintOnHeldItems, showDamageTintOnCape;
-    private final EnumOption<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson;
-    private final BooleanOption onlyShowShieldWhenBlocking;
-    private final BooleanOption disableEffectBasedFovChange;
-    private final BooleanOption alternativeBobbing;
-    private final BooleanOption showHandWhenInvisible;
-    private final DoubleSliderOption invisibilityHandOpacity;
+    private final DoubleSliderSetting attackCooldownHandOffset;
+    private final ColorSetting damageColor;
+    private final EnumSetting<ArmorDamageRenderSelection> showDamageTintOnArmor;
+    private final BooleanSetting showDamageTintOnHeldItems, showDamageTintOnCape;
+    private final EnumSetting<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson;
+    private final BooleanSetting onlyShowShieldWhenBlocking;
+    private final BooleanSetting disableEffectBasedFovChange;
+    private final BooleanSetting alternativeBobbing;
+    private final BooleanSetting showHandWhenInvisible;
+    private final DoubleSliderSetting invisibilityHandOpacity;
 
     public HudRenderingCategory(ModConfig modConfig) {
         super(modConfig);
-        attackCooldownHandOffset = this.register(new DoubleSliderOption("attackCooldownHandOffset", this, 0.0, -1.0, 1.0));
+        attackCooldownHandOffset = this.register(new DoubleSliderSetting("attackCooldownHandOffset", this, 0.0, -1.0, 1.0));
 
-        damageColor = this.register(new ColorOption("damageColor", this, Color.ofRGBA(255, 0, 0, 77)));
-        showDamageTintOnArmor = this.register(new EnumOption<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE));
-        showDamageTintOnHeldItems = this.register(new BooleanOption("showDamageTintOnHeldItems", this, false));
-        showDamageTintOnCape = this.register(new BooleanOption("showDamageTintOnCape", this, false));
-        showDamageTintInFirstPerson = this.register(new EnumOption<>("showDamageTintInFirstPerson", this, FirstPersonDamageRenderSelection.class, FirstPersonDamageRenderSelection.NONE));
+        damageColor = this.register(new ColorSetting("damageColor", this, Color.ofRGBA(255, 0, 0, 77)));
+        showDamageTintOnArmor = this.register(new EnumSetting<>("showDamageTintOnArmor", this, ArmorDamageRenderSelection.class, ArmorDamageRenderSelection.NONE));
+        showDamageTintOnHeldItems = this.register(new BooleanSetting("showDamageTintOnHeldItems", this, false));
+        showDamageTintOnCape = this.register(new BooleanSetting("showDamageTintOnCape", this, false));
+        showDamageTintInFirstPerson = this.register(new EnumSetting<>("showDamageTintInFirstPerson", this, FirstPersonDamageRenderSelection.class, FirstPersonDamageRenderSelection.NONE));
 
-        onlyShowShieldWhenBlocking = this.register(new BooleanOption("onlyShowShieldWhenBlocking", this, false));
-        disableEffectBasedFovChange = this.register(new BooleanOption("disableEffectBasedFovChange", this, false));
-        alternativeBobbing = this.register(new BooleanOption("alternativeBobbing", this, false));
-        showHandWhenInvisible = this.register(new BooleanOption("showHandWhenInvisible", this, false));
-        invisibilityHandOpacity = this.register(new DoubleSliderOption("firstPersonHandOpacityOnInvisibility", this, 0.3, 0.0, 1.0));
+        onlyShowShieldWhenBlocking = this.register(new BooleanSetting("onlyShowShieldWhenBlocking", this, false));
+        disableEffectBasedFovChange = this.register(new BooleanSetting("disableEffectBasedFovChange", this, false));
+        alternativeBobbing = this.register(new BooleanSetting("alternativeBobbing", this, false));
+        showHandWhenInvisible = this.register(new BooleanSetting("showHandWhenInvisible", this, false));
+        invisibilityHandOpacity = this.register(new DoubleSliderSetting("firstPersonHandOpacityOnInvisibility", this, 0.3, 0.0, 1.0));
     }
 
     @Override
@@ -43,47 +43,47 @@ public class HudRenderingCategory extends Category {
         return "hudRendering";
     }
 
-    public DoubleSliderOption attackCooldownHandOffset() {
+    public DoubleSliderSetting attackCooldownHandOffset() {
         return attackCooldownHandOffset;
     }
 
-    public ColorOption damageColor() {
+    public ColorSetting damageColor() {
         return damageColor;
     }
 
-    public EnumOption<ArmorDamageRenderSelection> showDamageTintOnArmor() {
+    public EnumSetting<ArmorDamageRenderSelection> showDamageTintOnArmor() {
         return showDamageTintOnArmor;
     }
 
-    public BooleanOption showDamageTintOnHeldItems() {
+    public BooleanSetting showDamageTintOnHeldItems() {
         return showDamageTintOnHeldItems;
     }
 
-    public BooleanOption showDamageTintOnCape() {
+    public BooleanSetting showDamageTintOnCape() {
         return showDamageTintOnCape;
     }
 
-    public EnumOption<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson() {
+    public EnumSetting<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson() {
         return showDamageTintInFirstPerson;
     }
 
-    public BooleanOption onlyShowShieldWhenBlocking() {
+    public BooleanSetting onlyShowShieldWhenBlocking() {
         return onlyShowShieldWhenBlocking;
     }
 
-    public BooleanOption disableEffectBasedFovChange() {
+    public BooleanSetting disableEffectBasedFovChange() {
         return disableEffectBasedFovChange;
     }
 
-    public BooleanOption alternativeBobbing() {
+    public BooleanSetting alternativeBobbing() {
         return alternativeBobbing;
     }
 
-    public BooleanOption showHandWhenInvisible() {
+    public BooleanSetting showHandWhenInvisible() {
         return showHandWhenInvisible;
     }
 
-    public DoubleSliderOption invisibilityHandOpacity() {
+    public DoubleSliderSetting invisibilityHandOpacity() {
         return invisibilityHandOpacity;
     }
 }

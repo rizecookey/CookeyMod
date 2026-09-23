@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.OptionsScreen;
 import net.minecraft.network.chat.Component;
 import net.rizecookey.cookeymod.CookeyMod;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
 import net.rizecookey.cookeymod.screen.ScreenBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +29,7 @@ public abstract class OptionsScreenMixin extends Screen {
     }
 
     @Unique
-    private BooleanOption showModButton;
+    private BooleanSetting showModButton;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void injectOptions(CallbackInfo ci) {

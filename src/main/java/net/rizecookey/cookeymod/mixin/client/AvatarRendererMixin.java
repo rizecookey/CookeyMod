@@ -24,10 +24,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
-import net.rizecookey.cookeymod.config.option.BooleanOption;
-import net.rizecookey.cookeymod.config.option.DoubleSliderOption;
-import net.rizecookey.cookeymod.config.option.EnumOption;
-import net.rizecookey.cookeymod.config.option.FirstPersonDamageRenderSelection;
+import net.rizecookey.cookeymod.config.setting.BooleanSetting;
+import net.rizecookey.cookeymod.config.setting.DoubleSliderSetting;
+import net.rizecookey.cookeymod.config.setting.EnumSetting;
+import net.rizecookey.cookeymod.config.setting.FirstPersonDamageRenderSelection;
 import net.rizecookey.cookeymod.extension.minecraft.AvatarRendererExtension;
 import net.rizecookey.cookeymod.util.ItemUtils;
 import org.jspecify.annotations.NonNull;
@@ -41,15 +41,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AvatarRenderer.class)
 public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & ClientAvatarEntity> extends LivingEntityRenderer<@NonNull AvatarlikeEntity, AvatarRenderState, PlayerModel> implements AvatarRendererExtension {
     @Unique
-    private static BooleanOption ENABLE_TOOL_BLOCKING;
+    private static BooleanSetting ENABLE_TOOL_BLOCKING;
 
     @Unique
-    private BooleanOption shownHandWhenInvisible;
+    private BooleanSetting shownHandWhenInvisible;
     @Unique
-    private EnumOption<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson;
+    private EnumSetting<FirstPersonDamageRenderSelection> showDamageTintInFirstPerson;
 
     @Unique
-    private DoubleSliderOption invisibilityHandOpacity;
+    private DoubleSliderSetting invisibilityHandOpacity;
 
     @Unique
     private boolean playerInvisible;
