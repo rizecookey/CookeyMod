@@ -62,6 +62,6 @@ public abstract class GameRendererMixin {
         float backwardsInterpolatedWalkDistance = cameraState.entityRenderState.backwardsInterpolatedWalkDistance;
         float bob = cameraState.entityRenderState.bob;
         poseStack.translate(Mth.sin(backwardsInterpolatedWalkDistance * 3.1415927F) * bob * 0.5F, -Math.abs(Mth.cos(backwardsInterpolatedWalkDistance * 3.1415927F) * bob), 0.0D);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.cos(backwardsInterpolatedWalkDistance * 3.1415927F) * bob * 3.0F));
+        poseStack.rotateDegrees(Axis.ZP, Mth.cos(backwardsInterpolatedWalkDistance * 3.1415927F) * bob * 3.0F);
     }
 }

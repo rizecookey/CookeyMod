@@ -39,7 +39,7 @@ public abstract class EquipmentLayerRendererMixin implements OverlayRendered {
 
     @ModifyExpressionValue(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V",
             slice = @Slice(
-                    from = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer;trimSpriteLookup:Ljava/util/function/Function;", opcode = Opcodes.GETFIELD)
+                    from = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer;trimTextureLookup:Ljava/util/function/Function;", opcode = Opcodes.GETFIELD)
             ),
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC, ordinal = 0))
     private int modifyTrimOverlayCoords(int previousCoords) {

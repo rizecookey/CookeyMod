@@ -43,7 +43,7 @@ public abstract class RenderTypesMixin {
         return identifier -> ScopedValue.where(ADD_USE_OVERLAY, null).call(() -> original.call(function).apply(identifier));
     }
 
-    @ModifyExpressionValue(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderSetup;builder(Lcom/mojang/blaze3d/pipeline/RenderPipeline;)Lnet/minecraft/client/renderer/rendertype/RenderSetup$RenderSetupBuilder;"))
+    @ModifyExpressionValue(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderSetup;builder(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;)Lnet/minecraft/client/renderer/rendertype/RenderSetup$RenderSetupBuilder;"))
     private static RenderSetup.RenderSetupBuilder addUseOverlay(RenderSetup.RenderSetupBuilder original) {
         if (ADD_USE_OVERLAY.isBound()) {
             return original.useOverlay();

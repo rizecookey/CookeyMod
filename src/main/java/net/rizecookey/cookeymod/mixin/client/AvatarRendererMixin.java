@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.UvMapping;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
@@ -87,14 +87,14 @@ public abstract class AvatarRendererMixin<AvatarlikeEntity extends Avatar & Clie
         }
     }
 
-    @WrapOperation(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
-    private void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int i, int j, TextureAtlasSprite textureAtlasSprite, Operation<Void> original, @Local(argsOnly = true, name = "skinTexture") Identifier skinTexture) {
-        int overlayCoords = showDamageTintInFirstPerson.get().isOnHand() ? this.overlayCoords : j;
+    @WrapOperation(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/UvMapping;)V"))
+    private void transparentHandWhenInvisible(SubmitNodeCollector instance, ModelPart modelPart, PoseStack poseStack, RenderType renderType, int lightCoords, int overlayCoords, UvMapping uvMapping, Operation<Void> original, @Local(argsOnly = true, name = "skinTexture") Identifier skinTexture) {
+        int actualOverlayCoords = showDamageTintInFirstPerson.get().isOnHand() ? this.overlayCoords : overlayCoords;
         if (shownHandWhenInvisible.get() && playerInvisible) {
             int color = ARGB.color((int) (invisibilityHandOpacity.get() * 0xFFL), 0xFF, 0xFF, 0xFF);
-            instance.submitModelPart(modelPart, poseStack, RenderTypes.entityTranslucentCullItemTarget(skinTexture), i, overlayCoords, textureAtlasSprite, color, null);
+            instance.submitModelPart(modelPart, poseStack, RenderTypes.entityTranslucentCull(skinTexture), lightCoords, actualOverlayCoords, uvMapping, color);
         } else {
-            original.call(instance, modelPart, poseStack, renderType, i, overlayCoords, textureAtlasSprite);
+            original.call(instance, modelPart, poseStack, renderType, lightCoords, actualOverlayCoords, uvMapping);
         }
     }
 
