@@ -32,6 +32,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "swing", at = @At("RETURN"))
     private void resetAttackStrengthOnSwing(InteractionHand hand, SwingAnimation animation, boolean sendToSwingingEntity, CallbackInfoReturnable<Boolean> cir) {
+        //noinspection ConstantValue
         if (fixCooldownDesync.get() && (LivingEntity) (Object) this instanceof LocalPlayer localPlayer) {
             localPlayer.resetAttackStrengthTicker();
         }
