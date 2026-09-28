@@ -25,6 +25,15 @@ public abstract class RenderPipelinesMixin {
         return original;
     }
 
+    @ModifyExpressionValue(method = "<clinit>", slice = @Slice(
+            to = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/RenderPipelines;ARMOR_CUTOUT_NO_CULL_GLINT:Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;", opcode = Opcodes.PUTSTATIC)
+    ), at = @At(value = "INVOKE:LAST", target = "Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;builder([Lcom/mojang/renderpearl/api/pipeline/RenderPipeline$Snippet;)Lcom/mojang/renderpearl/api/pipeline/RenderPipeline$Builder;"))
+    private static RenderPipeline.Builder setArmorCutoutNoCullGlintBuilder(RenderPipeline.Builder original, @Share("builderToAddSamplerTo") LocalRef<RenderPipeline.Builder> builderToAddSamplerTo, @Share("armorCutoutNoCullBuilder") LocalRef<RenderPipeline.Builder> armorCutoutNoCullBuilder) {
+        armorCutoutNoCullBuilder.set(original);
+        builderToAddSamplerTo.set(original);
+        return original;
+    }
+
     @WrapOperation(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/mojang/renderpearl/api/pipeline/RenderPipeline$Builder;withShaderDefine(Ljava/lang/String;)Lcom/mojang/renderpearl/api/pipeline/RenderPipeline$Builder;"))
     private static RenderPipeline.Builder preventNoOverlayDefineOnArmorCutoutNoCull(RenderPipeline.Builder instance, String key, Operation<RenderPipeline.Builder> original, @Share("armorCutoutNoCullBuilder") LocalRef<RenderPipeline.Builder> armorCutoutNoCullBuilder) {
         if (instance == armorCutoutNoCullBuilder.get() && key.equals("NO_OVERLAY")) {
