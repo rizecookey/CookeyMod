@@ -5,20 +5,31 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.rizecookey.cookeymod.CookeyMod;
 import net.rizecookey.cookeymod.config.ModConfig;
 import net.rizecookey.cookeymod.config.setting.BooleanSetting;
+import net.rizecookey.cookeymod.config.setting.Setting;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
+
 @Mixin(GameRenderer.class)
-public abstract class GameRendererMixin {
+public abstract class GameRendererMixin implements Setting.ValueChangeListener<Color> {
+    @Mutable
+    @Shadow
+    @Final
+    private OverlayTexture overlayTexture;
     @Unique
     private BooleanSetting disableCameraBobbing = CookeyMod.getInstance().getConfig().animations().disableCameraBobbing();
 
@@ -30,6 +41,9 @@ public abstract class GameRendererMixin {
         ModConfig modConfig = CookeyMod.getInstance().getConfig();
         disableCameraBobbing = modConfig.animations().disableCameraBobbing();
         alternativeBobbing = modConfig.hudRendering().alternativeBobbing();
+
+        modConfig.hudRendering().damageColor()
+                .registerListener((_, _) -> reloadOverlayTexture(), this);
     }
 
     @ModifyExpressionValue(method = "renderLevel", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/OptionsRenderState;bobView:Z", opcode = Opcodes.GETFIELD),
@@ -52,6 +66,11 @@ public abstract class GameRendererMixin {
         ci.cancel();
     }
 
+    @Unique
+    private void reloadOverlayTexture() {
+        this.overlayTexture.close();
+        this.overlayTexture = new OverlayTexture();
+    }
 
     @Unique
     private void alternativeBobView(CameraRenderState cameraState, PoseStack poseStack) {

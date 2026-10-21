@@ -26,8 +26,8 @@
   ],
   "accessWidener": "cookeymod.accesswidener",
   "depends": {
-    "fabricloader": ">=0.18.5",
-    "minecraft": ">=26.3 <26.4"
+    "fabricloader": ">=0.20.1",
+    "minecraft": ">=26.4- <26.5"
   },
   "suggests": {
     "modmenu": "*"
