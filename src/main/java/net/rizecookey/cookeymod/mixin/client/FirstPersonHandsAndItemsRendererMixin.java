@@ -105,7 +105,7 @@ public abstract class FirstPersonHandsAndItemsRendererMixin {
         return !hudRenderingCategory.showHandWhenInvisible().get() && original;
     }
 
-    @ModifyExpressionValue(method = {"renderOneHandedMap", "renderTwoHandedMap"}, at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;isInvisible:Z", opcode = Opcodes.GETFIELD))
+    @ModifyExpressionValue(method = {"submitOneHandedMap", "submitTwoHandedMap"}, at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;isInvisible:Z", opcode = Opcodes.GETFIELD))
     private boolean makeArmAppearWithMap(boolean original) {
         return !hudRenderingCategory.showHandWhenInvisible().get() && original;
     }
@@ -140,7 +140,7 @@ public abstract class FirstPersonHandsAndItemsRendererMixin {
         poseStack.rotateDegrees(Axis.ZP, reverse * 78.05F);
     }
 
-    @Inject(method = "renderPlayerHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;skin:Lnet/minecraft/world/entity/player/PlayerSkin;", opcode = Opcodes.GETFIELD))
+    @Inject(method = "submitPlayerHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;skin:Lnet/minecraft/world/entity/player/PlayerSkin;", opcode = Opcodes.GETFIELD))
     private void updateInvisibilityAndOverlayCoordsOnPlayerArmRender(CallbackInfo ci, @Local(name = "avatarRenderer") AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
         updateInvisibilityAndOverlayCoords(avatarRenderer);
     }
